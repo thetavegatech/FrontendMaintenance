@@ -62,7 +62,7 @@ export default function Users() {
   return (
     <div className="container">
       <NavLink to="/register">
-        <CButton color="info" className="mb-2" style={{ marginTop: '5px' }}>
+        <CButton className="mb-2" style={{ marginTop: '5px', backgroundColor: '#000026' }}>
           Add New
         </CButton>
       </NavLink>

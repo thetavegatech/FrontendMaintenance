@@ -178,32 +178,32 @@ class BDList extends React.Component {
                 marginBottom: '0.5rem',
               }}
             />
+            <label htmlFor="searchTask" style={{ marginLeft: '0%' }}>
+              <span role="img" aria-label="search-icon"></span>
+            </label>
+            <select
+              value={this.searchQuery}
+              onChange={this.handleSearchChange}
+              style={{
+                display: '',
+                marginBottom: '20px',
+                padding: '8px',
+                border: '1px solid',
+                borderRadius: '4px',
+                transition: 'border-color 0.3s ease-in-out',
+                backgroundColor: isHovered ? '#f0f0f0' : 'transparent',
+              }}
+              onMouseEnter={this.handleMouseEnter}
+              onMouseLeave={this.handleMouseLeave}
+            >
+              {/* <option value="Plant 1">Search by Plant</option> */}
+              <option>Search by Plant </option>
+              <option value="Plant 1">Plant 1</option>
+              <option value="Plant 2">Plant 2</option>
+              <option value="Plant 3">Plant 3</option>
+              {/* <option value="Plant 1, Plant 2, Plant 3">Search </option> */}
+            </select>
           </div>
-          <label htmlFor="searchTask" style={{ marginLeft: '0%' }}>
-            <span role="img" aria-label="search-icon"></span>
-          </label>
-          <select
-            value={this.searchQuery}
-            onChange={this.handleSearchChange}
-            style={{
-              display: 'flex',
-              marginBottom: '10px',
-              padding: '8px',
-              border: '1px solid',
-              borderRadius: '4px',
-              transition: 'border-color 0.3s ease-in-out',
-              backgroundColor: isHovered ? '#f0f0f0' : 'transparent',
-            }}
-            onMouseEnter={this.handleMouseEnter}
-            onMouseLeave={this.handleMouseLeave}
-          >
-            {/* <option value="Plant 1">Search by Plant</option> */}
-            <option>Search by Plant </option>
-            <option value="Plant 1">Plant 1</option>
-            <option value="Plant 2">Plant 2</option>
-            <option value="Plant 3">Plant 3</option>
-            {/* <option value="Plant 1, Plant 2, Plant 3">Search </option> */}
-          </select>
           <div className="table-container">
             <Table className="custom-table">
               <Thead style={{ backgroundColor: '#000026', color: 'white' }}>
