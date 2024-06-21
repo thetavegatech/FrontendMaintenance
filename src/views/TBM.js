@@ -7,6 +7,8 @@ import { FaEdit } from 'react-icons/fa'
 import './assetTable/asset.css'
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table'
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 
 const TbmTable = () => {
   const [tbms, setTbms] = useState([])
@@ -156,6 +158,16 @@ const TbmTable = () => {
     console.error(err)
   }
 
+  const [expandedItems, setExpandedItems] = useState([])
+
+  const toggleExpand = (index) => {
+    if (expandedItems.includes(index)) {
+      setExpandedItems(expandedItems.filter((item) => item !== index))
+    } else {
+      setExpandedItems([...expandedItems, index])
+    }
+  }
+
   return (
     <div className="container">
       <NavLink to="/tbmForm">
@@ -167,7 +179,7 @@ const TbmTable = () => {
           Add New
         </CButton>
       </NavLink>
-      <label htmlFor="searchTask" style={{ marginLeft: '70%' }}>
+      <label htmlFor="searchTask" style={{ marginLeft: '%' }}>
         <span role="img" aria-label="search-icon"></span>
       </label>
       <input
@@ -261,6 +273,81 @@ const TbmTable = () => {
             )}
           </Tbody>
         </Table>
+        <div className="list-view">
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            <>
+              {message && (
+                <p style={{ textAlign: 'center', fontStyle: 'italic', color: 'red' }}>{message}</p>
+              )}
+              {filteredTbms.map((tbm, index) => (
+                <div
+                  key={tbm._id}
+                  className={`list-item ${expandedItems.includes(index) ? 'expanded' : ''}`}
+                >
+                  <div className="expand">
+                    <FontAwesomeIcon
+                      icon={expandedItems.includes(index) ? faChevronUp : faChevronDown}
+                      onClick={() => toggleExpand(index)}
+                    />
+                  </div>
+                  <div>
+                    <span>{tbm.assetName}</span> - <span>{tbm.location}</span>
+                  </div>
+                  <div
+                    className={`expanded-content ${
+                      expandedItems.includes(index) ? 'visible' : 'hidden'
+                    }`}
+                  >
+                    <div className="table-like">
+                      <div className="table-row">
+                        <div className="table-cell">
+                          <strong>tbmScheduleDate:</strong>
+                        </div>
+                        <div className="table-cell">
+                          {new Date(tbm.tbmScheduleDate).toLocaleDateString()}
+                        </div>
+                      </div>
+                      <div className="table-row">
+                        <div className="table-cell">
+                          <strong>tbmFrequency:</strong>
+                        </div>
+                        <div className="table-cell">{tbm.tbmFrequency}</div>
+                      </div>
+                      <div className="table-row">
+                        <div className="table-cell">
+                          <strong>nextTbmDate:</strong>
+                        </div>
+                        <div className="table-cell">
+                          {new Date(tbm.nextTbmDate).toLocaleDateString()}
+                        </div>
+                      </div>
+                      <div className="table-row">
+                        <div className="table-cell">
+                          <strong>status:</strong>
+                        </div>
+                        <div className="table-cell">{tbm.status}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="actions">
+                    <NavLink to={`/editcbm/${tbm._id}`} style={{ color: '#000080' }}>
+                      <FaEdit />
+                    </NavLink>
+                    <button
+                      className="btn"
+                      onClick={() => deleteData(tbm._id)}
+                      style={{ color: 'red' }}
+                    >
+                      <MdDelete />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </>
+          )}
+        </div>
         <div>
           {/* <QrReader
           delay={300}

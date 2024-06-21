@@ -9,6 +9,8 @@ import loadingGif from '../assetTable/loader.gif'
 import '../assetTable/asset.css'
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table'
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 
 class AssetTable extends React.Component {
   state = {
@@ -17,6 +19,7 @@ class AssetTable extends React.Component {
     searchQuery: '',
     formData: {},
     loading: true, // New state for loading
+    expandedItems: [],
   }
 
   handleMouseEnter = () => {
@@ -84,16 +87,16 @@ class AssetTable extends React.Component {
   }
 
   fetchData() {
-    axios
-      .get('http://192.168.1.3:5000/UserInfo')
-      .then((response) => {
-        this.setState(response.data)
-        console.log(response)
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error)
-        alert('Error fetching data')
-      })
+    // axios
+    //   .get('http://192.168.1.3:5000/UserInfo')
+    //   .then((response) => {
+    //     this.setState(response.data)
+    //     console.log(response)
+    //   })
+    //   .catch((error) => {
+    //     console.error('Error fetching data:', error)
+    //     alert('Error fetching data')
+    //   })
   }
 
   deleteData(id) {
@@ -367,6 +370,15 @@ class AssetTable extends React.Component {
     })
   }
 
+  toggleExpand = (index) => {
+    this.setState((prevState) => {
+      const expandedItems = prevState.expandedItems.includes(index)
+        ? prevState.expandedItems.filter((item) => item !== index)
+        : [...prevState.expandedItems, index]
+      return { expandedItems }
+    })
+  }
+
   render() {
     const { assets, filteredAssets, message, searchQuery, loading } = this.state
 
@@ -390,7 +402,7 @@ class AssetTable extends React.Component {
         </NavLink>
 
         {/* <div> */}
-        <label htmlFor="searchTask" style={{ marginLeft: '70%' }}>
+        <label htmlFor="searchTask" style={{ marginLeft: '0%' }}>
           <span role="img" aria-label="search-icon"></span>
         </label>
         <input
@@ -496,6 +508,101 @@ class AssetTable extends React.Component {
               )}
             </Tbody>
           </Table>
+          <div className="list-view">
+            {loading ? (
+              <p>Loading...</p>
+            ) : (
+              <>
+                {this.message && (
+                  <p style={{ textAlign: 'center', fontStyle: 'italic', color: 'red' }}>
+                    {this.message}
+                  </p>
+                )}
+                {filteredDefaultAssets.map((asset, index) => (
+                  <div
+                    key={asset._id}
+                    className={`list-item ${
+                      this.state.expandedItems.includes(index) ? 'expanded' : ''
+                    }`}
+                  >
+                    <div className="expand">
+                      <FontAwesomeIcon
+                        icon={
+                          this.state.expandedItems.includes(index) ? faChevronUp : faChevronDown
+                        }
+                        onClick={() => this.toggleExpand(index)}
+                      />
+                    </div>
+                    <div>
+                      <span>{asset.AssetName}</span> - <span>{asset.Location}</span>
+                    </div>
+                    <div
+                      className={`expanded-content ${
+                        this.state.expandedItems.includes(index) ? 'visible' : 'hidden'
+                      }`}
+                    >
+                      <div className="table-like">
+                        <div className="table-row">
+                          <div className="table-cell">
+                            <strong>TaskName:</strong>
+                          </div>
+                          <div className="table-cell">{asset.TaskName}</div>
+                        </div>
+                        <div className="table-row">
+                          <div className="table-cell">
+                            <strong>startDate:</strong>
+                          </div>
+                          <div className="table-cell">
+                            {new Date(asset.startDate).toLocaleDateString()}
+                          </div>
+                        </div>
+                        <div className="table-row">
+                          <div className="table-cell">
+                            <strong>nextDate:</strong>
+                          </div>
+                          <div className="table-cell">
+                            {new Date(asset.nextDate).toLocaleDateString()}
+                          </div>
+                        </div>
+                        <div className="table-row">
+                          <div className="table-cell">
+                            <strong>TaskDescription:</strong>
+                          </div>
+                          <div className="table-cell">{asset.TaskDescription}</div>
+                        </div>
+                        <div className="table-row">
+                          <div className="table-cell">
+                            <strong>Schedule:</strong>
+                          </div>
+                          <div className="table-cell">
+                            {asset.ScheduledMaintenanceDatesandIntervals}
+                          </div>
+                        </div>
+                        <div className="table-row">
+                          <div className="table-cell">
+                            <strong>Status:</strong>
+                          </div>
+                          <div className="table-cell">{asset.Status}</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="actions">
+                      <NavLink to={`/editPM/${asset._id}`} style={{ color: '#000080' }}>
+                        <FaEdit />
+                      </NavLink>
+                      <button
+                        className="btn"
+                        onClick={() => this.deleteData(asset._id)}
+                        style={{ color: 'red' }}
+                      >
+                        <MdDelete />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </>
+            )}
+          </div>
         </div>
       </div>
     )

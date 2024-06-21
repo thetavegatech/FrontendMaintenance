@@ -26,6 +26,8 @@ import loadingGif from '../assetTable/loader.gif'
 import '../assetTable/asset.css'
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table'
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 
 class BreakdownHistory extends React.Component {
   state = {
@@ -39,6 +41,7 @@ class BreakdownHistory extends React.Component {
     searchQuery: '',
     isHovered: false,
     loading: true, // New state for loading
+    expandedItems: [],
   }
 
   handleMouseEnter = () => {
@@ -194,6 +197,15 @@ class BreakdownHistory extends React.Component {
     XLSX.writeFile(wb, 'reportdata.xlsx')
   }
 
+  toggleExpand = (index) => {
+    this.setState((prevState) => {
+      const expandedItems = prevState.expandedItems.includes(index)
+        ? prevState.expandedItems.filter((item) => item !== index)
+        : [...prevState.expandedItems, index]
+      return { expandedItems }
+    })
+  }
+
   render() {
     // const { breakdowns, selectedMachine, mttr } = this.state;
     const {
@@ -218,7 +230,7 @@ class BreakdownHistory extends React.Component {
       <>
         <div className="container" style={{ marginTop: '0px' }}>
           <div>
-            <label htmlFor="searchTask" style={{ marginLeft: '0%' }}>
+            <label htmlFor="searchTask" style={{ marginRight: '0%', marginTop: '10px' }}>
               <span role="img" aria-label="search-icon"></span>
             </label>
             <select
@@ -228,6 +240,7 @@ class BreakdownHistory extends React.Component {
                 // display: 'flex',
                 marginBottom: '0px',
                 padding: '8px',
+                margin: '8px',
                 border: '1px solid',
                 borderRadius: '4px',
                 transition: 'border-color 0.3s ease-in-out',
@@ -236,15 +249,14 @@ class BreakdownHistory extends React.Component {
               onMouseEnter={this.handleMouseEnter}
               onMouseLeave={this.handleMouseLeave}
             >
-              <option>Search by Plant</option>
+              <option>Search by Location</option>
               <option value="Plant 1">Plant 1</option>
               <option value="Plant 2">Plant 2</option>
               <option value="Plant 3">Plant 3</option>
             </select>
             <CButton
-              color="info"
-              type="button"
-              style={{ margin: '1rem' }}
+              className="mb-2"
+              style={{ marginTop: '5px', backgroundColor: '#000026' }}
               onClick={this.exportToExcel}
             >
               Export to Excel
@@ -256,7 +268,7 @@ class BreakdownHistory extends React.Component {
                 <Tr>
                   <Th style={{ textAlign: 'center', height: '40px' }}>Machine Name</Th>
                   <Th style={{ textAlign: 'center' }}>BreakDown Start Date</Th>
-                  <Td></Td>
+                  {/* <Td></Td> */}
                   <Th style={{ textAlign: 'center' }}>Shift</Th>
                   <Th style={{ textAlign: 'center' }}>Line Name</Th>
                   <Th style={{ textAlign: 'center' }}>Location</Th>
@@ -293,7 +305,7 @@ class BreakdownHistory extends React.Component {
                         <Td style={{ textAlign: 'center' }}>
                           {new Date(breakdown.BreakdownStartDate).toLocaleDateString()}
                         </Td>
-                        <Td></Td>
+                        {/* <Td></Td> */}
                         <Td style={{ textAlign: 'center' }}>{breakdown.Shift}</Td>
                         <Td style={{ textAlign: 'center' }}>{breakdown.LineName}</Td>
                         <Td style={{ textAlign: 'center' }}>{breakdown.Location}</Td>
@@ -317,124 +329,201 @@ class BreakdownHistory extends React.Component {
                 )}
               </Tbody>
             </Table>
+            <div className="list-view">
+              {loading ? (
+                <p>Loading...</p>
+              ) : (
+                <>
+                  {this.message && (
+                    <p style={{ textAlign: 'center', fontStyle: 'italic', color: 'red' }}>
+                      {this.message}
+                    </p>
+                  )}
+                  {this.state.searchQuery
+                    ? filteredAssets.filter((breakdown) => openBreakdowns.includes(breakdown))
+                    : validatedAssets
+                        .filter((breakdown) => openBreakdowns.includes(breakdown))
+                        .map((breakDown, index) => (
+                          <div
+                            key={breakDown._id}
+                            className={`list-item ${
+                              this.state.expandedItems.includes(index) ? 'expanded' : ''
+                            }`}
+                          >
+                            <div className="expand">
+                              <FontAwesomeIcon
+                                icon={
+                                  this.state.expandedItems.includes(index)
+                                    ? faChevronUp
+                                    : faChevronDown
+                                }
+                                onClick={() => this.toggleExpand(index)}
+                              />
+                            </div>
+                            <div>
+                              <span>{breakDown.MachineName}</span> -{' '}
+                              <span>{breakDown.Location}</span>
+                            </div>
+                            <div
+                              className={`expanded-content ${
+                                this.state.expandedItems.includes(index) ? 'visible' : 'hidden'
+                              }`}
+                            >
+                              <div className="table-like">
+                                <div className="table-row">
+                                  <div className="table-cell">
+                                    <strong>BreakdownStartDate:</strong>
+                                  </div>
+                                  <div className="table-cell">
+                                    {new Date(breakDown.BreakdownStartDate).toLocaleDateString()}
+                                  </div>
+                                </div>
+                                <div className="table-row">
+                                  <div className="table-cell">
+                                    <strong>BreakdownEndDate:</strong>
+                                  </div>
+                                  <div className="table-cell">
+                                    {new Date(breakDown.BreakdownEndDate).toLocaleDateString()}
+                                  </div>
+                                </div>
+                                <div className="table-row">
+                                  <div className="table-cell">
+                                    <strong>Shift:</strong>
+                                  </div>
+                                  <div className="table-cell">{breakDown.Shift}</div>
+                                </div>
+                                <div className="table-row">
+                                  <div className="table-cell">
+                                    <strong>LineName:</strong>
+                                  </div>
+                                  <div className="table-cell">{breakDown.LineName}</div>
+                                </div>
+                                <div className="table-row">
+                                  <div className="table-cell">
+                                    <strong>Status:</strong>
+                                  </div>
+                                  <div className="table-cell">{breakDown.Status}</div>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="actions">
+                              <NavLink
+                                to={`/pbdStatus/${breakDown._id}`}
+                                style={{ color: '#000080' }}
+                              >
+                                <FaEdit />
+                              </NavLink>
+                              {/* <button
+                          className="btn"
+                          onClick={() => deleteData(cbm._id)}
+                          style={{ color: 'red' }}
+                        >
+                          <MdDelete />
+                        </button> */}
+                            </div>
+                          </div>
+                        ))}
+                </>
+              )}
+            </div>
           </div>
 
           <div
-            className="container"
+            className="responsive-form"
             style={{
-              marginTop: '20px',
-              padding: '20px',
-              backgroundColor: '#f8f9fa',
-              borderRadius: '10px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              marginTop: '10px',
+              marginBottom: '10px',
             }}
           >
-            <div className="row g-2">
-              <div className="col-md-6" style={{ marginBottom: '10px' }}>
-                <label>Select Machine: </label>
-                <select
-                  onChange={(e) => {
-                    this.setState({ selectedMachine: e.target.value }, this.calculateMTBF)
-                  }}
-                  value={selectedMachine}
-                  style={{ marginLeft: '10px', padding: '5px' }}
-                >
-                  <option value="">Select Machine</option>
-                  {Array.from(new Set(breakdowns.map((breakdown) => breakdown.MachineName))).map(
-                    (machineName) => (
-                      <option key={machineName} value={machineName}>
-                        {machineName}
-                      </option>
-                    ),
-                  )}
-                </select>
-                {/* <button
-                  onClick={this.calculateMTBF}
-                  style={{
-                    marginLeft: '10px',
-                    padding: '8px',
-                    // backgroundColor: 'darkgrey',
-                    color="info",
-                    shape="rounded-pill"
-                    // border: '1px solid black',
-                    // cursor: 'pointer',
-                  }}
-                >
-                  Calculate MTBF
-                </button> */}
-                <CButton
-                  color="info"
-                  onClick={this.calculateMTBF}
-                  // shape="rounded-pill"
-                  className="mb-2"
-                  marginLeft="20px"
-                  padding="8px"
-                  style={{ marginTop: '5px', marginLeft: '10px' }}
-                >
-                  Calculate MTBF
-                </CButton>
-              </div>
-              <div className="col-md-6" style={{ marginBottom: '10px' }}>
-                <label style={{ marginLeft: '' }}>MTBF (hours): </label>
-                <input
-                  type="text"
-                  value={mtbf}
-                  readOnly
-                  style={{ marginLeft: '10px', padding: '5px' }}
-                />
-              </div>
-
-              <div className="col-md-6" style={{ marginBottom: '10px' }}>
-                <label>Select Machine: </label>
-                <select
-                  onChange={(e) => {
-                    this.setState({ selectedMachine: e.target.value }, this.calculateMTTR)
-                  }}
-                  value={selectedMachine}
-                  style={{ marginLeft: '10px', padding: '5px' }}
-                >
-                  <option value="">Select Machine</option>
-                  {Array.from(new Set(breakdowns.map((breakdown) => breakdown.MachineName))).map(
-                    (machineName) => (
-                      <option key={machineName} value={machineName}>
-                        {machineName}
-                      </option>
-                    ),
-                  )}
-                </select>
-                {/* <button
-                  onClick={this.calculateMTTR}
-                  style={{
-                    marginLeft: '10px',
-                    padding: '8px',
-                    // backgroundColor: 'darkgrey',
-                    color: '',
-                    border: '1px solid black',
-                    cursor: 'pointer',
-                  }}
-                >
-                  Calculate MTTR
-                </button> */}
-                <CButton
-                  color="info"
-                  onClick={this.calculateMTBF}
-                  // shape="rounded-pill"
-                  className="mb-2"
-                  marginLeft="20px"
-                  padding="8px"
-                  style={{ marginTop: '5px', marginLeft: '10px' }}
-                >
-                  Calculate MTTR
-                </CButton>
-              </div>
-              <div className="col-md-6" style={{ marginBottom: '10px' }}>
-                <label style={{ marginLeft: '' }}>MTTR (hours): </label>
-                <input
-                  type="text"
-                  value={mttr}
-                  readOnly
-                  style={{ marginLeft: '10px', padding: '5px' }}
-                />
-              </div>
+            <select
+              value={this.state.selectedMachine}
+              onChange={(e) => this.setState({ selectedMachine: e.target.value })}
+              style={{
+                padding: '8px',
+                border: '1px solid',
+                borderRadius: '4px',
+                width: '100%',
+                maxWidth: '400px',
+                margin: '10px 0',
+              }}
+            >
+              <option value="">Select Machine</option>
+              {validatedAssets.map((breakdown) => (
+                <option key={breakdown._id} value={breakdown.MachineName}>
+                  {breakdown.MachineName}
+                </option>
+              ))}
+            </select>
+            <div
+              className="responsive-buttons"
+              style={{ display: 'flex', gap: '10px', marginTop: '10px' }}
+            >
+              <button
+                onClick={this.calculateMTTR}
+                style={{
+                  padding: '10px 20px',
+                  backgroundColor: '#007bff',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  width: '100%',
+                  maxWidth: '150px',
+                }}
+              >
+                Calculate MTTR
+              </button>
+              <button
+                onClick={this.calculateMTBF}
+                style={{
+                  padding: '10px 20px',
+                  backgroundColor: '#28a745',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  width: '100%',
+                  maxWidth: '150px',
+                }}
+              >
+                Calculate MTBF
+              </button>
+            </div>
+            <div
+              className="responsive-buttons"
+              // style={{ marginTop: '20px', width: '100%', maxWidth: '400px', textAlign: 'center' }}
+            >
+              <input
+                type="text"
+                value={mttr}
+                readOnly
+                placeholder="MTTR Result"
+                style={{
+                  padding: '8px',
+                  border: '1px solid',
+                  borderRadius: '4px',
+                  width: '100%',
+                  margin: '10px',
+                  marginBottom: '10px',
+                }}
+              />
+              <input
+                type="text"
+                value={mtbf}
+                readOnly
+                placeholder="MTBF Result"
+                style={{
+                  padding: '8px',
+                  border: '1px solid',
+                  borderRadius: '4px',
+                  width: '100%',
+                  margin: '10px',
+                  marginBottom: '10px',
+                }}
+              />
             </div>
           </div>
         </div>

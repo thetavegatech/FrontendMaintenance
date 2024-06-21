@@ -8,15 +8,21 @@ import { FaEdit } from 'react-icons/fa'
 import { MdDelete } from 'react-icons/md'
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table'
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
+// import '../asset.css'
 
 export default function Users() {
   const [usernos, setUsers] = useState([])
+  const [message, setMessage] = useState('')
+  const [loading, setLoading] = useState(true)
+
   const navigate = useNavigate()
 
   useEffect(() => {
     // Fetch user data from the server
     axios
-      .get('http://localhost:4000/getuser')
+      .get('https://backendmaintenx.onrender.com/getuser')
       .then((response) => {
         setUsers(response.data)
         console.log(response.data)
@@ -31,7 +37,7 @@ export default function Users() {
     const isConfirmed = window.confirm('Are you sure you want to delete this data?')
     if (isConfirmed) {
       axios
-        .delete(`http://localhost:4000/getuser/${id}`)
+        .delete(`https://backendmaintenx.onrender.com/getuser/${id}`)
         .then((response) => {
           console.log('User deleted successfully:', response.data)
           // Update the user list after deletion
@@ -40,6 +46,16 @@ export default function Users() {
         .catch((error) => {
           console.error('Error deleting user:', error)
         })
+    }
+  }
+
+  const [expandedItems, setExpandedItems] = useState([])
+
+  const toggleExpand = (index) => {
+    if (expandedItems.includes(index)) {
+      setExpandedItems(expandedItems.filter((item) => item !== index))
+    } else {
+      setExpandedItems([...expandedItems, index])
     }
   }
 
@@ -93,6 +109,81 @@ export default function Users() {
             ))}
           </Tbody>
         </Table>
+        <div className="list-view">
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            <>
+              {message && (
+                <p style={{ textAlign: 'center', fontStyle: 'italic', color: 'red' }}>{message}</p>
+              )}
+              {usernos.map((user, index) => (
+                <div
+                  key={user._id}
+                  className={`list-item ${expandedItems.includes(index) ? 'expanded' : ''}`}
+                >
+                  <div className="expand">
+                    <FontAwesomeIcon
+                      icon={expandedItems.includes(index) ? faChevronUp : faChevronDown}
+                      onClick={() => toggleExpand(index)}
+                    />
+                  </div>
+                  <div>
+                    <span>{user.name}</span> - <span>{user.role}</span>
+                  </div>
+                  <div
+                    className={`expanded-content ${
+                      expandedItems.includes(index) ? 'visible' : 'hidden'
+                    }`}
+                  >
+                    <div className="table-like">
+                      <div className="table-row">
+                        <div className="table-cell">
+                          <strong>tbmScheduleDate:</strong>
+                        </div>
+                        <div className="table-cell">
+                          {new Date(user.tbmScheduleDate).toLocaleDateString()}
+                        </div>
+                      </div>
+                      <div className="table-row">
+                        <div className="table-cell">
+                          <strong>tbmFrequency:</strong>
+                        </div>
+                        <div className="table-cell">{user.tbmFrequency}</div>
+                      </div>
+                      <div className="table-row">
+                        <div className="table-cell">
+                          <strong>nextTbmDate:</strong>
+                        </div>
+                        <div className="table-cell">
+                          {new Date(user.nextTbmDate).toLocaleDateString()}
+                        </div>
+                      </div>
+                      <div className="table-row">
+                        <div className="table-cell">
+                          <strong>status:</strong>
+                        </div>
+                        <div className="table-cell">{user.status}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="actions">
+                    <NavLink to={`/editcbm/${user._id}`} style={{ color: '#000080' }}>
+                      <FaEdit />
+                    </NavLink>
+                    <button
+                      className="btn"
+                      onClick={() => deleteData(user._id)}
+                      style={{ color: 'red' }}
+                    >
+                      <MdDelete />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </>
+          )}
+        </div>
       </div>
     </div>
   )

@@ -7,6 +7,8 @@ import './assetTable/asset.css'
 import { FaEdit } from 'react-icons/fa'
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table'
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 
 const AssetTable = () => {
   const [cbms, setCbms] = useState([])
@@ -156,6 +158,16 @@ const AssetTable = () => {
     console.error(err)
   }
 
+  const [expandedItems, setExpandedItems] = useState([])
+
+  const toggleExpand = (index) => {
+    if (expandedItems.includes(index)) {
+      setExpandedItems(expandedItems.filter((item) => item !== index))
+    } else {
+      setExpandedItems([...expandedItems, index])
+    }
+  }
+
   return (
     <div className="container">
       <NavLink to="/cbmForm">
@@ -163,7 +175,7 @@ const AssetTable = () => {
           Add New
         </CButton>
       </NavLink>
-      <label htmlFor="searchTask" style={{ marginLeft: '70%' }}>
+      <label htmlFor="searchTask" style={{ marginLeft: '%' }}>
         <span role="img" aria-label="search-icon"></span>
       </label>
       <input
@@ -247,6 +259,81 @@ const AssetTable = () => {
             )}
           </Tbody>
         </Table>
+        <div className="list-view">
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            <>
+              {message && (
+                <p style={{ textAlign: 'center', fontStyle: 'italic', color: 'red' }}>{message}</p>
+              )}
+              {filteredCbms.map((cbm, index) => (
+                <div
+                  key={cbm._id}
+                  className={`list-item ${expandedItems.includes(index) ? 'expanded' : ''}`}
+                >
+                  <div className="expand">
+                    <FontAwesomeIcon
+                      icon={expandedItems.includes(index) ? faChevronUp : faChevronDown}
+                      onClick={() => toggleExpand(index)}
+                    />
+                  </div>
+                  <div>
+                    <span>{cbm.assetName}</span> - <span>{cbm.location}</span>
+                  </div>
+                  <div
+                    className={`expanded-content ${
+                      expandedItems.includes(index) ? 'visible' : 'hidden'
+                    }`}
+                  >
+                    <div className="table-like">
+                      <div className="table-row">
+                        <div className="table-cell">
+                          <strong>cbmScheduleDate:</strong>
+                        </div>
+                        <div className="table-cell">
+                          {new Date(cbm.cbmScheduleDate).toLocaleDateString()}
+                        </div>
+                      </div>
+                      <div className="table-row">
+                        <div className="table-cell">
+                          <strong>cbmFrequency:</strong>
+                        </div>
+                        <div className="table-cell">{cbm.cbmFrequency}</div>
+                      </div>
+                      <div className="table-row">
+                        <div className="table-cell">
+                          <strong>nextCbmDate:</strong>
+                        </div>
+                        <div className="table-cell">
+                          {new Date(cbm.nextCbmDate).toLocaleDateString()}
+                        </div>
+                      </div>
+                      <div className="table-row">
+                        <div className="table-cell">
+                          <strong>status:</strong>
+                        </div>
+                        <div className="table-cell">{cbm.status}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="actions">
+                    <NavLink to={`/editcbm/${cbm._id}`} style={{ color: '#000080' }}>
+                      <FaEdit />
+                    </NavLink>
+                    <button
+                      className="btn"
+                      onClick={() => deleteData(cbm._id)}
+                      style={{ color: 'red' }}
+                    >
+                      <MdDelete />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </>
+          )}
+        </div>
         <div>
           {scannedData && (
             <div>

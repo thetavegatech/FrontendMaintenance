@@ -19,6 +19,8 @@ import {
 import '../assetTable/asset.css'
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table'
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 
 class BDList extends React.Component {
   state = {
@@ -31,6 +33,7 @@ class BDList extends React.Component {
     startDate: '',
     endDate: '',
     loading: true,
+    expandedItems: [],
   }
 
   handleMouseEnter = () => {
@@ -149,6 +152,15 @@ class BDList extends React.Component {
     }
   }
 
+  toggleExpand = (index) => {
+    this.setState((prevState) => {
+      const expandedItems = prevState.expandedItems.includes(index)
+        ? prevState.expandedItems.filter((item) => item !== index)
+        : [...prevState.expandedItems, index]
+      return { expandedItems }
+    })
+  }
+
   render() {
     // const { breakdowns, selectedLocation } = this.state
     const { breakdowns, filteredAssets, searchLocation, searchQuery, loading } = this.state
@@ -178,14 +190,14 @@ class BDList extends React.Component {
                 Add New
               </CButton>
             </NavLink>
-            <CButton
+            {/* <CButton
               // color="info"
               type="button"
-              style={{ margin: '1rem', backgroundColor: '#000026' }}
+              style={{ margin: 'rem', backgroundColor: '#000026' }}
               onClick={this.exportToExcel}
             >
               Export to Excel
-            </CButton>
+            </CButton> */}
             <label
               htmlFor="startDate"
               style={{
@@ -260,7 +272,7 @@ class BDList extends React.Component {
               onMouseEnter={this.handleMouseEnter}
               onMouseLeave={this.handleMouseLeave}
             >
-              <option>Search by Plant</option>
+              <option>Search by Location</option>
               <option value="Plant 1">Plant 1</option>
               <option value="Plant 2">Plant 2 </option>
               <option value="Plant 3">Plant 3</option>
@@ -323,6 +335,101 @@ class BDList extends React.Component {
                 ))}
               </Tbody>
             </Table>
+            <div className="list-view">
+              {loading ? (
+                <p>Loading...</p>
+              ) : (
+                <>
+                  {this.message && (
+                    <p style={{ textAlign: 'center', fontStyle: 'italic', color: 'red' }}>
+                      {this.message}
+                    </p>
+                  )}
+                  {this.state.searchQuery
+                    ? filteredAssets.filter((breakdown) => openBreakdowns.includes(breakdown))
+                    : validatedAssets
+                        .filter((breakdown) => openBreakdowns.includes(breakdown))
+                        .map((breakDown, index) => (
+                          <div
+                            key={breakDown._id}
+                            className={`list-item ${
+                              this.state.expandedItems.includes(index) ? 'expanded' : ''
+                            }`}
+                          >
+                            <div className="expand">
+                              <FontAwesomeIcon
+                                icon={
+                                  this.state.expandedItems.includes(index)
+                                    ? faChevronUp
+                                    : faChevronDown
+                                }
+                                onClick={() => this.toggleExpand(index)}
+                              />
+                            </div>
+                            <div>
+                              <span>{breakDown.MachineName}</span> -{' '}
+                              <span>{breakDown.Location}</span>
+                            </div>
+                            <div
+                              className={`expanded-content ${
+                                this.state.expandedItems.includes(index) ? 'visible' : 'hidden'
+                              }`}
+                            >
+                              <div className="table-like">
+                                <div className="table-row">
+                                  <div className="table-cell">
+                                    <strong>BreakdownStartDate:</strong>
+                                  </div>
+                                  <div className="table-cell">
+                                    {new Date(breakDown.BreakdownStartDate).toLocaleDateString()}
+                                  </div>
+                                </div>
+                                <div className="table-row">
+                                  <div className="table-cell">
+                                    <strong>BreakdownType:</strong>
+                                  </div>
+                                  <div className="table-cell">{breakDown.BreakdownType}</div>
+                                </div>
+                                <div className="table-row">
+                                  <div className="table-cell">
+                                    <strong>LineName:</strong>
+                                  </div>
+                                  <div className="table-cell">{breakDown.LineName}</div>
+                                </div>
+                                <div className="table-row">
+                                  <div className="table-cell">
+                                    <strong>Remark:</strong>
+                                  </div>
+                                  <div className="table-cell">{breakDown.Remark}</div>
+                                </div>
+                                <div className="table-row">
+                                  <div className="table-cell">
+                                    <strong>status:</strong>
+                                  </div>
+                                  <div className="table-cell">{breakDown.Status}</div>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="actions">
+                              <NavLink
+                                to={`/pbdStatus/${breakDown._id}`}
+                                style={{ color: '#000080' }}
+                              >
+                                <FaEdit />
+                              </NavLink>
+                              {/* <button
+                          className="btn"
+                          onClick={() => deleteData(cbm._id)}
+                          style={{ color: 'red' }}
+                        >
+                          <MdDelete />
+                        </button> */}
+                            </div>
+                          </div>
+                        ))}
+                </>
+              )}
+            </div>
             {loading && (
               <div className="loader-container">
                 {/* <div className="loader">Loading...</div> */}
