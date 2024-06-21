@@ -1,0 +1,731 @@
+import React, { useState, useEffect } from 'react'
+import './Breakdown.css'
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
+
+export default function BreakDown() {
+  const [usernos, setUsers] = useState([])
+  const [selectedUserId, setSelectedUserId] = useState('')
+  const [selectedUserName, setSelectedUserName] = useState('')
+  useEffect(() => {
+    // Fetch user data from the server
+    axios
+      .get('http://localhost:5000/UserNo')
+      .then((response) => {
+        setUsers(response.data)
+      })
+      .catch((error) => {
+        console.error('Error fetching user data:', error)
+      })
+  }, [])
+  const handleUserSelect = (userId) => {
+    const selectedUser = usernos.find((usernos) => usernos.phoneNumber === userId)
+    if (selectedUser) {
+      setSelectedUserId(selectedUser.phoneNumber)
+      setSelectedUserName(selectedUser.name)
+    }
+  }
+  const navigate = useNavigate()
+  const [formData, setFormData] = useState({
+    MachineName: '',
+    BreakdownStartDate: '',
+    BreakdownEndDate: '',
+    BreakdownStartTime: '',
+    BreakdownEndTime: '',
+    Shift: '',
+    LineName: '',
+    StageName: '',
+    BreakdownPhenomenons: '',
+    BreakdownType: '',
+    OCC: '',
+    BreakdownTime: '',
+    ActionTaken: '',
+    WhyWhyAnalysis: '',
+    RootCause: '',
+    PermanentAction: '',
+    TargetDate: '',
+    Responsibility: '',
+    HD: '',
+    Remark: '',
+    Status: 'open',
+  })
+  const [machineNames, setMachineNames] = useState([])
+  const [assetNames, setAssetNames] = useState([])
+
+  useEffect(() => {
+    // Fetch asset names from 'http://localhost:5000/getAllData'
+    fetch('http://localhost:5000/getAllData')
+      .then((res) => res.json())
+      .then((data) => {
+        // Extract unique asset names from the data
+        const uniqueAssetNames = [...new Set(data.map((item) => item.AssetName))]
+        // Set the assetNames state with the unique asset names
+        setAssetNames(uniqueAssetNames)
+      })
+      .catch((error) => {
+        console.error('Error fetching asset names: ', error)
+      })
+  }, [])
+
+  useEffect(() => {
+    // Fetch the breakdown data from your API
+    fetch('http://localhost:5000/getBreakdownData')
+      .then((res) => res.json())
+      .then((data) => {
+        // Extract unique machine names from the breakdown data
+        const uniqueMachineNames = [...new Set(data.map((item) => item.MachineName))]
+        // Set the machineNames state with the unique machine names
+        setMachineNames(uniqueMachineNames)
+      })
+      .catch((error) => {
+        console.error('Error fetching breakdown data: ', error)
+      })
+  }, [])
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+
+    const {
+      MachineName,
+      BreakdownStartDate,
+      BreakdownEndDate,
+      BreakdownStartTime,
+      BreakdownEndTime,
+      Shift,
+      LineName,
+      StageName,
+      BreakdownPhenomenons,
+      BreakdownType,
+      OCC,
+      ActionTaken,
+      WhyWhyAnalysis,
+      RootCause,
+      PermanentAction,
+      TargetDate,
+      Responsibility,
+      HD,
+      Remark,
+      Status = 'open',
+    } = formData
+
+    console.log(
+      MachineName,
+      BreakdownStartDate,
+      BreakdownEndDate,
+      BreakdownStartTime,
+      BreakdownEndTime,
+      Shift,
+      LineName,
+      StageName,
+      BreakdownPhenomenons,
+      BreakdownType,
+      OCC,
+      ActionTaken,
+      WhyWhyAnalysis,
+      RootCause,
+      PermanentAction,
+      TargetDate,
+      Responsibility,
+      HD,
+      Remark,
+      Status,
+    )
+
+    fetch('http://localhost:5000/saveBreakdown', {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+        Accept: 'application/json',
+        'Access-Control-Allow-Origin': '*',
+      },
+      body: JSON.stringify({
+        MachineName,
+        BreakdownStartDate,
+        BreakdownEndDate,
+        BreakdownStartTime,
+        BreakdownEndTime,
+        Shift,
+        LineName,
+        StageName,
+        BreakdownPhenomenons,
+        BreakdownType,
+        OCC,
+        ActionTaken,
+        WhyWhyAnalysis,
+        RootCause,
+        PermanentAction,
+        TargetDate,
+        Responsibility,
+        HD,
+        Remark,
+        Status,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data, 'add breakdown data')
+        console.log(MachineName)
+        navigate(-1)
+      })
+  }
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    })
+  }
+  const apiKey = 'NDE1MDY2NGM2Mzc3NTI0ZjQzNmE1YTM5NDY0YzZlNzU='
+  const numbers = '9665753262' // Replace with the phone numbers
+  const data1 = 'test'
+  const data2 = 'test'
+  const sender = 'AAABRD'
+
+  const sendSMS = () => {
+    // Formulate the message
+    // const message = encodeURIComponent(
+    //   `Breakdown For ${data1} please visit concerned department. Details are ${data2} - Aurangabad Auto Ancillary`,
+    // )
+    const message = encodeURIComponent(
+      'Breakdown For ' +
+        data1 +
+        ' please visit concerned department Details are ' +
+        data2 +
+        ' - Aurangabad Auto Ancillary',
+    )
+    // Create the API URL
+    const url = `https://api.textlocal.in/send/?apikey=${apiKey}&sender=${sender}&numbers={9665753262}&message=${message}`
+
+    // Use fetch to send the SMS
+    fetch(url)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('SMS sent successfully:', data)
+      })
+      .catch((error) => {
+        console.error('Error sending SMS:', error)
+      })
+  }
+
+  const handleButtonClick = () => {
+    // Call the SMS sending function
+    sendSMS()
+  }
+  return (
+    <>
+      <div
+        className="container-lg"
+        style={{ border: '2px', backgroundColor: '', height: '50%', width: '90%' }}
+      >
+        <div className="container">
+          <form action="#" method="post" onSubmit={handleSubmit}>
+            {/* Add Breakdown Detail Fields */}
+            {/* <h3>Add Breakdown Detail</h3> */}
+            <div className="row g-2">
+              <div className="col-md-6">
+                <label htmlFor="machineName">Machine Name:</label>
+                <select
+                  className="form-control col-sm-6"
+                  required
+                  name="MachineName"
+                  value={formData.AssetName}
+                  onChange={handleChange}
+                >
+                  <option value="">Select a machine</option>
+                  {/* Populate the dropdown options with asset names */}
+                  {assetNames.map((asset, index) => (
+                    <option key={index} value={asset}>
+                      {asset}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="col-md-6">
+                <label htmlFor="breakdownDate">Breakdown Start Date:</label>
+                <input
+                  type="date"
+                  required
+                  className="form-control col-sm-6"
+                  name="BreakdownStartDate"
+                  value={formData.BreakdownStartDate}
+                  onChange={handleChange}
+                  placeholder=""
+                />
+              </div>
+              <div className="col-md-6">
+                <label htmlFor="shift">Shift:</label>
+                <input
+                  type="text"
+                  required
+                  className="form-control col-sm-6"
+                  name="Shift"
+                  value={formData.Shift}
+                  onChange={handleChange}
+                  placeholder=""
+                />
+              </div>
+              <div className="col-md-6">
+                <label htmlFor="brekdownStartTime">BreakdownStartTime:</label>
+                <input
+                  type="text"
+                  required
+                  className="form-control col-sm-6"
+                  name="BreakdownStartTime"
+                  value={formData.BreakdownStartTime}
+                  onChange={handleChange}
+                  placeholder=""
+                />
+              </div>
+              <div className="col-md-6">
+                <label htmlFor="lineName">Line Name:</label>
+                <input
+                  type="text"
+                  required
+                  name="LineName"
+                  className="form-control col-sm-6"
+                  value={formData.LineName}
+                  onChange={handleChange}
+                  placeholder=""
+                />
+              </div>
+              <div className="col-md-6">
+                <label htmlFor="stageName">Stage Name:</label>
+                <input
+                  type="text"
+                  required
+                  className="form-control col-sm-6"
+                  name="StageName"
+                  value={formData.StageName}
+                  onChange={handleChange}
+                  placeholder=""
+                />
+              </div>
+              <div className="col-md-6">
+                <label htmlFor="breakdownPhenomen">Breakdown Phenomenon:</label>
+                <input
+                  type="text"
+                  required
+                  name="BreakdownPhenomenons"
+                  className="form-control col-sm-6"
+                  value={formData.BreakdownPhenomenons}
+                  onChange={handleChange}
+                  placeholder=""
+                />
+              </div>
+              <div className="">
+                <select onChange={(e) => handleUserSelect(e.target.value)}>
+                  <option className="form-control col-sm-6" value="">
+                    Select a user
+                  </option>
+                  {usernos.map((usernos) => (
+                    <option key={usernos.phoneNumber} value={usernos.phoneNumber}>
+                      {usernos.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="col-md-6">
+                <label>Name:</label>
+                <input
+                  className="form-control col-sm-6"
+                  type="text"
+                  value={selectedUserName}
+                  readOnly
+                />
+              </div>
+              <div className="col-md-6">
+                <label>Phone Number:</label>
+                <input
+                  className="form-control col-sm-6"
+                  type="text"
+                  value={selectedUserId}
+                  readOnly
+                />
+              </div>
+              <div className="col-xs-12">
+                <button type="submit" onClick={handleButtonClick}>
+                  Submit
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </>
+  )
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import React, { useState, useEffect } from 'react'
+import './Breakdown.css'
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
+
+export default function BreakDown() {
+  const [usernos, setUsers] = useState([])
+  const [selectedUser, setSelectedUser] = useState(null)
+  const [selectedUserName, setSelectedUserName] = useState('')
+  const [selectedUserId, setSelectedUserId] = useState('')
+  useEffect(() => {
+    // Fetch user data from the server
+    axios
+      .get('http://localhost:5000/UserNo')
+      .then((response) => {
+        setUsers(response.data)
+      })
+      .catch((error) => {
+        console.error('Error fetching user data:', error)
+      })
+  }, [])
+
+  const handleUserSelect = (userId) => {
+    // Find the selected user by their phoneNumber
+    const user = usernos.find((user) => user.phoneNumber === userId)
+    if (user) {
+      setSelectedUser(user)
+      setSelectedUserId(user.phoneNumber)
+      setSelectedUserName(user.name)
+    }
+  }
+
+  const navigate = useNavigate()
+  const [formData, setFormData] = useState({
+    MachineName: '',
+    BreakdownStartDate: '',
+    BreakdownEndDate: '',
+    BreakdownStartTime: '',
+    BreakdownEndTime: '',
+    Shift: '',
+    LineName: '',
+    StageName: '',
+    BreakdownPhenomenons: '',
+    BreakdownType: '',
+    OCC: '',
+    BreakdownTime: '',
+    ActionTaken: '',
+    WhyWhyAnalysis: '',
+    RootCause: '',
+    PermanentAction: '',
+    TargetDate: '',
+    Responsibility: '',
+    HD: '',
+    Remark: '',
+    Status: 'open',
+  })
+  const [machineNames, setMachineNames] = useState([])
+  const [assetNames, setAssetNames] = useState([])
+
+  useEffect(() => {
+    // Fetch asset names from 'http://localhost:5000/getAllData'
+    fetch('http://localhost:5000/getAllData')
+      .then((res) => res.json())
+      .then((data) => {
+        // Extract unique asset names from the data
+        const uniqueAssetNames = [...new Set(data.map((item) => item.AssetName))]
+        // Set the assetNames state with the unique asset names
+        setAssetNames(uniqueAssetNames)
+      })
+      .catch((error) => {
+        console.error('Error fetching asset names: ', error)
+      })
+  }, [])
+
+  useEffect(() => {
+    // Fetch the breakdown data from your API
+    fetch('http://localhost:5000/getBreakdownData')
+      .then((res) => res.json())
+      .then((data) => {
+        // Extract unique machine names from the breakdown data
+        const uniqueMachineNames = [...new Set(data.map((item) => item.MachineName))]
+        // Set the machineNames state with the unique machine names
+        setMachineNames(uniqueMachineNames)
+      })
+      .catch((error) => {
+        console.error('Error fetching breakdown data: ', error)
+      })
+  }, [])
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+
+    const {
+      MachineName,
+      BreakdownStartDate,
+      BreakdownEndDate,
+      BreakdownStartTime,
+      BreakdownEndTime,
+      Shift,
+      LineName,
+      StageName,
+      BreakdownPhenomenons,
+      BreakdownType,
+      OCC,
+      ActionTaken,
+      WhyWhyAnalysis,
+      RootCause,
+      PermanentAction,
+      TargetDate,
+      Responsibility,
+      HD,
+      Remark,
+      Status = 'open',
+    } = formData
+
+    console.log(
+      MachineName,
+      BreakdownStartDate,
+      BreakdownEndDate,
+      BreakdownStartTime,
+      BreakdownEndTime,
+      Shift,
+      LineName,
+      StageName,
+      BreakdownPhenomenons,
+      BreakdownType,
+      OCC,
+      ActionTaken,
+      WhyWhyAnalysis,
+      RootCause,
+      PermanentAction,
+      TargetDate,
+      Responsibility,
+      HD,
+      Remark,
+      Status,
+    )
+
+    fetch('http://localhost:5000/saveBreakdown', {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+        Accept: 'application/json',
+        'Access-Control-Allow-Origin': '*',
+      },
+      body: JSON.stringify({
+        MachineName,
+        BreakdownStartDate,
+        BreakdownEndDate,
+        BreakdownStartTime,
+        BreakdownEndTime,
+        Shift,
+        LineName,
+        StageName,
+        BreakdownPhenomenons,
+        BreakdownType,
+        OCC,
+        ActionTaken,
+        WhyWhyAnalysis,
+        RootCause,
+        PermanentAction,
+        TargetDate,
+        Responsibility,
+        HD,
+        Remark,
+        Status,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data, 'add breakdown data')
+        console.log(MachineName)
+        navigate(-1)
+      })
+  }
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    })
+  }
+  const apiKey = 'NDE1MDY2NGM2Mzc3NTI0ZjQzNmE1YTM5NDY0YzZlNzU='
+  const numbers = '9665753262' // Replace with the phone numbers
+  const data1 = 'test'
+  const data2 = 'test'
+  const sender = 'AAABRD'
+
+  const sendSMS = () => {
+    // Formulate the message
+    // const message = encodeURIComponent(
+    //   `Breakdown For ${data1} please visit concerned department. Details are ${data2} - Aurangabad Auto Ancillary`,
+    // )
+    const message = encodeURIComponent(
+      'Breakdown For ' +
+        data1 +
+        ' please visit concerned department Details are ' +
+        data2 +
+        ' - Aurangabad Auto Ancillary',
+    )
+    // Create the API URL
+    const url = `https://api.textlocal.in/send/?apikey=${apiKey}&sender=${sender}&numbers={9665753262}&message=${message}`
+
+    // Use fetch to send the SMS
+    fetch(url)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('SMS sent successfully:', data)
+      })
+      .catch((error) => {
+        console.error('Error sending SMS:', error)
+      })
+  }
+
+  const handleButtonClick = () => {
+    // Call the SMS sending function
+    sendSMS()
+  }
+  return (
+    <>
+      <div
+        className="container-lg"
+        style={{ border: '2px', backgroundColor: '', height: '50%', width: '90%' }}
+      >
+        <div className="container">
+          <form action="#" method="post" onSubmit={handleSubmit}>
+            {/* Add Breakdown Detail Fields */}
+            {/* <h3>Add Breakdown Detail</h3> */}
+            <div className="row g-2">
+              <div className="col-md-6">
+                <label htmlFor="machineName">Machine Name:</label>
+                <select
+                  className="form-control col-sm-6"
+                  required
+                  name="MachineName"
+                  value={formData.AssetName}
+                  onChange={handleChange}
+                >
+                  <option value="">Select a machine</option>
+                  {/* Populate the dropdown options with asset names */}
+                  {assetNames.map((asset, index) => (
+                    <option key={index} value={asset}>
+                      {asset}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="col-md-6">
+                <label htmlFor="breakdownDate">Breakdown Start Date:</label>
+                <input
+                  type="date"
+                  required
+                  className="form-control col-sm-6"
+                  name="BreakdownStartDate"
+                  value={formData.BreakdownStartDate}
+                  onChange={handleChange}
+                  placeholder=""
+                />
+              </div>
+              <div className="col-md-6">
+                <label htmlFor="shift">Shift:</label>
+                <input
+                  type="text"
+                  required
+                  className="form-control col-sm-6"
+                  name="Shift"
+                  value={formData.Shift}
+                  onChange={handleChange}
+                  placeholder=""
+                />
+              </div>
+              <div className="col-md-6">
+                <label htmlFor="brekdownStartTime">BreakdownStartTime:</label>
+                <input
+                  type="text"
+                  required
+                  className="form-control col-sm-6"
+                  name="BreakdownStartTime"
+                  value={formData.BreakdownStartTime}
+                  onChange={handleChange}
+                  placeholder=""
+                />
+              </div>
+              <div className="col-md-6">
+                <label htmlFor="lineName">Line Name:</label>
+                <input
+                  type="text"
+                  required
+                  name="LineName"
+                  className="form-control col-sm-6"
+                  value={formData.LineName}
+                  onChange={handleChange}
+                  placeholder=""
+                />
+              </div>
+              <div className="col-md-6">
+                <label htmlFor="stageName">Stage Name:</label>
+                <input
+                  type="text"
+                  required
+                  className="form-control col-sm-6"
+                  name="StageName"
+                  value={formData.StageName}
+                  onChange={handleChange}
+                  placeholder=""
+                />
+              </div>
+              <div className="col-md-6">
+                <label htmlFor="breakdownPhenomen">Breakdown Phenomenon:</label>
+                <input
+                  type="text"
+                  required
+                  name="BreakdownPhenomenons"
+                  className="form-control col-sm-6"
+                  value={formData.BreakdownPhenomenons}
+                  onChange={handleChange}
+                  placeholder=""
+                />
+              </div>
+              <div className="">
+                <label>Select Users:</label>
+                <select multiple onChange={(e) => handleUserSelect(e.target.value)}>
+                  {usernos.map((user) => (
+                    <option key={user.phoneNumber} value={user.phoneNumber}>
+                      {user.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="col-md-6">
+                <label>Name:</label>
+                <input
+                  className="form-control col-sm-6"
+                  type="text"
+                  value={selectedUserName}
+                  readOnly
+                />
+              </div>
+              <div className="col-md-6">
+                <label>Phone Number:</label>
+                <input
+                  className="form-control col-sm-6"
+                  type="text"
+                  value={selectedUserId}
+                  readOnly
+                />
+              </div>
+              <div className="col-xs-12">
+                <button type="submit" onClick={handleButtonClick}>
+                  Submit
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </>
+  )
+}
+

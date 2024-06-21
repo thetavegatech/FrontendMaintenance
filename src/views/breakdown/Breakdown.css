@@ -1,0 +1,64 @@
+/* form {
+    max-width: 1150px;
+    margin: 0 auto;
+    padding: 20px;
+    /* background-color: #f0ebeb; */
+    /* border: 1px solid #ddd; */
+    /* border-radius: 5px; */
+    /* font-family: Arial, sans-serif; */
+/* } */ */
+
+/* Style for form groups */
+.form-group-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.form-group-row label {
+    flex-basis: 45%;
+    text-align: right;
+    margin-right: 10px;
+}
+
+.form-control {
+    flex: 50%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Style for textareas */
+textarea {
+    flex: 50%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical; /* Allow vertical resizing of textareas */
+}
+
+/* Style for buttons */
+button[type="submit"] {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* Additional styles for headers */
+h1 {
+    font-size: 24px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.container{
+    overflow: hidden;
+}

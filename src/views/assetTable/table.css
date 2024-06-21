@@ -1,0 +1,56 @@
+
+/* tabs.css */
+
+/* General Styles */
+.custom-tabs-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    padding: 5px;
+  }
+  
+  .custom-tab-link {
+    margin: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    background-color: #e2e6ea;
+    color: #000026;
+    font-weight: bold;
+    text-align: center;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .custom-tab-link.active {
+    background-color: #000026;
+    color: #fff;
+  }
+  
+  .custom-tab-link:hover {
+    background-color: #d6d8db;
+    color: #000026;
+  }
+  
+  /* Tab Content */
+  .ctab-content {
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 768px) {
+    .custom-tab-link {
+      flex: 1 1 100%;
+      margin: 0.5rem 0;
+    }
+  
+    .ctab-content {
+      padding: 0.5rem;
+    }
+  }
+  

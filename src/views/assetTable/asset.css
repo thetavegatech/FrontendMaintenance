@@ -1,0 +1,125 @@
+/* General Styles */
+.container {
+  margin: 20px auto;
+  max-width: 1200px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.table-container {
+  overflow-x: auto;
+  border-radius: 8px;
+}
+
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.custom-table th, .custom-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.custom-table th {
+  background-color: #000026;
+  color: white;
+}
+
+.custom-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+/* List View Styles */
+.list-view {
+  display: none; /* Hide the list view by default */
+}
+
+.list-item {
+  background-color: #fff;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.list-item div {
+  margin-bottom: 10px;
+}
+
+.list-item div span {
+  font-weight: bold;
+}
+
+.mb-2 {
+  margin-right: 20px;
+}
+
+/* Mobile View - List Style */
+@media screen and (max-width: 768px) {
+  .mb-2 {
+    width: 70%;
+  }
+    .custom-table {
+      display: none; /* Hide the table on small screens */
+    }
+    
+    .list-view {
+      display: block; /* Show the list view on small screens */
+    }
+  
+    .list-item {
+      border: 1px solid #ccc;
+      margin-bottom: 10px;
+      padding: 10px;
+    }
+  
+    .list-item div {
+      margin-bottom: 5px;
+    }
+  
+    .list-item .expand {
+      display: block;
+      text-align: right;
+      margin-bottom: 10px;
+    }
+  
+    .list-item .expand i {
+      cursor: pointer;
+    }
+  
+    .expanded-content {
+      display: none;
+    }
+  
+    .expanded .expanded-content {
+      display: block;
+    }
+  
+    .table-like {
+      display: table;
+      width: 100%;
+    }
+  
+    .table-row {
+      display: table-row;
+    }
+  
+    .table-cell {
+      display: table-cell;
+      padding: 5px;
+      border: 1px solid #ccc;
+    }
+  
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+    }
+  }
+  
