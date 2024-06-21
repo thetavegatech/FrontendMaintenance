@@ -204,7 +204,6 @@ const TbmTable = () => {
               {/* <th style={{ textAlign: 'center' }}>Asset Type</th> */}
               {/* <Th style={{ textAlign: 'center' }}>Installation Date</Th> */}
               <Th style={{ textAlign: 'center' }}>TBM Schedule Date</Th>
-              <Th></Th>
               <Th style={{ textAlign: 'center' }}>TBM Frequency</Th>
               <Th style={{ textAlign: 'center' }}>Next TBM Date</Th>
               <Th style={{ textAlign: 'center' }}>Status</Th>
@@ -244,7 +243,6 @@ const TbmTable = () => {
                     <Td style={{ textAlign: 'center' }}>
                       {new Date(tbm.tbmScheduleDate).toLocaleDateString()}
                     </Td>
-                    <Td></Td>
                     <Td style={{ textAlign: 'center' }}>{tbm.tbmFrequency}</Td>
                     <Td style={{ textAlign: 'center' }}>
                       {new Date(tbm.nextTbmDate).toLocaleDateString()}

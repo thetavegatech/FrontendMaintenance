@@ -285,9 +285,7 @@ class BDList extends React.Component {
                 <Tr>
                   <Th style={{ textAlign: 'center', height: '40px' }}>Machine Code</Th>
                   <Th style={{ textAlign: 'center' }}>BreakDown Start Date</Th>
-                  <Th></Th>
                   <Th style={{ textAlign: 'center' }}>Breakdown Type</Th>
-                  {/* <Th></Th> */}
                   <Th style={{ textAlign: 'center' }}>Location</Th>
                   <Th style={{ textAlign: 'center' }}>Line Name</Th>
                   <Th style={{ textAlign: 'center' }}>Remark</Th>
@@ -312,9 +310,7 @@ class BDList extends React.Component {
                       {' '}
                       {new Date(breakdown.Date).toLocaleDateString()}
                     </Td>
-                    <Td></Td>
                     <Td style={{ textAlign: 'center' }}>{breakdown.BreakdownType}</Td>
-                    {/* <Td></Td> */}
                     <Td style={{ textAlign: 'center' }}>{breakdown.Location}</Td>
                     <Td style={{ textAlign: 'center' }}>{breakdown.LineName}</Td>
                     <Td style={{ textAlign: 'center' }}>{breakdown.Remark}</Td>

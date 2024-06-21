@@ -212,7 +212,6 @@ class BDList extends React.Component {
                     Machine Name
                   </Th>
                   <Th style={{ textAlign: 'center', color: 'white' }}>BreakDown Start Date</Th>
-                  <Td></Td>
                   <Th style={{ textAlign: 'center', color: 'white' }}>Shift</Th>
                   <Th style={{ textAlign: 'center', color: 'white' }}>Location</Th>
                   <Th style={{ textAlign: 'center', color: 'white' }}>Line Name</Th>
@@ -248,7 +247,6 @@ class BDList extends React.Component {
                         <Td style={{ textAlign: 'center' }}>
                           {new Date(breakdown.BreakdownStartDate).toISOString().split('T')[0]}
                         </Td>
-                        <Td></Td>
                         <Td style={{ textAlign: 'center' }}>{breakdown.Shift}</Td>
                         <Td style={{ textAlign: 'center' }}>{breakdown.Location}</Td>
                         <Td style={{ textAlign: 'center' }}>{breakdown.LineName}</Td>

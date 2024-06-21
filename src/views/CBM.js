@@ -199,7 +199,6 @@ const AssetTable = () => {
               <Th>Location</Th>
               {/* <Th style={{ textAlign: 'center' }}>Installation Date</Th> */}
               <Th>CBM Schedule Date</Th>
-              <Th></Th>
               <Th>CBM Frequency</Th>
               <Th>Next CBM</Th>
               <Th>Status</Th>
@@ -235,7 +234,6 @@ const AssetTable = () => {
                     {new Date(cbm.installationDate).toLocaleDateString()}
                   </Td> */}
                     <Td>{new Date(cbm.cbmScheduleDate).toLocaleDateString()}</Td>
-                    <Td></Td>
                     <Td>{cbm.cbmFrequency}</Td>
                     <Td>{new Date(cbm.nextCbmDate).toLocaleDateString()}</Td>
                     <Td>{cbm.status}</Td>

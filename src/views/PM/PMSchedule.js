@@ -431,9 +431,7 @@ class AssetTable extends React.Component {
                 <Th style={{ textAlign: 'center' }}>Location</Th>
                 <Th style={{ textAlign: 'center' }}>Task Name</Th>
                 <Th style={{ textAlign: 'center' }}>Task Description</Th>
-                {/* <Th></Th> */}
                 <Th style={{ textAlign: 'center' }}>Scheduled Maintenance</Th>
-                <Th></Th>
                 <Th style={{ textAlign: 'center' }}>Start Date</Th>
                 <Th style={{ textAlign: 'center' }}>Next Date</Th>
                 <Th style={{ textAlign: 'center' }}>Status</Th>
@@ -469,11 +467,9 @@ class AssetTable extends React.Component {
                       <Td style={{ textAlign: 'center' }}>{asset.Location}</Td>
                       <Td style={{ textAlign: 'center' }}>{asset.TaskName}</Td>
                       <Td style={{ textAlign: 'center' }}>{asset.TaskDescription}</Td>
-                      {/* <Td></Td> */}
                       <Td style={{ textAlign: 'center' }}>
                         {asset.ScheduledMaintenanceDatesandIntervals}
                       </Td>
-                      <Td></Td>
                       <Td style={{ textAlign: 'center' }}>
                         {new Date(asset.startDate).toISOString().split('T')[0]}
                       </Td>
