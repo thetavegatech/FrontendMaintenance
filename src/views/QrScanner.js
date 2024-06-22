@@ -21,15 +21,18 @@ const QrScanner = ({ onClose }) => {
       }
     }
 
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-      console.log('navigator.mediaDevices and getUserMedia are available')
-      checkCameraAccess()
-    } else {
-      console.error(
-        'navigator.mediaDevices or navigator.mediaDevices.getUserMedia is not available',
-      )
-      alert('Camera not supported on this device or browser.')
+    const checkGetUserMediaSupport = () => {
+      const supportsGetUserMedia = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)
+      if (supportsGetUserMedia) {
+        console.log('getUserMedia is supported!')
+        checkCameraAccess()
+      } else {
+        console.error('getUserMedia is not supported on this device/browser.')
+        alert('Your browser does not support getUserMedia. Please use a modern browser.')
+      }
     }
+
+    checkGetUserMediaSupport()
   }, [])
 
   const handleScan = (data) => {
@@ -56,7 +59,7 @@ const QrScanner = ({ onClose }) => {
               handleScan(result.text)
             }
           }}
-          constraints={{ facingMode: { exact: 'environment' } }}
+          constraints={{ facingMode: 'environment' }}
           style={{ width: '100%' }}
         />
         <button onClick={onClose}>Close</button>
