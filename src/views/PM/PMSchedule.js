@@ -9,8 +9,10 @@ import loadingGif from '../assetTable/loader.gif'
 import '../assetTable/asset.css'
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table'
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
+import { FaChevronUp, FaChevronDown } from 'react-icons/fa'
+
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+// import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 
 class AssetTable extends React.Component {
   state = {
@@ -522,12 +524,11 @@ class AssetTable extends React.Component {
                     }`}
                   >
                     <div className="expand">
-                      <FontAwesomeIcon
-                        icon={
-                          this.state.expandedItems.includes(index) ? faChevronUp : faChevronDown
-                        }
-                        onClick={() => this.toggleExpand(index)}
-                      />
+                      {this.state.expandedItems.includes(index) ? (
+                        <FaChevronUp onClick={() => this.toggleExpand(index)} />
+                      ) : (
+                        <FaChevronDown onClick={() => this.toggleExpand(index)} />
+                      )}
                     </div>
                     <div>
                       <span>{asset.AssetName}</span> - <span>{asset.Location}</span>

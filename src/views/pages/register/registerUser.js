@@ -8,9 +8,10 @@ import { FaEdit } from 'react-icons/fa'
 import { MdDelete } from 'react-icons/md'
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table'
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+// import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 // import '../asset.css'
+import { FaChevronUp, FaChevronDown } from 'react-icons/fa'
 
 export default function Users() {
   const [usernos, setUsers] = useState([])
@@ -123,10 +124,11 @@ export default function Users() {
                   className={`list-item ${expandedItems.includes(index) ? 'expanded' : ''}`}
                 >
                   <div className="expand">
-                    <FontAwesomeIcon
-                      icon={expandedItems.includes(index) ? faChevronUp : faChevronDown}
-                      onClick={() => toggleExpand(index)}
-                    />
+                    {expandedItems.includes(index) ? (
+                      <FaChevronUp onClick={() => toggleExpand(index)} />
+                    ) : (
+                      <FaChevronDown onClick={() => toggleExpand(index)} />
+                    )}
                   </div>
                   <div>
                     <span>{user.name}</span> - <span>{user.role}</span>
