@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { addDays, addWeeks, addMonths } from 'date-fns'
 import { useParams, useNavigate } from 'react-router-dom'
+import './form.css'
 
 const CBMEdit = () => {
   const [formData, setFormData] = useState({
@@ -208,7 +209,9 @@ const CBMEdit = () => {
             </select>
           </div>
         </div>
-        <button type="submit">Submit</button>
+        <button type="submit" className="submit-button">
+          Submit
+        </button>
       </form>
       {message && <p>{message}</p>}
     </div>

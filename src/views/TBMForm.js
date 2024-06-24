@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { addDays, addWeeks, addMonths } from 'date-fns'
 import './form.css'
+import { useParams, useNavigate } from 'react-router-dom'
 
 const TBMForm = () => {
   const [formData, setFormData] = useState({
@@ -14,7 +15,7 @@ const TBMForm = () => {
     nextTbmDate: '',
     status: 'Pending',
   })
-
+  const navigate = useNavigate()
   const [message, setMessage] = useState('')
   const [assets, setAssets] = useState([])
 
@@ -108,6 +109,7 @@ const TBMForm = () => {
         nextTbmDate: '',
         status: 'Pending',
       }))
+      navigate(-1)
     } catch (error) {
       setMessage('Error creating TBM record.')
       console.error('There was an error creating the TBM record:', error)
