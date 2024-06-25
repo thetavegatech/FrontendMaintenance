@@ -183,7 +183,7 @@ export default function BreakDown() {
     }
 
     // Proceed with form submission
-    fetch('https://backendmaintenx.onrender.com/saveBreakdown', {
+    fetch('https://backendmaintenx.onrender.com/api/breakdown', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
