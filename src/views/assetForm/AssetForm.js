@@ -138,11 +138,10 @@ const MyFormComponent = () => {
       className="container"
       style={{
         border: '1px solid #ccc',
-        padding: '5px',
-        backgroundColor: '',
+        padding: '20px',
+        backgroundColor: '#f9f9f9',
         borderRadius: '10px',
         boxShadow: '2px 4px 4px rgba(0, 0, 0, 0.1)',
-        height: '50%',
         width: '100%',
       }}
     >
@@ -154,127 +153,44 @@ const MyFormComponent = () => {
       )}
       <form onSubmit={handleSubmit} style={{ margin: '3%' }}>
         <div className="row g-3">
-          <div className="col-md-6">
-            <label htmlFor="assetName" style={{ marginBottom: '10px' }}>
-              Machine Name:
-            </label>
-            <input
-              required
-              type="text"
-              className="form-control col-sm-6"
-              id="assetName"
-              // value={''}
-              onChange={(e) => setFormData({ ...formData, AssetName: e.target.value })}
-            />
-          </div>
-          <div className="col-md-6">
-            <label htmlFor="machineNo" style={{ marginBottom: '10px' }} className="form-label">
-              MachineNo:
-            </label>
-            <input
-              className="form-control col-sm-6"
-              required
-              type="number"
-              id="MachineNo"
-              value={formData.MachineNo}
-              // value={''}
-              onChange={(e) => setFormData({ ...formData, MachineNo: e.target.value })}
-            />
-          </div>
-          <div className="col-md-6">
-            <label htmlFor="srno" style={{ marginBottom: '10px' }}>
-              Sr No:
-            </label>
-            <input
-              required
-              type="number"
-              className="form-control col-sm-6"
-              id="srno"
-              onChange={(e) => setFormData({ ...formData, SrNo: e.target.value })}
-            />
-          </div>
-          <div className="col-md-6">
-            <label htmlFor="assetmachinetype" style={{ marginBottom: '10px' }}>
-              Machine Type:
-            </label>
-            <input
-              required
-              type="text"
-              className="form-control col-sm-6"
-              id="MachineType"
-              onChange={(e) => setFormData({ ...formData, MachineType: e.target.value })}
-            />
-          </div>
-          <div className="col-md-6">
-            <label htmlFor="Model" style={{ marginBottom: '10px' }}>
-              Model:
-            </label>
-            <input
-              required
-              type="text"
-              className="form-control col-sm-6"
-              id="Model"
-              onChange={(e) => setFormData({ ...formData, Model: e.target.value })}
-            />
-          </div>
-          <div className="col-md-6">
-            <label htmlFor="controller" style={{ marginBottom: '10px' }}>
-              Controller:
-            </label>
-            <input
-              required
-              type="text"
-              className="form-control col-sm-6"
-              id="controller"
-              onChange={(e) => setFormData({ ...formData, Controller: e.target.value })}
-            />
-          </div>
-          <div className="col-md-6">
-            <label htmlFor="powerRatting" style={{ marginBottom: '10px' }}>
-              Power Ratting:
-            </label>
-            <input
-              required
-              type="text"
-              className="form-control col-sm-6"
-              id="powerRatting"
-              onChange={(e) => setFormData({ ...formData, PowerRatting: e.target.value })}
-            />
-          </div>
-          <div className="col-md-6">
-            <label htmlFor="capecitySpindle" style={{ marginBottom: '10px' }}>
-              Capecity Spindle:
-            </label>
-            <input
-              required
-              type="text"
-              className="form-control col-sm-6"
-              id="capecitySpindle"
-              onChange={(e) => setFormData({ ...formData, CapecitySpindle: e.target.value })}
-            />
-          </div>
-          <div className="col-md-6">
-            <label htmlFor="axistravels" style={{ marginBottom: '10px' }}>
-              Axis Travels:
-            </label>
-            <input
-              required
-              type="text"
-              className="form-control col-sm-6"
-              id="axistravels"
-              onChange={(e) => setFormData({ ...formData, AxisTravels: e.target.value })}
-            />
-          </div>
-          <div className="col-md-6">
+          {[
+            { label: 'Machine Name', id: 'assetName', type: 'text', valueKey: 'AssetName' },
+            { label: 'Machine No', id: 'MachineNo', type: 'number', valueKey: 'MachineNo' },
+            { label: 'Sr No', id: 'srno', type: 'number', valueKey: 'SrNo' },
+            { label: 'Machine Type', id: 'MachineType', type: 'text', valueKey: 'MachineType' },
+            { label: 'Model', id: 'Model', type: 'text', valueKey: 'Model' },
+            { label: 'Controller', id: 'controller', type: 'text', valueKey: 'Controller' },
+            { label: 'Power Rating', id: 'powerRatting', type: 'text', valueKey: 'PowerRatting' },
+            {
+              label: 'Capacity Spindle',
+              id: 'capecitySpindle',
+              type: 'text',
+              valueKey: 'CapecitySpindle',
+            },
+            { label: 'Axis Travels', id: 'axistravels', type: 'text', valueKey: 'AxisTravels' },
+          ].map(({ label, id, type, valueKey }) => (
+            <div className="col-md-3" key={id} style={{ marginBottom: '15px' }}>
+              <label htmlFor={id} style={{ marginBottom: '5px', display: 'block' }}>
+                {label}:
+              </label>
+              <input
+                required
+                type={type}
+                className="form-control"
+                id={id}
+                onChange={(e) => setFormData({ ...formData, [valueKey]: e.target.value })}
+              />
+            </div>
+          ))}
+          <div className="col-md-3" style={{ marginBottom: '15px' }}>
             <label htmlFor="assetLocation" className="form-label">
               Location:
             </label>
             <select
-              className="form-control col-sm-6"
+              className="form-control"
               required
               id="assetLocation"
               name="assetLocation"
-              style={{ marginBottom: '10px' }}
               onChange={(e) => setFormData({ ...formData, Location: e.target.value })}
             >
               <option value="">Select an option</option>
@@ -284,16 +200,15 @@ const MyFormComponent = () => {
               <option value="Plant 4">Plant 4</option>
             </select>
           </div>
-          <div className="col-md-6">
+          <div className="col-md-3" style={{ marginBottom: '15px' }}>
             <label htmlFor="ranking" className="form-label">
               Ranking:
             </label>
             <select
-              className="form-control col-sm-6"
+              className="form-control"
               required
               id="ranking"
               name="ranking"
-              style={{ marginBottom: '10px' }}
               onChange={(e) => setFormData({ ...formData, Ranking: e.target.value })}
             >
               <option value="">Select an option</option>
@@ -304,51 +219,49 @@ const MyFormComponent = () => {
               <option value="5">5</option>
             </select>
           </div>
-          <div className="col-md-6">
-            <label htmlFor="installationDate" style={{ marginBottom: '10px' }}>
-              Insatallation Date:
+          <div className="col-md-3" style={{ marginBottom: '15px' }}>
+            <label htmlFor="installationDate" style={{ marginBottom: '5px', display: 'block' }}>
+              Installation Date:
             </label>
             <input
-              // required
               type="date"
-              className="form-control col-sm-6"
+              className="form-control"
               id="InstallationDate"
               name="InstallationDate"
               onChange={(e) => setFormData({ ...formData, InstallationDate: e.target.value })}
             />
           </div>
-          <div className="col-md-6">
-            <label htmlFor="manufacturingyear" style={{ marginBottom: '10px' }}>
+          <div className="col-md-3" style={{ marginBottom: '15px' }}>
+            <label htmlFor="manufacturingyear" style={{ marginBottom: '5px', display: 'block' }}>
               Manufacturing Year:
             </label>
             <input
               required
-              type="year"
-              // min="2000"
-              className="form-control col-sm-6"
+              type="number"
+              className="form-control"
               id="manufacturingyear"
               onChange={(e) => setFormData({ ...formData, ManufacturingYear: e.target.value })}
             />
           </div>
-          <div className="col-md-6">
+          <div className="col-md-3" style={{ marginBottom: '15px' }}>
             <label htmlFor="attachment">Attachment:</label>
             <input
               type="file"
               id="Image"
               name="Image"
-              className="form-control col-sm-6"
+              className="form-control"
               onChange={convertToBse64}
-            ></input>
+            />
           </div>
-          <div className="col-xs-12">
+          <div className="col-12">
             <button
               type="submit"
               className="btn btn-primary"
               style={{
                 marginTop: '20px',
-                marginBottom: '10px',
                 fontSize: '16px',
-                transition: 'background-color 0.3s',
+                backgroundColor: '#000026',
+                // transition: 'background-color 0.3s',
                 cursor: 'pointer',
               }}
               onMouseOver={(e) => (e.target.style.backgroundColor = '#009bff')}
@@ -360,6 +273,7 @@ const MyFormComponent = () => {
         </div>
       </form>
     </div>
+
     // </div>
   )
 }

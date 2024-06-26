@@ -361,7 +361,7 @@ export default function BreakDown() {
         )}
         <form action="" method="post" onSubmit={handleSubmit}>
           <div className="row g-2">
-            <div className="col-md-6">
+            <div className="col-md-3">
               <label htmlFor="machineName" style={{ marginBottom: '10px', fontSize: '16px' }}>
                 Machine Number:
               </label>
@@ -369,54 +369,14 @@ export default function BreakDown() {
                 className="form-control"
                 required
                 name="MachineName"
-                // value={formData.MachineName}
                 value={formData.AssetName}
-                // value={
-                //   formData.MachineName
-                //     ? { label: formData.MachineName, value: formData.MachineName }
-                //     : null
-                // }
-                // value={selectedMachineName}
                 onChange={(selectedOption) => handleMachineNumberChange(selectedOption)}
                 options={assetNames.map((asset) => ({ label: asset, value: asset }))}
                 placeholder="Select a machine"
               />
             </div>
 
-            <div className="col-md-6">
-              <label
-                htmlFor="assetLocation"
-                className="form-label"
-                style={{ marginBottom: '10px' }}
-              >
-                Location:
-              </label>
-              <input
-                type="text"
-                className="form-control col-sm-6"
-                required
-                id="Location"
-                name="Location"
-                value={formData.Location} // Bind input value to Location field in form data state
-                onChange={(e) => setFormData({ ...formData, Location: e.target.value })}
-              />
-              {/* <select
-                className="form-control col-sm-6"
-                required
-                // id="assetLocation"
-                name="Location"
-                value={formData.Location}
-                onChange={handleChange}
-              >
-                <option value="">Select an option</option>
-                <option value="AAAPL-27">AAAPL-27</option>
-                <option value="AAAPL-29">AAAPL-29</option>
-                <option value="AAAPL- 89">AAAPL- 89</option>
-                <option value="DPAPL - 236">DPAPL - 236</option>
-                <option value=" DPAPL- GN"> DPAPL- GN</option>
-              </select> */}
-            </div>
-            <div className="col-md-6">
+            <div className="col-md-3">
               <label htmlFor="breakdownDate" style={{ marginBottom: '10px' }}>
                 Breakdown Start Date:
               </label>
@@ -430,21 +390,8 @@ export default function BreakDown() {
                 placeholder=""
               />
             </div>
-            <div className="col-md-6">
-              <label htmlFor="shift" style={{ marginBottom: '10px' }}>
-                Shift:
-              </label>
-              <input
-                type="text"
-                required
-                className="form-control col-sm-6"
-                name="Shift"
-                value={formData.Shift}
-                onChange={handleChange}
-                placeholder=""
-              />
-            </div>
-            <div className="col-md-6">
+
+            <div className="col-md-3">
               <label htmlFor="breakdownStartTime" style={{ marginBottom: '10px' }}>
                 Breakdown Start Time:
               </label>
@@ -458,14 +405,45 @@ export default function BreakDown() {
                 onChange={handleChange}
               ></input>
             </div>
-            <div className="col-md-6">
+            <div className="col-md-3">
+              <label htmlFor="shift" style={{ marginBottom: '10px' }}>
+                Shift:
+              </label>
+              <input
+                type="text"
+                required
+                className="form-control col-sm-6"
+                name="Shift"
+                value={formData.Shift}
+                onChange={handleChange}
+                placeholder=""
+              />
+            </div>
+            <div className="col-md-3">
+              <label
+                htmlFor="assetLocation"
+                className="form-label"
+                style={{ marginBottom: '10px' }}
+              >
+                Location:
+              </label>
+              <input
+                type="text"
+                className="form-control col-sm-6"
+                required
+                id="Location"
+                name="Location"
+                value={formData.Location}
+                onChange={(e) => setFormData({ ...formData, Location: e.target.value })}
+              />
+            </div>
+            <div className="col-md-3">
               <label htmlFor="LineName" style={{ marginBottom: '10px' }}>
                 Line Name:
               </label>
               <select
                 className="form-control col-sm-6"
                 required
-                // id="assetLocation"
                 name="LineName"
                 value={formData.LineName}
                 onChange={handleChange}
@@ -479,17 +457,17 @@ export default function BreakDown() {
                 <option value="WORM SHAFT">WORM SHAFT</option>
                 <option value="K B CELL">K B CELL</option>
                 <option value="SSP TSP">SSP TSP</option>
-                <option value="HEAT TEEATMENT">HEAT TEEATMENT</option>
+                <option value="HEAT TREATMENT">HEAT TREATMENT</option>
                 <option value="FORGING">FORGING</option>
                 <option value="CHANGE ARM/ BRACKET">CHANGE ARM/ BRACKET</option>
                 <option value="BSC">BSC</option>
-                <option value="SECTOE LEVER">SECTOE LEVER</option>
+                <option value="SECTOR LEVER">SECTOR LEVER</option>
                 <option value="SLIDER BLOCK">SLIDER BLOCK</option>
                 <option value="CAM SHAFT GRINDING">CAM SHAFT GRINDING</option>
                 <option value="CAM SHAFT SOFT">CAM SHAFT SOFT</option>
               </select>
             </div>
-            <div className="col-md-6">
+            <div className="col-md-3">
               <label htmlFor="operations" style={{ marginBottom: '10px' }}>
                 Operations:
               </label>
@@ -503,7 +481,7 @@ export default function BreakDown() {
                 placeholder=""
               />
             </div>
-            <div className="col-md-6">
+            <div className="col-md-3">
               <label htmlFor="breakdownPhenomen" style={{ marginBottom: '10px' }}>
                 Breakdown Phenomenon:
               </label>
@@ -517,69 +495,64 @@ export default function BreakDown() {
                 placeholder=""
               />
             </div>
-            <div className="row lg-2">
-              <div className="col-md-6" style={{ marginTop: '2vh', overflowY: 'auto' }}>
-                <label style={{ marginBottom: '10px' }}>Select users:</label>
-                <div className="row">
-                  {usernos.map((user, index) => (
-                    <React.Fragment key={user.phoneNumber}>
-                      <div className="col-md-6">
-                        <div className="form-check">
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            id={`checkbox-${user.phoneNumber}`}
-                            checked={selectedUserNumbers.includes(user.phoneNumber)}
-                            onChange={() => handleUserSelect(user.phoneNumber)}
-                          />
-                          <label
-                            className="form-check-label"
-                            htmlFor={`checkbox-${user.phoneNumber}`}
-                          >
-                            {user.name}
-                          </label>
-                        </div>
+            <div className="col-md-3">
+              <label style={{ marginBottom: '10px' }}>Select users:</label>
+              <div className="row">
+                {usernos.map((user, index) => (
+                  <React.Fragment key={user.phoneNumber}>
+                    <div className="col-md-6">
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          id={`checkbox-${user.phoneNumber}`}
+                          checked={selectedUserNumbers.includes(user.phoneNumber)}
+                          onChange={() => handleUserSelect(user.phoneNumber)}
+                        />
+                        <label
+                          className="form-check-label"
+                          htmlFor={`checkbox-${user.phoneNumber}`}
+                        >
+                          {user.name}
+                        </label>
                       </div>
-                      {/* Insert a new row after every two users */}
-                      {index % 2 !== 0 && <div className="w-100"></div>}
-                    </React.Fragment>
-                  ))}
-                </div>
-              </div>
-
-              <div className="col-md-6" style={{ marginTop: '2vh' }}>
-                <label>Selected Users:</label>
-                <ul>
-                  {usernos
-                    .filter((user) => selectedUserNumbers.includes(user.phoneNumber))
-                    .map((user) => (
-                      <li key={user.phoneNumber}>
-                        {user.name} - {user.phoneNumber}
-                      </li>
-                    ))}
-                </ul>
-              </div>
-
-              <div className="col-xs-12">
-                <button
-                  type="submit"
-                  // onClick={handleButtonClick}
-                  className="btn btn-primary"
-                  style={{
-                    marginTop: '20px',
-                    fontSize: '16px',
-                    backgroundColor: '#3448db',
-                    marginBottom: '10px',
-                  }}
-                >
-                  Submit
-                </button>
+                    </div>
+                    {/* Insert a new row after every two users */}
+                    {index % 2 !== 0 && <div className="w-100"></div>}
+                  </React.Fragment>
+                ))}
               </div>
             </div>
-            {/* </div> */}
+            <div className="col-md-3">
+              <label>Selected Users:</label>
+              <ul>
+                {usernos
+                  .filter((user) => selectedUserNumbers.includes(user.phoneNumber))
+                  .map((user) => (
+                    <li key={user.phoneNumber}>
+                      {user.name} - {user.phoneNumber}
+                    </li>
+                  ))}
+              </ul>
+            </div>
+            <div className="col-xs-12">
+              <button
+                type="submit"
+                className="btn btn-primary"
+                style={{
+                  marginTop: '20px',
+                  fontSize: '16px',
+                  backgroundColor: '#3448db',
+                  marginBottom: '10px',
+                }}
+              >
+                Submit
+              </button>
+            </div>
           </div>
         </form>
       </div>
+
       {/* </div> */}
     </>
   )

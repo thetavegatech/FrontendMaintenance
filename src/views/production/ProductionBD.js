@@ -211,21 +211,20 @@ export default function BreakDown() {
             </div>
           )}
           <form method="post" onSubmit={Update}>
-            {/* Add Breakdown Detail Fields */}
-            {/* <h3>Add Breakdown Detail</h3> */}
+            {/* Row 1 */}
             <div className="row g-2">
-              <div className="col-md-6">
+              <div className="col-md-3">
                 <label htmlFor="machineName">Machine Name:</label>
                 <input
                   type="text"
                   className="form-control col-sm-6"
                   name="MachineName"
                   value={MachineName}
-                  disabled // This makes the input read-only
+                  disabled
                   onChange={(e) => setMachineName(e.target.value)}
                 />
               </div>
-              <div className="col-md-6">
+              <div className="col-md-3">
                 <label htmlFor="breakdownStartDate">Breakdown Start Date:</label>
                 <input
                   type="date"
@@ -236,7 +235,10 @@ export default function BreakDown() {
                   onChange={(e) => setBreakdownStartDate(e.target.value)}
                 />
               </div>
-              <div className="col-md-6">
+              {/* </div> */}
+              {/* Row 2 */}
+              {/* <div className="row g-2"> */}
+              <div className="col-md-3">
                 <label htmlFor="location">Location:</label>
                 <input
                   type="text"
@@ -247,7 +249,7 @@ export default function BreakDown() {
                   onChange={(e) => setLocation(e.target.value)}
                 />
               </div>
-              <div className="col-md-6">
+              <div className="col-md-3">
                 <label htmlFor="shift">Shift:</label>
                 <input
                   type="text"
@@ -258,7 +260,10 @@ export default function BreakDown() {
                   onChange={(e) => setShift(e.target.value)}
                 />
               </div>
-              <div className="col-md-6">
+              {/* </div> */}
+              {/* Row 3 */}
+              {/* <div className="row g-2"> */}
+              <div className="col-md-3">
                 <label htmlFor="lineName">Line Name:</label>
                 <input
                   type="text"
@@ -269,7 +274,7 @@ export default function BreakDown() {
                   onChange={(e) => setLineName(e.target.value)}
                 />
               </div>
-              <div className="col-md-6">
+              <div className="col-md-3">
                 <label htmlFor="operations">Operations:</label>
                 <input
                   type="text"
@@ -280,7 +285,10 @@ export default function BreakDown() {
                   onChange={(e) => setOperations(e.target.value)}
                 />
               </div>
-              <div className="col-md-6">
+              {/* </div> */}
+              {/* Row 4 */}
+              {/* <div className="row g-2"> */}
+              <div className="col-md-3">
                 <label htmlFor="breakdownPhenomen">Breakdown Phenomenon:</label>
                 <input
                   type="text"
@@ -291,7 +299,7 @@ export default function BreakDown() {
                   onChange={(e) => setBreakdownPhenomenons(e.target.value)}
                 />
               </div>
-              <div className="col-md-6">
+              <div className="col-md-3">
                 <label htmlFor="breakdownStartTime">Breakdown Start Time:</label>
                 <input
                   type="text"
@@ -302,9 +310,11 @@ export default function BreakDown() {
                   onChange={(e) => setBreakdownStartTime(e.target.value)}
                 />
               </div>
-              <div className="col-md-6">
+              {/* </div> */}
+              {/* Additional Rows */}
+              {/* <div className="row g-2"> */}
+              <div className="col-md-3">
                 <label htmlFor="breakdownType">Breakdown Type:</label>
-
                 <select
                   className="form-control col-sm-6"
                   required
@@ -322,46 +332,103 @@ export default function BreakDown() {
                   <option value="Production Setting">Production Setting</option>
                 </select>
               </div>
-              {/* <div className="col-md-6">
-                <label htmlFor="spareparts">Spare Parts:</label>
+              <div className="col-md-3">
+                <label htmlFor="rootCause">Root Cause:</label>
                 <input
                   type="text"
                   required
-                  name="SpareParts"
                   className="form-control col-sm-6"
-                  value={SpareParts}
-                  onChange={(e) => setSpareParts(e.target.value)}
+                  name="RootCause"
+                  value={RootCause}
+                  onChange={(e) => setRootCause(e.target.value)}
                 />
-              </div> */}
-              {/* <div className="col-md-5">
-                <label htmlFor="whyWhy">Why-Why Analysis:</label>
+              </div>
+              {/* </div> */}
+              {/* <div className="row g-2"> */}
+              <div className="col-md-3">
+                <label htmlFor="targetDate">Target Date:</label>
+                <input
+                  type="date"
+                  required
+                  className="form-control col-sm-6"
+                  name="TargetDate"
+                  value={TargetDate}
+                  onChange={(e) => setTargetDate(e.target.value)}
+                />
+              </div>
+              <div className="col-md-3">
+                <label htmlFor="responsibility">Responsibility:</label>
                 <input
                   type="text"
-                  // required
-                  className="form-control col-sm-5"
-                  name="WhyWhyAnalysis"
-                  // value={WhyWhyAnalysis}
-                  value={WhyWhyAnalysis}
-                  onChange={handleInputChange}
-                  // onChange={(e) => setWhyWhyAnalysis(e.target.value)}
+                  required
+                  className="form-control col-sm-6"
+                  name="Responsibility"
+                  value={Responsibility}
+                  onChange={(e) => setResponsibility(e.target.value)}
                 />
-                <button type="button" onClick={handleButtonClick}>
-                  Add Input
-                </button>
               </div>
-              <div>
-                <h6>Content:</h6>
-                <ul>
-                  {whyWhyAnalysisList &&
-                    whyWhyAnalysisList.map((item, index) => <li key={index}>{item}</li>)}
-                </ul>
-              </div> */}
-              {/* <button type="button" onClick={handleButtonClick}>
-                Add Input
-              </button> */}
-
+              {/* </div> */}
+              {/* <div className="row g-2"> */}
+              <div className="col-md-3">
+                <label htmlFor="hd">HD:</label>
+                <input
+                  type="text"
+                  required
+                  name="HD"
+                  className="form-control col-sm-6"
+                  value={HD}
+                  onChange={(e) => setHD(e.target.value)}
+                />
+              </div>
+              <div className="col-md-3">
+                <label htmlFor="remark">Remark:</label>
+                <input
+                  type="text"
+                  required
+                  className="form-control col-sm-6"
+                  name="Remark"
+                  value={Remark}
+                  onChange={(e) => setRemark(e.target.value)}
+                />
+              </div>
+              {/* </div> */}
+              {/* <div className="row g-2"> */}
+              <div className="col-md-3">
+                <label htmlFor="BreakdownEndDate">Breakdown End Date:</label>
+                <input
+                  type="date"
+                  required
+                  className="form-control col-sm-6"
+                  name="BreakdownEndDate"
+                  value={BreakdownEndDate}
+                  onChange={(e) => setBreakdownEndDate(e.target.value)}
+                />
+              </div>
+              <div className="col-md-3">
+                <label htmlFor="BreakdownEndTime">Breakdown End Time:</label>
+                <input
+                  type="time"
+                  required
+                  className="form-control col-sm-6"
+                  name="BreakdownEndTime"
+                  value={BreakdownEndTime}
+                  onChange={(e) => setBreakdownEndTime(e.target.value)}
+                />
+              </div>
+              {/* </div> */}
+              {/* <div className="row g-2"> */}
+              <div className="col-md-3">
+                <label htmlFor="attachment">Attachment:</label>
+                <input
+                  type="file"
+                  className="form-control col-sm-6"
+                  onChange={convertToBse64}
+                ></input>
+              </div>
+              {/* </div> */}
+              {/* <div className="row g-2"> */}
               <div style={{ display: 'flex', alignItems: 'center' }}>
-                <div className="col-md-5" style={{ marginRight: '10px' }}>
+                <div className="col-md-3" style={{ marginRight: '10px' }}>
                   <label htmlFor="whyWhy">Why-Why Analysis:</label>
                   <textarea
                     style={{ display: '' }}
@@ -376,7 +443,6 @@ export default function BreakDown() {
                   style={{
                     display: '',
                     marginRight: '15px',
-                    // alignItems: 'center',
                     marginTop: '10px',
                   }}
                 >
@@ -384,7 +450,6 @@ export default function BreakDown() {
                     <CIcon icon={cilPlus} className="ml-2" onClick={handleButtonClick} />
                   </CButton>
                 </div>
-                {/* </div> */}
                 <div style={{ display: '' }}>
                   <h6>Add:</h6>
                   <ul>
@@ -394,126 +459,7 @@ export default function BreakDown() {
                   </ul>
                 </div>
               </div>
-
-              {/* <div className="col-md-6">
-                <label htmlFor="cost">Cost:</label>
-                <input
-                  type="number"
-                  required
-                  name="Cost"
-                  className="form-control col-sm-6"
-                  value={Cost}
-                  onChange={(e) => setCost(e.target.value)}
-                />
-              </div> */}
-              <div className="col-md-6">
-                <label htmlFor="rootCause">Root Cause:</label>
-                <input
-                  type="text"
-                  required
-                  className="form-control col-sm-6"
-                  name="RootCause"
-                  value={RootCause}
-                  onChange={(e) => setRootCause(e.target.value)}
-                />
-              </div>
-              {/* <div className="col-md-6">
-                <label htmlFor="PreventiveAction">Preventive Action:</label>
-                <input
-                  type="text"
-                  required
-                  className="form-control col-sm-6"
-                  name="PreventiveAction"
-                  value={PreventiveAction}
-                  onChange={(e) => setPreventiveAction(e.target.value)}
-                />
-              </div>
-              <div className="col-md-6">
-                <label htmlFor="correctiveAction">Corrective Action:</label>
-                <input
-                  type="text"
-                  required
-                  className="form-control col-sm-6"
-                  name="CorrectiveAction"
-                  value={CorrectiveAction}
-                  onChange={(e) => setCorrectiveAction(e.target.value)}
-                />
-              </div> */}
-              <div className="col-md-6">
-                <label htmlFor="targetDate">Target Date:</label>
-                <input
-                  type="date"
-                  required
-                  className="form-control col-sm-6"
-                  name="TargetDate"
-                  value={TargetDate}
-                  onChange={(e) => setTargetDate(e.target.value)}
-                />
-              </div>
-              <div className="col-md-6">
-                <label htmlFor="responsibility">Responsibility:</label>
-                <input
-                  type="text"
-                  required
-                  className="form-control col-sm-6"
-                  name="Responsibility"
-                  value={Responsibility}
-                  onChange={(e) => setResponsibility(e.target.value)}
-                />
-              </div>
-              <div className="col-md-6">
-                <label htmlFor="hd">HD:</label>
-                <input
-                  type="text"
-                  required
-                  name="HD"
-                  className="form-control col-sm-6"
-                  value={HD}
-                  onChange={(e) => setHD(e.target.value)}
-                />
-              </div>
-              <div className="col-md-6">
-                <label htmlFor="remark">Remark:</label>
-                <input
-                  type="text"
-                  required
-                  className="form-control col-sm-6"
-                  name="Remark"
-                  value={Remark}
-                  onChange={(e) => setRemark(e.target.value)}
-                />
-              </div>
-              <div className="col-md-6">
-                <label htmlFor="BreakdownEndDate">BreakdownEndDate:</label>
-                <input
-                  type="date"
-                  required
-                  className="form-control col-sm-6"
-                  name="BreakdownEndDate"
-                  value={BreakdownEndDate}
-                  onChange={(e) => setBreakdownEndDate(e.target.value)}
-                />
-              </div>
-              <div className="col-md-6">
-                <label htmlFor="BreakdownEndTime">BreakdownEndTime:</label>
-                <input
-                  type="time"
-                  required
-                  className="form-control col-sm-6"
-                  name="BreakdownEndTime"
-                  value={BreakdownEndTime}
-                  onChange={(e) => setBreakdownEndTime(e.target.value)}
-                />
-              </div>
-              <div className="col-md-6">
-                <label htmlFor="attachment">Attachment:</label>
-                <input
-                  type="file"
-                  className="form-control col-sm-6"
-                  onChange={convertToBse64}
-                ></input>
-              </div>
-
+              {/* </div> */}
               <div style={{ marginTop: '20px' }}>
                 <button
                   className="btn btn-primary"

@@ -117,11 +117,21 @@ const TBMForm = () => {
   }
 
   return (
-    <div className="form-container">
+    <div
+      className="container"
+      style={{
+        border: '1px solid #ccc',
+        padding: '20px',
+        backgroundColor: '#f9f9f9',
+        borderRadius: '10px',
+        boxShadow: '2px 4px 4px rgba(0, 0, 0, 0.1)',
+        width: '100%',
+      }}
+    >
       <h4>Create TBM Record</h4>
-      <form onSubmit={handleSubmit}>
-        <div className="form-row">
-          <div className="form-group">
+      <form onSubmit={handleSubmit} style={{ margin: '3%' }}>
+        <div className="row g-3">
+          <div className="col-md-4" style={{ marginBottom: '15px' }}>
             <label>Asset Name:</label>
             <select
               name="assetName"
@@ -138,7 +148,7 @@ const TBMForm = () => {
               ))}
             </select>
           </div>
-          <div className="form-group">
+          <div className="col-md-4" style={{ marginBottom: '15px' }}>
             <label>Location:</label>
             <input
               type="text"
@@ -149,8 +159,8 @@ const TBMForm = () => {
               required
             />
           </div>
-          <div className="form-group">
-            <label>CBM Schedule Date:</label>
+          <div className="col-md-4" style={{ marginBottom: '15px' }}>
+            <label>TBM Schedule Date:</label>
             <input
               type="date"
               name="tbmScheduleDate"
@@ -159,8 +169,8 @@ const TBMForm = () => {
               onChange={handleChange}
             />
           </div>
-          <div className="form-group">
-            <label>CBM Frequency:</label>
+          <div className="col-md-4" style={{ marginBottom: '15px' }}>
+            <label>TBM Frequency:</label>
             <select
               type="text"
               name="tbmFrequency"
@@ -177,7 +187,7 @@ const TBMForm = () => {
               <option value="yearly">Yearly</option>
             </select>
           </div>
-          <div className="form-group">
+          <div className="col-md-4" style={{ marginBottom: '15px' }}>
             <label>Next TBM Date:</label>
             <input
               type="date"
@@ -187,12 +197,30 @@ const TBMForm = () => {
               onChange={handleChange}
             />
           </div>
+          <div className="col-12">
+            <button
+              type="submit"
+              className="btn btn-primary"
+              style={{
+                marginTop: '20px',
+                fontSize: '16px',
+                backgroundColor: '#000026',
+                // transition: 'background-color 0.3s',
+                cursor: 'pointer',
+              }}
+              onMouseOver={(e) => (e.target.style.backgroundColor = '#009bff')}
+              onMouseOut={(e) => (e.target.style.backgroundColor = '#007bff')}
+            >
+              Submit
+            </button>
+          </div>
+          {message && (
+            <div className="col-12">
+              <p>{message}</p>
+            </div>
+          )}
         </div>
-        <button type="submit" className="submit-button">
-          Submit
-        </button>
       </form>
-      {message && <p>{message}</p>}
     </div>
   )
 }
