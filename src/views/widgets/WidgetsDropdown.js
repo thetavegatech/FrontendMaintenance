@@ -38,6 +38,7 @@ import {
 } from 'recharts'
 import { Date } from 'core-js'
 import './WidgetsDropdown.css'
+import { Icons } from 'react-toastify'
 
 const WidgetsDropdown = () => {
   const navigate = useNavigate()
@@ -246,7 +247,7 @@ const WidgetsDropdown = () => {
           </div>
           <CDropdown alignment="end" className="options">
             <CDropdownToggle color="transparent" caret={false} className="p-0">
-              <CIcon icon={cilOptions} className="text-high-emphasis-inverse" />
+              <CIcon icon={cilOptions} color="black" className="text-high-emphasis-inverse" />
             </CDropdownToggle>
             <CDropdownMenu>
               <NavLink to="/production" className="nav-link">

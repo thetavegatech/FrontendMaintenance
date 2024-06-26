@@ -14,6 +14,7 @@
 .custom-widget .icon {
   flex: 0 0 50px;
   margin-right: 20px;
+  /* background: linear-gradient(135deg, #d9dad9 0%, #81c784 100%); */
 }
 
 .custom-widget .details {
@@ -32,19 +33,19 @@
 }
 
 .custom-widget.primary {
-  background: linear-gradient(135deg, #4caf50 0%, #81c784 100%);
+  background: linear-gradient(135deg, #4caf50 0%, #bff1c1 100%);
 }
 
 .custom-widget.info {
-  background: linear-gradient(135deg, #2196f3 0%, #64b5f6 100%);
+  background: linear-gradient(135deg, #2196f3 0%, #cae3f7 100%);
 }
 
 .custom-widget.warning {
-  background: linear-gradient(135deg, #ff9800 0%, #ffb74d 100%);
+  background: linear-gradient(135deg, #ff9800 0%, #f8dbaf 100%);
 }
 
 .custom-widget.danger {
-  background: linear-gradient(135deg, #f44336 0%, #e57373 100%);
+  background: linear-gradient(135deg, #f44336 0%, #f79898 100%);
 }
 
 .custom-widget .options {

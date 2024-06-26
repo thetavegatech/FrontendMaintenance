@@ -36,6 +36,9 @@ const CBMForm = React.lazy(() => import('./views/CBMForm'))
 const TBMForm = React.lazy(() => import('./views/TBMForm'))
 const editregisteruser = React.lazy(() => import('./views/pages/register/editregisteruser'))
 const registerUser = React.lazy(() => import('./views/pages/register/registerUser'))
+const AdminProduction = React.lazy(() => import('./views/AdminVeiw/AdminProduction'))
+const AdminBreakdown = React.lazy(() => import('./views/AdminVeiw/AdminBreakdown'))
+const AdminBDHistory = React.lazy(() => import('./views/AdminVeiw/AdminBDHistory'))
 // Base
 
 //Forms
@@ -104,6 +107,9 @@ const routes = [
   { path: '/tbmForm', name: 'TBMForm', element: TBMForm },
   { path: '/registeruser', name: 'registerUser', element: registerUser },
   { path: '/editRegisterUser/:id', name: 'editregisteruser', element: editregisteruser },
+  { path: '/adminproduction', name: 'AdminProduction', element: AdminProduction },
+  { path: '/adminbreakdown', name: 'AdminBreakdown', element: AdminBreakdown },
+  { path: '/adminbdhistory', name: 'AdminBDHistory', element: AdminBDHistory },
 ]
 
 export default routes

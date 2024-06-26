@@ -120,7 +120,7 @@ const AppHeader = () => {
   const [qrModal, setQrModal] = useState()
   const [scanResult, setScanResult] = useState('')
   const sidebarShow = useSelector((state) => state.custom.sidebarShow)
-  const userrole = useSelector((state) => state.auth.userInfo?.role) || ''
+  const userrole = useSelector((state) => state.auth.userInfo?.plant) || ''
   const username = useSelector((state) => state.auth.userInfo?.name)
   const dispatch = useDispatch()
   const navigate = useNavigate()

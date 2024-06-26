@@ -1,7 +1,7 @@
 /* General Styles */
 .container {
   margin: 20px auto;
-  max-width: 1200px;
+  /* max-width: 1200px; */
   background-color: #f8f9fa;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -89,6 +89,78 @@
 .results input {
   width: 100%;
   margin-bottom: 10px;
+}
+
+/* Modal container */
+.cmodal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Modal header */
+.cmodal-header {
+  background-color: #f3f3f7;
+  color: rgb(29, 27, 27);
+  padding: 15px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+/* Modal body */
+.cmodal-body {
+  padding: 20px;
+  background-color: #f7f7f7;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+/* Modal content */
+.cmodal-content {
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  width: 100%;
+  max-width: 500px;
+}
+
+/* Button styles */
+.cbutton {
+  background-color: #000026;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.cbutton-close {
+  background-color: #fafbfc;
+}
+
+.cbutton:hover {
+  background-color: #114981;
+}
+
+/* Select dropdown */
+.cmodal-body select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+/* Result display */
+.mttr-result, .mtbf-result {
+  margin-top: 20px;
+  font-size: 18px;
+  font-weight: bold;
 }
 
 /* Mobile View - List Style */

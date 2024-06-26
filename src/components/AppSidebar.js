@@ -160,30 +160,15 @@ const AppSidebar = () => {
                   <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
                   TBM
                 </CNavItem>
-                <CNavItem
-                  component={NavLink}
-                  to="/production"
-                  style={navItemStyles}
-                  activeStyle={activeNavItemStyles}
-                >
+                <CNavItem component={NavLink} style={navItemStyles} to="/adminproduction">
                   <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
                   Production
                 </CNavItem>
-                <CNavItem
-                  component={NavLink}
-                  to="/breakdown"
-                  style={navItemStyles}
-                  activeStyle={activeNavItemStyles}
-                >
+                <CNavItem component={NavLink} style={navItemStyles} to="/adminbreakdown">
                   <CIcon customClassName="nav-icon" icon={cilPuzzle} />
                   Breakdown
                 </CNavItem>
-                <CNavItem
-                  component={NavLink}
-                  to="/breakdownHistory"
-                  style={navItemStyles}
-                  activeStyle={activeNavItemStyles}
-                >
+                <CNavItem component={NavLink} style={navItemStyles} to="/adminbdhistory">
                   <CIcon customClassName="nav-icon" icon={cilPuzzle} />
                   Breakdown History
                 </CNavItem>
