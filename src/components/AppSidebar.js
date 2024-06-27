@@ -181,7 +181,7 @@ const AppSidebar = () => {
                   <CIcon customClassName="nav-icon" icon={cilPuzzle} />
                   PM Schedule
                 </CNavItem>
-                <CNavItem
+                {/* <CNavItem
                   component={NavLink}
                   style={navItemStyles}
                   activeStyle={activeNavItemStyles}
@@ -189,7 +189,7 @@ const AppSidebar = () => {
                 >
                   <CIcon customClassName="nav-icon" icon={cilNotes} />
                   Users
-                </CNavItem>
+                </CNavItem> */}
                 <CNavItem
                   component={NavLink}
                   style={navItemStyles}
