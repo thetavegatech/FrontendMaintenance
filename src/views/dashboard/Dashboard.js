@@ -282,23 +282,21 @@ const Dashboard = () => {
         </CCol>
         <CCol xs={12} lg={6}>
           <CCard className="mb-4">
-            <CCardHeader>LineName Wise Chart</CCardHeader>
+            <CCardHeader>Polar Area Chart</CCardHeader>
             <CCardBody>
-              <LineChart
-                width={window.innerWidth >= 992 ? 500 : 300}
-                height={300}
-                data={lineChartData}
-                margin={{
-                  right: 20,
+              <CChartPolarArea
+                data={{
+                  labels: formattedChartData.map((item) => item.breakdownType),
+                  datasets: [
+                    {
+                      data: formattedChartData.map((item) => item.value),
+                      backgroundColor: ['#ff7d98', '#4cacee', '#ffff00'],
+                      hoverBackgroundColor: ['#ff315b', '#137bc1', '#fff04d'],
+                      label: 'My dataset', // for legend
+                    },
+                  ],
                 }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="lineName" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Line type="monotone" dataKey="value" stroke="#82ca9d" />
-              </LineChart>
+              />
             </CCardBody>
           </CCard>
         </CCol>
@@ -309,51 +307,12 @@ const Dashboard = () => {
             <CCardBody>
               <CChartDoughnut
                 data={{
-                  labels: formattedChartData.map((item) => item.breakdownType),
-                  datasets: [
-                    {
-                      backgroundColor: ['#41B883', '#E46651', '#00D8FF', '#DD1B16'],
-                      data: formattedChartData.map((item) => item.value),
-                    },
-                  ],
-                }}
-              />
-            </CCardBody>
-          </CCard>
-        </CCol>
-
-        <CCol xs={12} lg={6}>
-          <CCard className="mb-4">
-            <CCardHeader>Line wise Pie Chart</CCardHeader>
-            <CCardBody>
-              <CChartPie
-                data={{
                   labels: lineChartData.map((item) => item.lineName),
                   datasets: [
                     {
-                      data: lineChartData.map((item) => item.value),
-                      backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-                      hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-                    },
-                  ],
-                }}
-              />
-            </CCardBody>
-          </CCard>
-        </CCol>
-
-        <CCol xs={12} lg={6}>
-          <CCard className="mb-4">
-            <CCardHeader>Polar Area Chart</CCardHeader>
-            <CCardBody>
-              <CChartPolarArea
-                data={{
-                  labels: formattedChartData.map((item) => item.breakdownType),
-                  datasets: [
-                    {
+                      backgroundColor: ['#ff7d98', '#4cacee', '#ffff00'],
+                      hoverBackgroundColor: ['#ff315b', '#137bc1', '#FFCE56'],
                       data: formattedChartData.map((item) => item.value),
-                      backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF6384', '#36A2EB'],
-                      label: 'My dataset', // for legend
                     },
                   ],
                 }}

@@ -133,7 +133,7 @@ export default function BreakDown() {
             backgroundColor: '',
             padding: '20px',
             borderRadius: '10px',
-            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+            boxShadow: '0 3px 8px rgba(0, 0, 0, 0.1)',
             width: '95%',
           }}
         >
@@ -141,7 +141,7 @@ export default function BreakDown() {
             {/* Add Breakdown Detail Fields */}
             {/* <h3>Add Breakdown Detail</h3> */}
             <div className="row g-3">
-              <div className="col-md-4">
+              <div className="col-md-3">
                 <label htmlFor="machineName">Machine Name:</label>
                 <input
                   type="text"
@@ -152,7 +152,7 @@ export default function BreakDown() {
                   onChange={(e) => setMachineName(e.target.value)}
                 />
               </div>
-              <div className="col-md-4">
+              <div className="col-md-3">
                 <label htmlFor="breakdownStartDate">Breakdown Start Date:</label>
                 <input
                   type="date"
@@ -163,7 +163,7 @@ export default function BreakDown() {
                   onChange={(e) => setBreakdownStartDate(e.target.value)}
                 />
               </div>
-              <div className="col-md-4">
+              <div className="col-md-3">
                 <label htmlFor="shift">Shift:</label>
                 <input
                   type="text"
@@ -174,7 +174,7 @@ export default function BreakDown() {
                   onChange={(e) => setShift(e.target.value)}
                 />
               </div>
-              <div className="col-md-4">
+              <div className="col-md-3">
                 <label htmlFor="lineName">Line Name:</label>
                 <input
                   type="text"
@@ -185,7 +185,7 @@ export default function BreakDown() {
                   onChange={(e) => setLineName(e.target.value)}
                 />
               </div>
-              <div className="col-md-4">
+              <div className="col-md-3">
                 <label htmlFor="stageName">Operations:</label>
                 <input
                   type="text"
@@ -196,7 +196,7 @@ export default function BreakDown() {
                   onChange={(e) => setOperations(e.target.value)}
                 />
               </div>
-              <div className="col-md-4">
+              <div className="col-md-3">
                 <label htmlFor="breakdownPhenomen">Breakdown Phenomenon:</label>
                 <input
                   type="text"
@@ -207,7 +207,7 @@ export default function BreakDown() {
                   onChange={(e) => setBreakdownPhenomenons(e.target.value)}
                 />
               </div>
-              <div className="col-md-4">
+              <div className="col-md-3">
                 <label htmlFor="breakdownType">Breakdown Type:</label>
 
                 <select
@@ -227,7 +227,7 @@ export default function BreakDown() {
                   <option value="Production Setting">Production Setting</option>
                 </select>
               </div>
-              {/* <div className="col-md-4">
+              {/* <div className="col-md-3">
                 <label htmlFor="occ">Detect OCC:</label>
                 <input
                   type="text"
@@ -238,7 +238,7 @@ export default function BreakDown() {
                   onChange={(e) => setDetectOCC(e.target.value)}
                 />
               </div> */}
-              <div className="col-md-4">
+              <div className="col-md-3">
                 <label htmlFor="breakdownStartTime">Breakdown Start Time:</label>
                 <input
                   type="text"
@@ -249,7 +249,7 @@ export default function BreakDown() {
                   onChange={(e) => setBreakdownStartTime(e.target.value)}
                 />
               </div>
-              <div className="col-md-4">
+              <div className="col-md-3">
                 <label htmlFor="breakdownEndTime">Breakdown End Time:</label>
                 <input
                   type="text"
@@ -260,7 +260,7 @@ export default function BreakDown() {
                   onChange={(e) => setBreakdownEndTime(e.target.value)}
                 />
               </div>
-              <div className="col-md-4">
+              <div className="col-md-3">
                 <label htmlFor="breakdownEndDate">Breakdown End Date:</label>
                 <input
                   type="date"
@@ -271,7 +271,7 @@ export default function BreakDown() {
                   onChange={(e) => setBreakdownEndDate(e.target.value)}
                 />
               </div>
-              <div className="col-md-4">
+              <div className="col-md-3">
                 <label htmlFor="whyWhy">Why-Why Analysis:</label>
                 <input
                   type="textarea"
@@ -282,7 +282,7 @@ export default function BreakDown() {
                   onChange={(e) => setWhyWhyAnalysis(e.target.value)}
                 />
               </div>
-              <div className="col-md-4">
+              <div className="col-md-3">
                 <label htmlFor="rootCause">Root Cause:</label>
                 <input
                   type="text"
@@ -293,7 +293,7 @@ export default function BreakDown() {
                   onChange={(e) => setRootCause(e.target.value)}
                 />
               </div>
-              <div className="col-md-4">
+              <div className="col-md-3">
                 <label htmlFor="targetDate">Target Date:</label>
                 <input
                   type="date"
@@ -304,7 +304,7 @@ export default function BreakDown() {
                   onChange={(e) => setTargetDate(e.target.value)}
                 />
               </div>
-              <div className="col-md-4">
+              <div className="col-md-3">
                 <label htmlFor="responsibility">Responsibility:</label>
                 <input
                   disabled
@@ -315,7 +315,7 @@ export default function BreakDown() {
                   onChange={(e) => setResponsibility(e.target.value)}
                 />
               </div>
-              <div className="col-md-4">
+              <div className="col-md-3">
                 <label htmlFor="hd">HD:</label>
                 <input
                   type="text"
@@ -326,7 +326,7 @@ export default function BreakDown() {
                   onChange={(e) => setHD(e.target.value)}
                 />
               </div>
-              <div className="col-md-4">
+              <div className="col-md-3">
                 <label htmlFor="remark">Remark:</label>
                 <input
                   type="text"
@@ -337,7 +337,7 @@ export default function BreakDown() {
                   onChange={(e) => setRemark(e.target.value)}
                 />
               </div>
-              <div className="col-md-4">
+              <div className="col-md-3">
                 <label htmlFor="assetCategory">Status</label>
                 <select
                   className="form-control col-sm-6"

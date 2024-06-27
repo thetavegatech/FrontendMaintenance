@@ -136,7 +136,7 @@ const MyFormComponent = () => {
     const formData = new FormData()
     formData.append('file', file)
 
-    fetch('http://192.168.1.17:5000/upload', {
+    fetch('http://192.168.1.17:3000/upload', {
       method: 'POST',
       body: formData,
       headers: {
@@ -187,7 +187,7 @@ const MyFormComponent = () => {
         skipSundays()
         break
       case 'fifteen days':
-        addWeekdays(15)
+        addWeekdays(13)
         break
       case 'monthly':
         newDate.setMonth(newDate.getMonth() + 1)
@@ -212,7 +212,7 @@ const MyFormComponent = () => {
         newDate.setFullYear(newDate.getFullYear() + 1)
         // newDate.setMonth(0)
         // newDate.setDate(1)
-        addWeekdays(52)
+        addWeekdays(32)
         skipSundays()
         break
       default:
@@ -293,14 +293,14 @@ const MyFormComponent = () => {
 
   return (
     <div
-      className="container-lg"
+      className="container"
       style={{
         border: '2px solid #ccc',
-        backgroundColor: '',
+        backgroundColor: 'white',
         padding: '20px',
         borderRadius: '10px',
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-        width: '90%',
+        width: '100%',
       }}
     >
       {/* Display success message if it exists */}
@@ -310,151 +310,119 @@ const MyFormComponent = () => {
         </div>
       )}
       {/* <div className="container1" style={{ border: '2px' }}> */}
-      <div className="container">
-        <form onSubmit={handleSubmit} style={{ marginLeft: '%' }}>
-          <div className="row g-3">
-            <div className="col-md-5">
-              <label>Asset Name:</label>
-              <select
-                name="assetName"
-                className="form-control col-sm-6"
-                value={formData.AssetName}
-                onChange={handleAssetNameChange}
-                required
-              >
-                <option value="">Select Asset</option>
-                {assetNames.map((name) => (
-                  <option key={name} value={name}>
-                    {name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            {/* <div className="form-group">
-              <label>Asset Name:</label>
-              <select
-                name="assetName"
-                className="form-control col-sm-6"
-                value={formData.AssetName}
-                onChange={handleChange}
-                required
-              >
-                <option value="">Select Asset</option>
-                {assetNames.map((name) => (
-                  <option key={name} value={name}>
-                    {name}
-                  </option>
-                ))}
-              </select>
-            </div> */}
-            <div className="col-md-5">
-              <label htmlFor="Location">Location:</label>
-              {/* <select
-                className="form-control col-sm-6"
-                required
-                id="Location"
-                name="Location"
-                onChange={(e) => setFormData({ ...formData, Location: e.target.value })}
-              >
-                <option value="">Select an option</option>
-                <option value="Plant 1">Plant 1</option>
-                <option value="Plant 2">Plant 2</option>
-                <option value="Plant 3">Plant 3</option>
-                <option value="Plant 4">Plant 4</option>
-              </select> */}
-              <input
-                type="text"
-                name="location"
-                className="form-control"
-                value={formData.Location}
-                onChange={(e) => setFormData({ ...formData, Location: e.target.value })}
-                readOnly
-                required
-              />
-            </div>
-            <div className="col-md-5">
-              <label htmlFor="taskName">Task Name:</label>
-              <input
-                type="text"
-                required
-                className="form-control col-sm-6"
-                id="TaskName"
-                onChange={(e) => setFormData({ ...formData, TaskName: e.target.value })}
-              />
-            </div>
-            <div className="col-md-5">
-              <label htmlFor="description" className="form-label">
-                Task Description:
-              </label>
-              <input
-                className="form-control col-sm-6"
-                required
-                id="taskDescription"
-                defaultValue={''}
-                onChange={(e) => setFormData({ ...formData, TaskDescription: e.target.value })}
-              />
-            </div>
-            <div className="col-md-5">
-              <label htmlFor="pmScheduleDate">Start From :</label>
-              <input
-                type="date"
-                required
-                className="form-control col-sm-6"
-                id="pmScheduleDate"
-                onChange={(e) => setFormData({ ...formData, pmScheduleDate: e.target.value })}
-              />
-            </div>
-            <div className="col-md-5">
-              <label htmlFor="scheduledMaintenance">
-                Scheduled Maintenance Dates and Intervals:
-              </label>
-              <select
-                className="form-control col-sm-6"
-                required
-                id="scheduledMaintenance"
-                name="ScheduledMaintenanceDatesandIntervals"
-                onChange={handleFrequencyChange}
-              >
-                <option value="">Select an option</option>
-                <option value="daily">Daily</option>
-                <option value="weekly">Weekly</option>
-                <option value="fifteen Days">Fifteen Days</option>
-                <option value="monthly">Monthly</option>
-                <option value="quarterly">Quarterly</option>
-                <option value="half Year">Half Year</option>
-                <option value="yearly">Yearly</option>
-              </select>
-            </div>
-            <div className="col-md-5">
-              <label htmlFor="NextDateofMaintenance">Next Date of Maintenance :</label>
-              <input
-                type="date"
-                required
-                className="form-control col-sm-6"
-                id="nextScheduleDate"
-                value={formData.nextScheduleDate}
-                readOnly // to make it non-editable
-                onChange={(e) => setFormData({ ...formData, nextScheduleDate: e.target.value })}
-              />
-            </div>
-            <div className="col-md-5">
-              <label htmlFor="attachment">Attachment:</label>
-              <input
-                type="file"
-                id="Image"
-                name="Image"
-                className="form-control col-sm-6"
-                onChange={convertToBse64}
-              ></input>
-            </div>
-            <div className="col-xs-12">
-              <button type="submit" className="btn btn-primary">
-                Submit
-              </button>
-            </div>
+      {/* <div className="container"> */}
+      <form onSubmit={handleSubmit} style={{ marginLeft: '%' }}>
+        <div className="row g-3">
+          <div className="col-md-3">
+            <label>Asset Name:</label>
+            <select
+              name="assetName"
+              className="form-control col-sm-6"
+              value={formData.AssetName}
+              onChange={handleAssetNameChange}
+              required
+            >
+              <option value="">Select Asset</option>
+              {assetNames.map((name) => (
+                <option key={name} value={name}>
+                  {name}
+                </option>
+              ))}
+            </select>
           </div>
-        </form>
-      </div>
+          <div className="col-md-3">
+            <label htmlFor="Location">Location:</label>
+            <input
+              type="text"
+              name="location"
+              className="form-control"
+              value={formData.Location}
+              onChange={(e) => setFormData({ ...formData, Location: e.target.value })}
+              readOnly
+              required
+            />
+          </div>
+          <div className="col-md-3">
+            <label htmlFor="taskName">Task Name:</label>
+            <input
+              type="text"
+              required
+              className="form-control col-sm-6"
+              id="TaskName"
+              onChange={(e) => setFormData({ ...formData, TaskName: e.target.value })}
+            />
+          </div>
+          <div className="col-md-3">
+            <label htmlFor="description" className="form-label">
+              Task Description:
+            </label>
+            <input
+              className="form-control col-sm-6"
+              required
+              id="taskDescription"
+              defaultValue={''}
+              onChange={(e) => setFormData({ ...formData, TaskDescription: e.target.value })}
+            />
+          </div>
+          <div className="col-md-3">
+            <label htmlFor="pmScheduleDate">Start From :</label>
+            <input
+              type="date"
+              required
+              className="form-control col-sm-6"
+              id="pmScheduleDate"
+              onChange={(e) => setFormData({ ...formData, pmScheduleDate: e.target.value })}
+            />
+          </div>
+          <div className="col-md-3">
+            <label htmlFor="scheduledMaintenance">Scheduled Maintenance Dates and Intervals:</label>
+            <select
+              className="form-control col-sm-6"
+              required
+              id="scheduledMaintenance"
+              name="ScheduledMaintenanceDatesandIntervals"
+              onChange={handleFrequencyChange}
+            >
+              <option value="">Select an option</option>
+              <option value="daily">Daily</option>
+              <option value="weekly">Weekly</option>
+              <option value="fifteen Days">Fifteen Days</option>
+              <option value="monthly">Monthly</option>
+              <option value="quarterly">Quarterly</option>
+              <option value="half Year">Half Year</option>
+              <option value="yearly">Yearly</option>
+            </select>
+          </div>
+          <div className="col-md-3">
+            <label htmlFor="NextDateofMaintenance">Next Date of Maintenance :</label>
+            <input
+              type="date"
+              required
+              className="form-control col-sm-6"
+              id="nextScheduleDate"
+              value={formData.nextScheduleDate}
+              readOnly // to make it non-editable
+              onChange={(e) => setFormData({ ...formData, nextScheduleDate: e.target.value })}
+            />
+          </div>
+          <div className="col-md-3">
+            <label htmlFor="attachment">Attachment:</label>
+            <input
+              type="file"
+              id="Image"
+              name="Image"
+              className="form-control col-sm-6"
+              onChange={convertToBse64}
+            ></input>
+          </div>
+          <div className="col-xs-12">
+            <button type="submit" className="btn btn-primary">
+              Submit
+            </button>
+          </div>
+        </div>
+      </form>
+      {/* </div> */}
       {/* </div> */}
     </div>
   )

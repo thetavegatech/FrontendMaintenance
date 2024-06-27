@@ -16,6 +16,18 @@
     color: #333;
   }
   
+  .form-col {
+    flex: 1;
+    min-width: 200px;
+    margin-right: 20px;
+  }
+
+  .form-col .line {
+    height: 1px;
+    background-color: #ccc;
+    margin-top: 5px;
+  }
+
   .form-row {
     display: flex;
     flex-wrap: wrap;

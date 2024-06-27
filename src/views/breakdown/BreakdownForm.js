@@ -283,6 +283,7 @@ export default function BreakDown() {
   }
 
   const apiKey = 'NDE1MDY2NGM2Mzc3NTI0ZjQzNmE1YTM5NDY0YzZlNzU='
+  // const apiKey = 'df718014b227a2f55bd47853be91a49d-87106218-0fee-456b-9c44-204f2adf13d5'
   const numbers = '7020804148' // Replace with the phone numbers
   const data1 = 'test'
   const data2 = { username }
@@ -310,6 +311,7 @@ export default function BreakDown() {
 
     // Create the API URL
     const url = `https://api.textlocal.in/send/?apikey=${apiKey}&sender=${sender}&numbers=${selectedno}&message=${message}`
+    // const url = 'https://vv2n1p.api.infobip.com/sms/2/text/advanced?apikey=${apiKey}&sender=${sender}&numbers=${selectedno}&message=${message}'
 
     // Use fetch to send the SMS
     fetch(url)
