@@ -66,7 +66,12 @@ const QrScanner = ({ onClose }) => {
         <QrReader
           delay={delay}
           onError={handleError}
-          onScan={handleScan}
+          // onScan={handleScan}
+          onResult={(result) => {
+            if (result?.text) {
+              handleScan(result.text)
+            }
+          }}
           style={{ width: '100%' }}
           constraints={{ facingMode: 'environment' }}
         />
