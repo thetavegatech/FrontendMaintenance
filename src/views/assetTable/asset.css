@@ -163,6 +163,27 @@
   font-weight: bold;
 }
 
+.add-asset-icon {
+  /* position: fixed; */
+  bottom: 20px;
+  right: 20px;
+  font-size: 50px;
+  color: #000026;
+  cursor: pointer;
+  z-index: 1000;
+  margin: 10px;
+}
+
+.add-asset-icon:hover {
+  color: #0056b3;
+}
+
+.excel-icon {
+  font-size: 40px;
+  cursor: pointer;
+  color: #efeff8;
+  /* transition: color 0.3s; */
+}
 /* Mobile View - List Style */
 @media screen and (max-width: 768px) {
   .mb-2 {

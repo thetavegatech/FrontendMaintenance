@@ -1,194 +1,204 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table'
+import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css'
 import { NavLink } from 'react-router-dom'
-import { CTable, CTableHead, CButton } from '@coreui/react'
-import { MdDelete } from 'react-icons/md'
 import { FaEdit } from 'react-icons/fa'
-// import QrReader from 'react-qr-reader'
+import { MdDelete } from 'react-icons/md'
+import './assetTable/asset.css'
+import { FaPlusCircle, FaChevronUp, FaChevronDown } from 'react-icons/fa'
 
-const PmTable = () => {
-  const [pms, setPms] = useState([])
-  const [filteredPms, setFilteredPms] = useState([])
-  const [searchQuery, setSearchQuery] = useState('')
-  const [message, setMessage] = useState('')
+const TodaysTasks = () => {
+  const [tasks, setTasks] = useState([])
   const [loading, setLoading] = useState(true)
-  const [scannedData, setScannedData] = useState(null)
+  const [message, setMessage] = useState('')
+  const [filteredAssets, setFilteredAssets] = useState([])
 
   useEffect(() => {
-    axios
-      .get('http://localhost:4000/api/pm')
-      .then((response) => {
-        const pmData = Array.isArray(response.data) ? response.data : [response.data]
-        setPms(pmData)
-        setFilteredPms(pmData)
+    const fetchTodaysTasks = async () => {
+      try {
+        const response = await axios.get('https://backendmaintenx.onrender.com/api/pm')
+        const fetchedTasks = response.data
+        const today = new Date().toISOString().split('T')[0]
+
+        const todaysTasks = fetchedTasks.filter(
+          (task) => new Date(task.nextDate).toISOString().split('T')[0] === today,
+        )
+
+        setTasks(todaysTasks)
         setLoading(false)
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error)
-        alert('Error fetching data')
+      } catch (error) {
+        console.error("Error fetching today's tasks:", error)
         setLoading(false)
-      })
+      }
+    }
+
+    fetchTodaysTasks()
   }, [])
 
-  const deleteData = (id) => {
-    const isConfirmed = window.confirm('Are you sure you want to delete this data?')
-    if (isConfirmed) {
-      axios
-        .delete(`http://localhost:4000/api/pm/${id}`)
-        .then((response) => {
-          const newPms = pms.filter((pm) => pm._id !== id)
-          setPms(newPms)
-          setFilteredPms(newPms)
-          setMessage('Data successfully deleted!')
-          setTimeout(() => {
-            setMessage('')
-          }, 2000)
-        })
-        .catch((error) => {
-          console.error('Error deleting data:', error)
-          setMessage('Error deleting data. Please try again.')
-          setTimeout(() => {
-            setMessage('')
-          }, 2000)
-        })
+  const [expandedItems, setExpandedItems] = useState([])
+
+  const toggleExpand = (index) => {
+    if (expandedItems.includes(index)) {
+      setExpandedItems(expandedItems.filter((item) => item !== index))
+    } else {
+      setExpandedItems([...expandedItems, index])
     }
-  }
-
-  const handleSearchChange = (e) => {
-    const query = e.target.value.toLowerCase()
-    const filteredPms = pms.filter((pm) => {
-      const locationLower = (pm.location || '').toLowerCase()
-      const assetNameLower = (pm.assetName || '').toLowerCase()
-      return locationLower.includes(query) || assetNameLower.includes(query)
-    })
-    setFilteredPms(filteredPms)
-    setSearchQuery(query)
-  }
-
-  const handleScan = (data) => {
-    if (data) {
-      setScannedData(data)
-    }
-  }
-
-  const handleError = (err) => {
-    console.error(err)
   }
 
   return (
     <div className="container">
-      <NavLink to="/pmForm">
-        <CButton color="info" className="mb-2" style={{ marginTop: '5px' }}>
-          Add New
-        </CButton>
-      </NavLink>
-      <label htmlFor="searchTask" style={{ marginLeft: '70%' }}>
-        <span role="img" aria-label="search-icon"></span>
-      </label>
-      <input
-        placeholder="Search by Asset/Location"
-        style={{
-          marginBottom: '10px',
-          padding: '8px',
-          border: '1px solid ',
-          borderRadius: '4px',
-          transition: 'border-color 0.3s ease-in-out, background-color 0.3s ease-in-out',
-        }}
-        value={searchQuery}
-        onChange={handleSearchChange}
-      />
-      <CTable bordered striped hover responsive>
-        <CTableHead color="dark">
-          <tr>
-            <th style={{ textAlign: 'center' }}>Sr No</th>
-            <th style={{ textAlign: 'center' }}>Asset Name</th>
-            <th style={{ textAlign: 'center' }}>Asset Type</th>
-            <th style={{ textAlign: 'center' }}>Location</th>
-            <th style={{ textAlign: 'center' }}>PM Task Name</th>
-            <th style={{ textAlign: 'center' }}>PM Schedule Date</th>
-            <th style={{ textAlign: 'center' }}>Next Schedule Date</th>
-            <th style={{ textAlign: 'center' }}>Description</th>
-            <th style={{ textAlign: 'center' }}>PM Details</th>
-            <th style={{ textAlign: 'center' }}>Status</th>
-            <th style={{ textAlign: 'center' }}>QR Code</th>
-            <th style={{ textAlign: 'center' }}>Edit</th>
-            <th style={{ textAlign: 'center' }}>Delete</th>
-          </tr>
-        </CTableHead>
-        <tbody>
-          {loading ? (
-            <tr>
-              <td colSpan="13" style={{ textAlign: 'center' }}>
-                <p>Loading...</p>
-              </td>
-            </tr>
-          ) : (
-            <>
-              {message && (
-                <tr>
-                  <td
-                    colSpan="13"
-                    style={{ textAlign: 'center', fontStyle: 'italic', color: 'red' }}
-                  >
-                    {message}
-                  </td>
-                </tr>
-              )}
-              {filteredPms.map((pm, index) => (
-                <tr key={pm._id}>
-                  <td style={{ textAlign: 'center' }}>{index + 1}</td>
-                  <td style={{ textAlign: 'center' }}>{pm.assetName}</td>
-                  <td style={{ textAlign: 'center' }}>{pm.assetType}</td>
-                  <td style={{ textAlign: 'center' }}>{pm.location}</td>
-                  <td style={{ textAlign: 'center' }}>{pm.pmTaskName}</td>
-                  <td style={{ textAlign: 'center' }}>
-                    {new Date(pm.pmScheduleDate).toLocaleDateString()}
-                  </td>
-                  <td style={{ textAlign: 'center' }}>
-                    {new Date(pm.nextScheduleDate).toLocaleDateString()}
-                  </td>
-                  <td style={{ textAlign: 'center' }}>{pm.description}</td>
-                  <td style={{ textAlign: 'center' }}>{pm.pmDetails}</td>
-                  <td style={{ textAlign: 'center' }}>{pm.status}</td>
-                  <td style={{ textAlign: 'center' }}>
-                    {pm.qrCode && <img src={pm.qrCode} alt="QR Code" width={50} height={50} />}
-                  </td>
-                  <td style={{ textAlign: 'center' }}>
-                    <NavLink to={`/editpm/${pm._id}`} style={{ color: '#000080' }}>
+      <h2>Todays Tasks</h2>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <div className="table-container">
+          <Table className="custom-table">
+            <Thead>
+              <Tr>
+                <Th style={{ textAlign: 'center', height: '40px' }}>Asset Name</Th>
+                <Th style={{ textAlign: 'center' }}>Location</Th>
+                <Th style={{ textAlign: 'center' }}>Task Name</Th>
+                <Th style={{ textAlign: 'center' }}>Task Description</Th>
+                <Th style={{ textAlign: 'center' }}>Scheduled Maintenance</Th>
+                <Th style={{ textAlign: 'center' }}>Start Date</Th>
+                <Th style={{ textAlign: 'center' }}>Next Date</Th>
+                <Th style={{ textAlign: 'center' }}>Status</Th>
+                <Th style={{ textAlign: 'center' }}>Edit</Th>
+                <Th style={{ textAlign: 'center' }}>Delete</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {tasks.map((task) => (
+                <Tr key={task._id}>
+                  <Td style={{ textAlign: 'center' }}>{task.AssetName}</Td>
+                  <Td style={{ textAlign: 'center' }}>{task.Location}</Td>
+                  <Td style={{ textAlign: 'center' }}>{task.TaskName}</Td>
+                  <Td style={{ textAlign: 'center' }}>{task.TaskDescription}</Td>
+                  <Td style={{ textAlign: 'center' }}>
+                    {task.ScheduledMaintenanceDatesandIntervals}
+                  </Td>
+                  <Td style={{ textAlign: 'center' }}>
+                    {new Date(task.startDate).toISOString().split('T')[0]}
+                  </Td>
+                  <Td style={{ textAlign: 'center' }}>
+                    {new Date(task.nextDate).toISOString().split('T')[0]}
+                  </Td>
+                  <Td style={{ textAlign: 'center' }}>{task.status}</Td>
+                  <Td style={{ textAlign: 'center' }}>
+                    <NavLink to={`/editPM/${task._id}`} style={{ color: '#000080' }}>
                       <FaEdit />
                     </NavLink>
-                  </td>
-                  <td style={{ textAlign: 'center' }}>
+                  </Td>
+                  <Td style={{ textAlign: 'center' }}>
                     <button
                       className="btn"
-                      onClick={() => deleteData(pm._id)}
+                      onClick={() => this.deleteData(task._id)}
                       style={{ color: 'red' }}
                     >
                       <MdDelete />
                     </button>
-                  </td>
-                </tr>
+                  </Td>
+                </Tr>
               ))}
-            </>
-          )}
-        </tbody>
-      </CTable>
-      <div>
-        {/* <QrReader
-          delay={300}
-          onError={handleError}
-          onScan={handleScan}
-          style={{ width: '300px' }}
-        /> */}
-        {scannedData && (
-          <div>
-            <h3>Scanned Data:</h3>
-            <p>{scannedData}</p>
+            </Tbody>
+          </Table>
+          <div className="list-view">
+            {loading ? (
+              <p>Loading...</p>
+            ) : (
+              <>
+                {message && (
+                  <p style={{ textAlign: 'center', fontStyle: 'italic', color: 'red' }}>
+                    {message}
+                  </p>
+                )}
+                {tasks.map((tasks, index) => (
+                  <div
+                    key={tasks._id}
+                    className={`list-item ${expandedItems.includes(index) ? 'expanded' : ''}`}
+                  >
+                    <div className="expand">
+                      {expandedItems.includes(index) ? (
+                        <FaChevronUp onClick={() => toggleExpand(index)} />
+                      ) : (
+                        <FaChevronDown onClick={() => toggleExpand(index)} />
+                      )}
+                    </div>
+                    <div>
+                      <span>{tasks.AssetName}</span> - <span>{tasks.Location}</span>
+                    </div>
+                    <div
+                      className={`expanded-content ${
+                        expandedItems.includes(index) ? 'visible' : 'hidden'
+                      }`}
+                    >
+                      <div className="table-like">
+                        <div className="table-row">
+                          <div className="table-cell">
+                            <strong>TaskName:</strong>
+                          </div>
+                          <div className="table-cell">{tasks.TaskName}</div>
+                        </div>
+                        <div className="table-row">
+                          <div className="table-cell">
+                            <strong>startDate:</strong>
+                          </div>
+                          <div className="table-cell">
+                            {new Date(tasks.startDate).toLocaleDateString()}
+                          </div>
+                        </div>
+                        <div className="table-row">
+                          <div className="table-cell">
+                            <strong>nextDate:</strong>
+                          </div>
+                          <div className="table-cell">
+                            {new Date(tasks.nextDate).toLocaleDateString()}
+                          </div>
+                        </div>
+                        <div className="table-row">
+                          <div className="table-cell">
+                            <strong>TaskDescription:</strong>
+                          </div>
+                          <div className="table-cell">{tasks.TaskDescription}</div>
+                        </div>
+                        <div className="table-row">
+                          <div className="table-cell">
+                            <strong>Schedule:</strong>
+                          </div>
+                          <div className="table-cell">
+                            {tasks.ScheduledMaintenanceDatesandIntervals}
+                          </div>
+                        </div>
+                        <div className="table-row">
+                          <div className="table-cell">
+                            <strong>Status:</strong>
+                          </div>
+                          <div className="table-cell">{tasks.Status}</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="actions">
+                      <NavLink to={`/editPM/${tasks._id}`} style={{ color: '#000080' }}>
+                        <FaEdit />
+                      </NavLink>
+                      <button
+                        className="btn"
+                        // onClick={() => deleteData(asset._id)}
+                        style={{ color: 'red' }}
+                      >
+                        <MdDelete />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </>
+            )}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   )
 }
 
-export default PmTable
+export default TodaysTasks

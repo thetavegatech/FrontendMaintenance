@@ -193,29 +193,6 @@ const AppHeader = () => {
         <AppBreadcrumb />
       </CContainer>
       {isQrScannerOpen && <QrScanner onClose={toggleQrScanner} />}
-      {/* <CModal show={qrModal} onClose={() => setQrModal(true)} size="lg">
-        <CModalHeader closeButton>
-          <CModalTitle>Scan QR Code</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <QrReader
-            delay={300}
-            onError={handleError}
-            onScan={handleScan}
-            style={{ width: '100%' }}
-          />
-          {scanResult && (
-            <div>
-              <p>Scanned Data: {scanResult}</p>
-            </div>
-          )}
-        </CModalBody>
-        <CModalFooter>
-          <CButton color="secondary" onClick={() => setQrModal(false)}>
-            Close
-          </CButton>
-        </CModalFooter>
-      </CModal> */}
     </CHeader>
   )
 }

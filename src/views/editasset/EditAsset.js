@@ -141,21 +141,20 @@ export default function EditForm() {
   return (
     <>
       <div
-        className="tab-content1"
+        className="container"
         style={{
-          border: '2px solid #ccc',
-          backgroundColor: '',
+          border: '1px solid #ccc',
           padding: '20px',
+          // backgroundColor: '#f9f9f9',
           borderRadius: '10px',
-          boxShadow: '2px 4px 8px rgba(0, 0, 0, 0.1)',
+          boxShadow: '2px 4px 4px rgba(0, 0, 0, 0.1)',
           width: '100%',
         }}
       >
-        {/* Step 1: Asset Identification */}
         <div>
           <form onSubmit={Update}>
             <div className="row g-2">
-              <div className="col-md-6">
+              <div className="col-md-3">
                 <label htmlFor="assetName" style={{ marginBottom: '10px' }}>
                   Asset Name:
                 </label>
@@ -171,7 +170,7 @@ export default function EditForm() {
                   onChange={(e) => setAssetName(e.target.value)}
                 />
               </div>
-              <div className="col-md-6">
+              <div className="col-md-3">
                 <label htmlFor="MachineNo" style={{ marginBottom: '10px' }}>
                   MachineNo:
                 </label>
@@ -186,207 +185,191 @@ export default function EditForm() {
                   onChange={(e) => setMachineNo(e.target.value)}
                 />
               </div>
+              {/* </div> */}
+              {/* </form> */}
+              {/* </div> */}
+              {/* <form onSubmit={Update}> */}
+              {/* <div className="row g-2"> */}
+              <div className="col-md-3">
+                <label htmlFor="SrNo" style={{ marginBottom: '10px' }}>
+                  SrNo:
+                </label>
+                <input
+                  className="form-control col-sm-4"
+                  required
+                  style={{ marginBottom: '10px' }}
+                  id="SrNo"
+                  name="SrNo"
+                  value={SrNo}
+                  onChange={(e) => setSrNo(e.target.value)}
+                />
+                {/* </input> */}
+              </div>
+              <div className="col-md-3">
+                <label htmlFor="MachineType" style={{ marginBottom: '10px' }}>
+                  MachineType:
+                </label>
+                <input
+                  type="text"
+                  required
+                  style={{ marginBottom: '10px' }}
+                  className="form-control col-sm-4"
+                  id="MachineType"
+                  name="MachineType"
+                  value={MachineType}
+                  onChange={(e) => setMachineType(e.target.value)}
+                />
+              </div>
+              <div className="col-md-3">
+                <label htmlFor="assetLocation" className="form-label">
+                  Location:
+                </label>
+                <input
+                  className="form-control col-sm-6"
+                  required
+                  id="assetLocation"
+                  name="Location"
+                  value={Location}
+                  style={{ marginBottom: '10px' }}
+                  onChange={(e) => setLocation(e.target.value)}
+                />
+              </div>
+              <div className="col-md-3">
+                <label htmlFor="Controller" style={{ marginBottom: '10px' }}>
+                  Controller:
+                </label>
+                <textarea
+                  className="form-control col-sm-4"
+                  required
+                  id="Controller"
+                  style={{ marginBottom: '10px' }}
+                  defaultValue={''}
+                  name="Controller"
+                  value={Controller}
+                  onChange={(e) => setController(e.target.value)}
+                />
+              </div>
+              <div className="col-md-3">
+                <label htmlFor="PowerRatting" style={{ marginBottom: '10px' }}>
+                  PowerRatting:
+                </label>
+                <textarea
+                  className="form-control col-sm-4"
+                  required
+                  style={{ marginBottom: '10px' }}
+                  id="PowerRatting"
+                  defaultValue={''}
+                  name="PowerRatting"
+                  value={PowerRatting}
+                  onChange={(e) => setPowerRatting(e.target.value)}
+                />
+              </div>
+              <div className="col-md-3">
+                <label htmlFor="CapecitySpindle" style={{ marginBottom: '10px' }}>
+                  CapecitySpindle:
+                </label>
+                <textarea
+                  className="form-control col-sm-4"
+                  required
+                  style={{ marginBottom: '10px' }}
+                  id="CapecitySpindle"
+                  defaultValue={''}
+                  name="CapecitySpindle"
+                  value={CapecitySpindle}
+                  onChange={(e) => setCapecitySpindle(e.target.value)}
+                />
+              </div>
+              <div className="col-md-3">
+                <label htmlFor="AxisTravels" style={{ marginBottom: '10px' }}>
+                  AxisTravels:
+                </label>
+                <textarea
+                  className="form-control col-sm-4"
+                  required
+                  style={{ marginBottom: '10px' }}
+                  id="AxisTravels"
+                  defaultValue={''}
+                  name="AxisTravels"
+                  value={AxisTravels}
+                  onChange={(e) => setAxisTravels(e.target.value)}
+                />
+              </div>
+              <div className="col-md-3">
+                <label htmlFor="Ranking" style={{ marginBottom: '10px' }}>
+                  Ranking:
+                </label>
+                <textarea
+                  className="form-control col-sm-4"
+                  required
+                  style={{ marginBottom: '10px' }}
+                  id="Ranking"
+                  defaultValue={''}
+                  name="Ranking"
+                  value={Ranking}
+                  onChange={(e) => setRanking(e.target.value)}
+                />
+              </div>
+              <div className="col-md-3">
+                <label htmlFor="InstallationDate" style={{ marginBottom: '10px' }}>
+                  InstallationDate:
+                </label>
+                <input
+                  className="form-control col-sm-4"
+                  type="date"
+                  // required
+                  style={{ marginBottom: '10px' }}
+                  id="InstallationDate"
+                  defaultValue={''}
+                  name="InstallationDate"
+                  value={InstallationDate}
+                  onChange={(e) => setInstallationDate(e.target.value)}
+                />
+              </div>
+              <div className="col-md-3">
+                <label htmlFor="manufacturingyear" style={{ marginBottom: '10px' }}>
+                  Manufacturing Year:
+                </label>
+                <input
+                  required
+                  type="year"
+                  className="form-control col-sm-4"
+                  id="ManufacturingYear"
+                  defaultValue={''}
+                  name="ManufacturingYear"
+                  value={ManufacturingYear}
+                  onChange={(e) => setManufacturingYear(e.target.value)}
+                />
+              </div>
+              <div className="col-md-3">
+                <label htmlFor="attachment">Attachment:</label>
+                <input
+                  type="file"
+                  className="form-control col-sm-4"
+                  onChange={convertToBse64}
+                ></input>
+              </div>
             </div>
+            <div className="col-12">
+              <button
+                type="submit"
+                className="btn btn-primary"
+                style={{
+                  marginTop: '10px',
+                  fontSize: '16px',
+                  backgroundColor: '#000026',
+                  // transition: 'background-color 0.3s',
+                  cursor: 'pointer',
+                }}
+                // onMouseOver={(e) => (e.target.style.backgroundColor = '#009bff')}
+                // onMouseOut={(e) => (e.target.style.backgroundColor = '#007bff')}
+              >
+                Submit
+              </button>
+            </div>
+            {/* </div> */}
           </form>
-        </div>
-        <form onSubmit={Update}>
-          <div className="row g-2">
-            <div className="col-md-6">
-              <label htmlFor="SrNo" style={{ marginBottom: '10px' }}>
-                SrNo:
-              </label>
-              <input
-                className="form-control col-sm-4"
-                required
-                style={{ marginBottom: '10px' }}
-                id="SrNo"
-                name="SrNo"
-                value={SrNo}
-                onChange={(e) => setSrNo(e.target.value)}
-              />
-              {/* </input> */}
-            </div>
-            <div className="col-md-6">
-              <label htmlFor="MachineType" style={{ marginBottom: '10px' }}>
-                MachineType:
-              </label>
-              <input
-                type="text"
-                required
-                style={{ marginBottom: '10px' }}
-                className="form-control col-sm-4"
-                id="MachineType"
-                name="MachineType"
-                value={MachineType}
-                onChange={(e) => setMachineType(e.target.value)}
-              />
-            </div>
-            {/* <div className="col-md-6">
-              <label htmlFor="Make" style={{ marginBottom: '10px' }}>
-                Make:
-              </label>
-              <input
-                type="text"
-                required
-                style={{ marginBottom: '10px' }}
-                className="form-control col-sm-4"
-                id="Make"
-                name="Make"
-                value={Make}
-                onChange={(e) => setMake(e.target.value)}
-              />
-            </div> */}
-            <div className="col-md-6">
-              <label htmlFor="assetLocation" className="form-label">
-                Location:
-              </label>
-              <input
-                className="form-control col-sm-6"
-                required
-                id="assetLocation"
-                name="Location"
-                value={Location}
-                style={{ marginBottom: '10px' }}
-                onChange={(e) => setLocation(e.target.value)}
-              />
-            </div>
-            {/* <div className="col-md-5">
-              <label htmlFor="maintenanceActivities">Details of Maintenance Activities:</label>
-              <textarea
-                className="form-control col-sm-4"
-                id="maintenanceActivities"
-                defaultValue={''}
-                name="DetailsofMaintenanceActivities"
-                value={DetailsofMaintenanceActivities}
-                onChange={(e) => setDetailsofMaintenanceActivities(e.target.value)}
-              />
-            </div> */}
-            <div className="col-md-6">
-              <label htmlFor="Controller" style={{ marginBottom: '10px' }}>
-                Controller:
-              </label>
-              <textarea
-                className="form-control col-sm-4"
-                required
-                id="Controller"
-                style={{ marginBottom: '10px' }}
-                defaultValue={''}
-                name="Controller"
-                value={Controller}
-                onChange={(e) => setController(e.target.value)}
-              />
-            </div>
-            <div className="col-md-6">
-              <label htmlFor="PowerRatting" style={{ marginBottom: '10px' }}>
-                PowerRatting:
-              </label>
-              <textarea
-                className="form-control col-sm-4"
-                required
-                style={{ marginBottom: '10px' }}
-                id="PowerRatting"
-                defaultValue={''}
-                name="PowerRatting"
-                value={PowerRatting}
-                onChange={(e) => setPowerRatting(e.target.value)}
-              />
-            </div>
-            <div className="col-md-6">
-              <label htmlFor="CapecitySpindle" style={{ marginBottom: '10px' }}>
-                CapecitySpindle:
-              </label>
-              <textarea
-                className="form-control col-sm-4"
-                required
-                style={{ marginBottom: '10px' }}
-                id="CapecitySpindle"
-                defaultValue={''}
-                name="CapecitySpindle"
-                value={CapecitySpindle}
-                onChange={(e) => setCapecitySpindle(e.target.value)}
-              />
-            </div>
-            <div className="col-md-6">
-              <label htmlFor="AxisTravels" style={{ marginBottom: '10px' }}>
-                AxisTravels:
-              </label>
-              <textarea
-                className="form-control col-sm-4"
-                required
-                style={{ marginBottom: '10px' }}
-                id="AxisTravels"
-                defaultValue={''}
-                name="AxisTravels"
-                value={AxisTravels}
-                onChange={(e) => setAxisTravels(e.target.value)}
-              />
-            </div>
-            <div className="col-md-6">
-              <label htmlFor="Ranking" style={{ marginBottom: '10px' }}>
-                Ranking:
-              </label>
-              <textarea
-                className="form-control col-sm-4"
-                required
-                style={{ marginBottom: '10px' }}
-                id="Ranking"
-                defaultValue={''}
-                name="Ranking"
-                value={Ranking}
-                onChange={(e) => setRanking(e.target.value)}
-              />
-            </div>
-            <div className="col-md-6">
-              <label htmlFor="InstallationDate" style={{ marginBottom: '10px' }}>
-                InstallationDate:
-              </label>
-              <input
-                className="form-control col-sm-4"
-                type="date"
-                // required
-                style={{ marginBottom: '10px' }}
-                id="InstallationDate"
-                defaultValue={''}
-                name="InstallationDate"
-                value={InstallationDate}
-                onChange={(e) => setInstallationDate(e.target.value)}
-              />
-            </div>
-            <div className="col-md-6">
-              <label htmlFor="manufacturingyear" style={{ marginBottom: '10px' }}>
-                Manufacturing Year:
-              </label>
-              <input
-                required
-                type="year"
-                className="form-control col-sm-4"
-                id="ManufacturingYear"
-                defaultValue={''}
-                name="ManufacturingYear"
-                value={ManufacturingYear}
-                onChange={(e) => setManufacturingYear(e.target.value)}
-              />
-            </div>
-            <div className="col-md-6">
-              <label htmlFor="attachment">Attachment:</label>
-              <input
-                type="file"
-                className="form-control col-sm-4"
-                onChange={convertToBse64}
-              ></input>
-            </div>
-          </div>
-          <button
-            className="btn btn-primary"
-            style={{ margin: '10px', width: '28%' }}
-            type="submit"
-          >
-            Save
-          </button>
           {/* </div> */}
-        </form>
-        {/* </div> */}
-        {/* </div> */}
+        </div>
       </div>
       {/* </div> */}
     </>

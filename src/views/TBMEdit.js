@@ -121,18 +121,17 @@ const CBMEdit = () => {
       className="container"
       style={{
         border: '1px solid #ccc',
-        padding: '5px',
+        padding: '20px',
         backgroundColor: '',
         borderRadius: '10px',
         boxShadow: '2px 4px 4px rgba(0, 0, 0, 0.1)',
-        height: '50%',
         width: '100%',
       }}
     >
       <h4>Edit TBM Record</h4>
       <form onSubmit={handleSubmit}>
         <div className="row g-3">
-          <div className="col-md-4">
+          <div className="col-md-3">
             <label>Asset Name:</label>
             <input
               name="assetName"
@@ -142,7 +141,7 @@ const CBMEdit = () => {
               required
             />
           </div>
-          <div className="col-md-4">
+          <div className="col-md-3">
             <label>Location:</label>
             <input
               type="text"
@@ -154,7 +153,7 @@ const CBMEdit = () => {
               required
             />
           </div>
-          <div className="col-md-4">
+          <div className="col-md-3">
             <label>TBM Schedule Date:</label>
             <input
               type="date"
@@ -164,7 +163,7 @@ const CBMEdit = () => {
               onChange={handleChange}
             />
           </div>
-          <div className="col-md-4">
+          <div className="col-md-3">
             <label>TBM Frequency:</label>
             <select
               type="text"
@@ -182,7 +181,7 @@ const CBMEdit = () => {
               <option value="yearly">Yearly</option>
             </select>
           </div>
-          <div className="col-md-4">
+          <div className="col-md-3">
             <label>Next TBM Date:</label>
             <input
               type="date"
@@ -192,7 +191,7 @@ const CBMEdit = () => {
               onChange={handleChange}
             />
           </div>
-          <div className="col-md-4">
+          <div className="col-md-3">
             <label htmlFor="status">Status</label>
             <select
               className="form-control col-sm-6"
@@ -209,9 +208,23 @@ const CBMEdit = () => {
             </select>
           </div>
         </div>
-        <button type="submit" className="submit-button">
-          Submit
-        </button>
+        <div className="col-12">
+          <button
+            type="submit"
+            className="btn btn-primary"
+            style={{
+              marginTop: '20px',
+              fontSize: '16px',
+              backgroundColor: '#000026',
+              // transition: 'background-color 0.3s',
+              cursor: 'pointer',
+            }}
+            onMouseOver={(e) => (e.target.style.backgroundColor = '#009bff')}
+            onMouseOut={(e) => (e.target.style.backgroundColor = '#007bff')}
+          >
+            Submit
+          </button>
+        </div>
       </form>
       {message && <p>{message}</p>}
     </div>

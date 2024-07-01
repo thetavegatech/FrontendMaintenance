@@ -17,7 +17,7 @@ import {
 import '../assetTable/asset.css'
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table'
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css'
-import { FaChevronUp, FaChevronDown } from 'react-icons/fa'
+import { FaPlusCircle, FaFileExcel, FaChevronUp, FaChevronDown } from 'react-icons/fa'
 
 class BDList extends React.Component {
   state = {
@@ -146,26 +146,19 @@ class BDList extends React.Component {
     return (
       <>
         <div className="container">
-          <div>
-            <NavLink to="/breakdownForm">
-              {' '}
-              <CButton
-                // color="info"
-                // shape="rounded-pill"
-                className="mb-2"
-                style={{ marginTop: '5px', backgroundColor: '#000026' }}
-              >
-                Add New
-              </CButton>
+          <div className="action-icons">
+            <NavLink to="/assetForm">
+              <FaPlusCircle className="add-asset-icon" />
             </NavLink>
-            <CButton
+            <FaFileExcel
+              className="excel-icon"
               // color="info"
               type="button"
               style={{ margin: 'rem', backgroundColor: '#000026' }}
               onClick={this.exportToExcel}
-            >
-              Export to Excel
-            </CButton>
+            />
+            {/* Export to Excel
+            </CButton> */}
             <label
               htmlFor="startDate"
               style={{

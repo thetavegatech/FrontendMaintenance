@@ -11,7 +11,7 @@ import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css'
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 // import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 // import '../asset.css'
-import { FaChevronUp, FaChevronDown } from 'react-icons/fa'
+import { FaPlusCircle, FaChevronUp, FaChevronDown } from 'react-icons/fa'
 
 export default function Users() {
   const [usernos, setUsers] = useState([])
@@ -62,10 +62,8 @@ export default function Users() {
 
   return (
     <div className="container">
-      <NavLink to="/register">
-        <CButton className="mb-2" style={{ marginTop: '5px', backgroundColor: '#000026' }}>
-          Add New
-        </CButton>
+      <NavLink to="/assetForm">
+        <FaPlusCircle className="add-asset-icon" />
       </NavLink>
       <div className="table-container">
         <Table className="custom-table">

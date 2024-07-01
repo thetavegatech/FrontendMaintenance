@@ -7,7 +7,7 @@ import { FaEdit } from 'react-icons/fa'
 import './assetTable/asset.css'
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table'
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css'
-import { FaChevronUp, FaChevronDown } from 'react-icons/fa'
+import { FaPlusCircle, FaChevronUp, FaChevronDown } from 'react-icons/fa'
 
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 // import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
@@ -172,14 +172,8 @@ const TbmTable = () => {
 
   return (
     <div className="container">
-      <NavLink to="/tbmForm">
-        <CButton
-          // color="info"
-          className="mb-2"
-          style={{ marginTop: '5px', backgroundColor: '#000026' }}
-        >
-          Add New
-        </CButton>
+      <NavLink to="/assetForm">
+        <FaPlusCircle className="add-asset-icon" />
       </NavLink>
       <label htmlFor="searchTask" style={{ marginLeft: '%' }}>
         <span role="img" aria-label="search-icon"></span>

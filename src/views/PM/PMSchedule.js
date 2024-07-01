@@ -9,7 +9,7 @@ import loadingGif from '../assetTable/loader.gif'
 import '../assetTable/asset.css'
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table'
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css'
-import { FaChevronUp, FaChevronDown } from 'react-icons/fa'
+import { FaPlusCircle, FaChevronUp, FaChevronDown } from 'react-icons/fa'
 
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 // import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
@@ -393,14 +393,11 @@ class AssetTable extends React.Component {
 
     return (
       <div className="container" style={{ marginTop: '0px' }}>
-        <NavLink to="/taskForm">
-          <CButton
-            // color="info"
-            className="mb-2"
-            style={{ marginTop: '5px', backgroundColor: '#000026' }}
-          >
-            Add New
-          </CButton>
+        <NavLink to="/taskform">
+          <FaPlusCircle className="add-asset-icon" />
+        </NavLink>
+        <NavLink to="/pm">
+          <button className="btn">Todays Tasks</button>
         </NavLink>
 
         {/* <div> */}

@@ -348,7 +348,7 @@ export default function BreakDown() {
         className="container"
         style={{
           border: '2px solid #ccc',
-          backgroundColor: '',
+          // backgroundColor: '',
           padding: '20px',
           borderRadius: '10px',
           boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',

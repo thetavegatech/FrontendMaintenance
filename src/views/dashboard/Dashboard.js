@@ -245,20 +245,22 @@ const Dashboard = () => {
           <CCard className="mb-4">
             <CCardHeader>BreakDown Type Wise Chart</CCardHeader>
             <CCardBody>
-              <ScatterChart width={window.innerWidth >= 992 ? 500 : 300} height={300}>
-                <CartesianGrid />
-                <XAxis dataKey="breakdownType" />
-                <YAxis dataKey="value" />
-                <Tooltip cursor={{ strokeDasharray: '3 3' }} />
-                <Legend />
-                <Scatter
-                  name="Breakdown Typewise"
-                  data={formattedChartData}
-                  fill="#000026"
-                  backgroundColor="rgba(255,255,255,.2)"
-                  borderColor="rgba(255,255,255,.55)"
-                />
-              </ScatterChart>
+              <ResponsiveContainer width="100%" height={300}>
+                <ScatterChart width={window.innerWidth >= 992 ? 500 : 300} height={300}>
+                  <CartesianGrid />
+                  <XAxis dataKey="breakdownType" />
+                  <YAxis dataKey="value" />
+                  <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+                  <Legend />
+                  <Scatter
+                    name="Breakdown Typewise"
+                    data={formattedChartData}
+                    fill="#000026"
+                    backgroundColor="rgba(255,255,255,.2)"
+                    borderColor="rgba(255,255,255,.55)"
+                  />
+                </ScatterChart>
+              </ResponsiveContainer>
             </CCardBody>
           </CCard>
         </CCol>

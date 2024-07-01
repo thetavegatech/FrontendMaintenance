@@ -26,6 +26,10 @@
   font-weight: bold;
 }
 
+.btn{
+  font-size: 19px;
+  font-weight: bold;
+}
 .custom-widget .stat-label {
   font-size: 1em;
   margin-top: 5px;
@@ -46,6 +50,31 @@
 
 .custom-widget.danger {
   background: linear-gradient(135deg, #f44336 0%, #f79898 100%);
+}
+.custom-widget1.custom-card {
+  background: linear-gradient(135deg, #4caf50 0%, #bff1c1 100%);
+  border-radius: 10px;
+  text-align: center;
+  font-weight: bold;
+  margin-top: 10px;
+}
+.custom-widget2.custom-card {
+  background: linear-gradient(135deg, #2196f3 0%, #cae3f7 100%);
+  border-radius: 10px;
+  text-align: center;
+  margin-top: 10px;
+}
+.custom-widget3.custom-card {
+  background: linear-gradient(135deg, #ff9800 0%, #f8dbaf 100%);
+  border-radius: 10px;
+  text-align: center;
+  margin-top: 10px;
+}
+.custom-widget4.custom-card {
+  background: linear-gradient(135deg, #f44336 0%, #f79898 100%);
+  border-radius: 10px;
+  text-align: center;
+  margin-top: 10px;
 }
 
 .custom-widget .options {

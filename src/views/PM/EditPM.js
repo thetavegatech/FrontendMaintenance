@@ -137,119 +137,132 @@ export default function EditForm() {
   return (
     <>
       <div
-        className="tab-content1"
+        className="container"
         style={{
-          border: '2px solid #ccc',
-          backgroundColor: '',
+          border: '1px solid #ccc',
           padding: '20px',
+          // backgroundColor: '#f9f9f9',
           borderRadius: '10px',
-          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+          boxShadow: '2px 4px 4px rgba(0, 0, 0, 0.1)',
           width: '100%',
         }}
       >
         {/* Step 1: Asset Identification */}
         <div>
           <form onSubmit={Update}>
-            <div className="form-group"></div>
-            <div className="form-group">
-              <label htmlFor="taskName">Task Name:</label>
-              <input
-                disabled
-                type="text"
-                className="form-control"
-                name="taskName"
-                id="taskName"
-                // style={{ width: '100%' }}
-                value={TaskName}
-                onChange={(e) => setTaskName(e.target.value)}
-              />
+            <div className="row g-2">
+              <div className="col-md-3">
+                <label htmlFor="taskName">Task Name:</label>
+                <input
+                  disabled
+                  type="text"
+                  className="form-control"
+                  name="taskName"
+                  id="taskName"
+                  // style={{ width: '100%' }}
+                  value={TaskName}
+                  onChange={(e) => setTaskName(e.target.value)}
+                />
+              </div>
+              <div className="col-md-3">
+                <label htmlFor="assetDescription">Description:</label>
+                <textarea
+                  className="form-control"
+                  disabled
+                  // style={{ width: '80%' }}
+                  id="taskDescription"
+                  defaultValue={''}
+                  name="TaskDescription"
+                  value={TaskDescription}
+                  onChange={(e) => setTaskDescription(e.target.value)}
+                />
+              </div>
+              <div className="col-md-3">
+                <label htmlFor="startDate">Start From :</label>
+                <input
+                  type="text" // Change input type to text
+                  className="form-control"
+                  id="startDate"
+                  // style={{ width: '80%' }}
+                  name="startDate"
+                  value={startDate}
+                  disabled // to make it non-editable
+                />
+              </div>
+              <div className="col-md-3">
+                <label htmlFor="startDate">Next Date :</label>
+                <input
+                  type="text" // Change input type to text
+                  className="form-control"
+                  id="nextDate"
+                  // style={{ width: '80%' }}
+                  name="nextDate"
+                  value={nextDate}
+                  onChange={(e) => setnextDate(e.target.value)}
+                />
+              </div>
+              <div className="col-md-3">
+                <label htmlFor="scheduledMaintenance">Scheduled Maintenance Intervals:</label>
+                <select
+                  disabled
+                  className="form-control"
+                  // style={{ width: '80%' }}
+                  id="scheduledMaintenance"
+                  name="ScheduledMaintenanceDatesandIntervals"
+                  value={ScheduledMaintenanceDatesandIntervals}
+                  onChange={(e) => setScheduledMaintenanceDatesandIntervals(e.target.value)}
+                >
+                  <option value="daily">Daily</option>
+                  <option value="weekly">Weekly</option>
+                  <option value="fifteen days">Fifteen Days</option>
+                  <option value="monthly">Monthly</option>
+                  <option value="quarterly">Quarterly</option>
+                  <option value="half year">Half Year</option>
+                  <option value="yearly">Yearly</option>
+                </select>
+              </div>
+              <div className="col-md-3">
+                <label htmlFor="status">Status</label>
+                <select
+                  className="form-control"
+                  // style={{ width: '80%' }}
+                  required
+                  id="status"
+                  name="status"
+                  value={status}
+                  onChange={(e) => setstatus(e.target.value)}
+                >
+                  <option value="Pending">Pending</option>
+                  <option value="Completed">Completed</option>
+                  {/* <option value="open">Open</option> */}
+                </select>
+              </div>
+              <div className="col-md-3">
+                <label htmlFor="attachment">Attachment:</label>
+                <input
+                  type="file"
+                  className="form-control col-sm-6"
+                  onChange={convertToBse64}
+                ></input>
+              </div>
+              <div className="col-12">
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  style={{
+                    marginTop: '10px',
+                    fontSize: '16px',
+                    backgroundColor: '#000026',
+                    // transition: 'background-color 0.3s',
+                    cursor: 'pointer',
+                  }}
+                  // onMouseOver={(e) => (e.target.style.backgroundColor = '#009bff')}
+                  // onMouseOut={(e) => (e.target.style.backgroundColor = '#007bff')}
+                >
+                  Submit
+                </button>
+              </div>
             </div>
-            <div className="form-group">
-              <label htmlFor="assetDescription">Description:</label>
-              <textarea
-                className="form-control"
-                disabled
-                // style={{ width: '80%' }}
-                id="taskDescription"
-                defaultValue={''}
-                name="TaskDescription"
-                value={TaskDescription}
-                onChange={(e) => setTaskDescription(e.target.value)}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="startDate">Start From :</label>
-              <input
-                type="text" // Change input type to text
-                className="form-control"
-                id="startDate"
-                // style={{ width: '80%' }}
-                name="startDate"
-                value={startDate}
-                disabled // to make it non-editable
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="startDate">Next Date :</label>
-              <input
-                type="text" // Change input type to text
-                className="form-control"
-                id="nextDate"
-                // style={{ width: '80%' }}
-                name="nextDate"
-                value={nextDate}
-                onChange={(e) => setnextDate(e.target.value)}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="scheduledMaintenance">
-                Scheduled Maintenance Dates and Intervals:
-              </label>
-              <select
-                disabled
-                className="form-control"
-                // style={{ width: '80%' }}
-                id="scheduledMaintenance"
-                name="ScheduledMaintenanceDatesandIntervals"
-                value={ScheduledMaintenanceDatesandIntervals}
-                onChange={(e) => setScheduledMaintenanceDatesandIntervals(e.target.value)}
-              >
-                <option value="daily">Daily</option>
-                <option value="weekly">Weekly</option>
-                <option value="fifteen days">Fifteen Days</option>
-                <option value="monthly">Monthly</option>
-                <option value="quarterly">Quarterly</option>
-                <option value="half year">Half Year</option>
-                <option value="yearly">Yearly</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label htmlFor="status">Status</label>
-              <select
-                className="form-control"
-                // style={{ width: '80%' }}
-                required
-                id="status"
-                name="status"
-                value={status}
-                onChange={(e) => setstatus(e.target.value)}
-              >
-                <option value="Pending">Pending</option>
-                <option value="Completed">Completed</option>
-                {/* <option value="open">Open</option> */}
-              </select>
-            </div>
-            <div className="col-md-6">
-              <label htmlFor="attachment">Attachment:</label>
-              <input
-                type="file"
-                className="form-control col-sm-6"
-                onChange={convertToBse64}
-              ></input>
-            </div>
-            <button className="btn btn-primary mb-2" style={{ margin: '10px' }} type="submit">
-              Save
-            </button>
           </form>
         </div>
       </div>

@@ -139,7 +139,7 @@ const MyFormComponent = () => {
       style={{
         border: '1px solid #ccc',
         padding: '20px',
-        backgroundColor: '#f9f9f9',
+        // backgroundColor: '#f9f9f9',
         borderRadius: '10px',
         boxShadow: '2px 4px 4px rgba(0, 0, 0, 0.1)',
         width: '100%',
@@ -258,14 +258,14 @@ const MyFormComponent = () => {
               type="submit"
               className="btn btn-primary"
               style={{
-                marginTop: '20px',
+                marginTop: '10px',
                 fontSize: '16px',
                 backgroundColor: '#000026',
                 // transition: 'background-color 0.3s',
                 cursor: 'pointer',
               }}
-              onMouseOver={(e) => (e.target.style.backgroundColor = '#009bff')}
-              onMouseOut={(e) => (e.target.style.backgroundColor = '#007bff')}
+              // onMouseOver={(e) => (e.target.style.backgroundColor = '#009bff')}
+              // onMouseOut={(e) => (e.target.style.backgroundColor = '#007bff')}
             >
               Submit
             </button>
