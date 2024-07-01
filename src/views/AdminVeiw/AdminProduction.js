@@ -147,7 +147,7 @@ class BDList extends React.Component {
       <>
         <div className="container">
           <div className="action-icons">
-            <NavLink to="/assetForm">
+            <NavLink to="/breakdownform">
               <FaPlusCircle className="add-asset-icon" />
             </NavLink>
             <FaFileExcel
@@ -169,7 +169,7 @@ class BDList extends React.Component {
                 whiteSpace: 'nowrap',
                 '@media (max-width: 750px)': {
                   // marginLeft: '3rem',
-                  // marginRight: '0.8rem',
+                  marginRight: '2rem',
                   fontSize: '14px',
                 },
               }}
@@ -185,7 +185,7 @@ class BDList extends React.Component {
                 padding: '6px',
                 borderRadius: '5px',
                 border: '1px solid #ccc',
-                marginRight: '10px',
+                // marginRight: '15px',
                 marginLeft: '10px',
                 fontSize: '14px',
               }}

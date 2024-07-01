@@ -172,7 +172,7 @@ const TbmTable = () => {
 
   return (
     <div className="container">
-      <NavLink to="/assetForm">
+      <NavLink to="/tbmform">
         <FaPlusCircle className="add-asset-icon" />
       </NavLink>
       <label htmlFor="searchTask" style={{ marginLeft: '%' }}>

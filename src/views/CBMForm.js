@@ -126,7 +126,7 @@ const CBMForm = () => {
         width: '100%',
       }}
     >
-      <h4>Create CBM Record</h4>
+      {/* <h4>Create CBM Record</h4> */}
       <form onSubmit={handleSubmit}>
         <div className="row g-3">
           <div className="col-md-4" style={{ marginBottom: '15px' }}>

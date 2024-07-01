@@ -2,21 +2,17 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { NavLink } from 'react-router-dom'
-import dlt from './delete.png'
-import { CTable, CTableHead, CButton } from '@coreui/react'
-import { FaEdit } from 'react-icons/fa'
+import { FaEdit, FaPlusCircle, FaChevronUp, FaChevronDown } from 'react-icons/fa'
 import { MdDelete } from 'react-icons/md'
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table'
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css'
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-// import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
-// import '../asset.css'
-import { FaPlusCircle, FaChevronUp, FaChevronDown } from 'react-icons/fa'
+import './asset.css'
 
 export default function Users() {
   const [usernos, setUsers] = useState([])
   const [message, setMessage] = useState('')
   const [loading, setLoading] = useState(true)
+  const [expandedItems, setExpandedItems] = useState([])
 
   const navigate = useNavigate()
 
@@ -26,6 +22,7 @@ export default function Users() {
       .get('https://backendmaintenx.onrender.com/getuser')
       .then((response) => {
         setUsers(response.data)
+        setLoading(false)
         console.log(response.data)
       })
       .catch((error) => {
@@ -50,8 +47,6 @@ export default function Users() {
     }
   }
 
-  const [expandedItems, setExpandedItems] = useState([])
-
   const toggleExpand = (index) => {
     if (expandedItems.includes(index)) {
       setExpandedItems(expandedItems.filter((item) => item !== index))
@@ -62,7 +57,7 @@ export default function Users() {
 
   return (
     <div className="container">
-      <NavLink to="/assetForm">
+      <NavLink to="/register">
         <FaPlusCircle className="add-asset-icon" />
       </NavLink>
       <div className="table-container">
@@ -71,11 +66,9 @@ export default function Users() {
             <Tr>
               <Th>Name</Th>
               <Th style={{ textAlign: 'center' }}>Role</Th>
-              {/* <th style={{ textAlign: 'center' }}>Role</th> */}
               <Th style={{ textAlign: 'center' }}>Email</Th>
               <Th style={{ textAlign: 'center' }}>Phone No</Th>
               <Th style={{ textAlign: 'center' }}>Plant</Th>
-              {/* <th style={{ textAlign: 'center' }}>Validation</th> */}
               <Th style={{ textAlign: 'center' }}>Edit</Th>
               <Th style={{ textAlign: 'center' }}>Delete</Th>
             </Tr>
@@ -88,7 +81,6 @@ export default function Users() {
                 <Td style={{ textAlign: 'center' }}>{user.email}</Td>
                 <Td style={{ textAlign: 'center' }}>{user.mobileNO}</Td>
                 <Td style={{ textAlign: 'center' }}>{user.plant}</Td>
-                {/* <td style={{ textAlign: 'center' }}>{user.Validation}</td> */}
                 <Td style={{ textAlign: 'center' }}>
                   <NavLink to={`/editRegisterUser/${user._id}`} style={{ color: '#000080' }}>
                     <FaEdit />
@@ -101,7 +93,6 @@ export default function Users() {
                     style={{ color: 'red' }}
                   >
                     <MdDelete />
-                    {/* <img src={dlt} alt="" width={30} height={25} /> */}
                   </button>
                 </Td>
               </Tr>
@@ -139,32 +130,28 @@ export default function Users() {
                     <div className="table-like">
                       <div className="table-row">
                         <div className="table-cell">
-                          <strong>tbmScheduleDate:</strong>
+                          <strong>email:</strong>
                         </div>
-                        <div className="table-cell">
-                          {new Date(user.tbmScheduleDate).toLocaleDateString()}
-                        </div>
+                        <div className="table-cell">{user.email}</div>
                       </div>
                       <div className="table-row">
                         <div className="table-cell">
-                          <strong>tbmFrequency:</strong>
+                          <strong>mobileNO:</strong>
                         </div>
-                        <div className="table-cell">{user.tbmFrequency}</div>
+                        <div className="table-cell">{user.mobileNO}</div>
                       </div>
                       <div className="table-row">
                         <div className="table-cell">
-                          <strong>nextTbmDate:</strong>
+                          <strong>plant:</strong>
                         </div>
-                        <div className="table-cell">
-                          {new Date(user.nextTbmDate).toLocaleDateString()}
-                        </div>
+                        <div className="table-cell">{user.plant}</div>
                       </div>
-                      <div className="table-row">
+                      {/* <div className="table-row">
                         <div className="table-cell">
                           <strong>status:</strong>
                         </div>
                         <div className="table-cell">{user.status}</div>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                   <div className="actions">

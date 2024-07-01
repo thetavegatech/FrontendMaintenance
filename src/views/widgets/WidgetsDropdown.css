@@ -28,7 +28,7 @@
 
 .btn{
   font-size: 19px;
-  font-weight: bold;
+  /* font-weight: bold; */
 }
 .custom-widget .stat-label {
   font-size: 1em;

@@ -172,7 +172,7 @@ const AssetTable = () => {
 
   return (
     <div className="container">
-      <NavLink to="/assetForm">
+      <NavLink to="/cbmform">
         <FaPlusCircle className="add-asset-icon" />
       </NavLink>
       <label htmlFor="searchTask" style={{ marginLeft: '%' }}>
