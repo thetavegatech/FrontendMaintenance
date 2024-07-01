@@ -31,7 +31,7 @@ const QRScanner = ({ onScan, onError, onClose }) => {
           }
         }}
         style={{ width: '100%' }}
-        facingMode="environment" // Use the rear camera
+        constraints={{ facingMode: 'environment' }} // Use the rear camera
       />
       <button onClick={onClose}>Close Scanner</button>
     </div>

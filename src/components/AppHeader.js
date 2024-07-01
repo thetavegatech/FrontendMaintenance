@@ -198,6 +198,7 @@ const AppHeader = () => {
           onScan={handleScanResult}
           onError={console.error}
           onClose={() => setIsQrScannerOpen(false)}
+          constraints={{ facingMode: 'environment' }}
         />
       )}
     </CHeader>
