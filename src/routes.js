@@ -32,6 +32,7 @@ const TBMEdit = React.lazy(() => import('./views/TBMEdit'))
 const CBM = React.lazy(() => import('./views/CBM'))
 const CBMEdit = React.lazy(() => import('./views/CBMEdit'))
 const PM = React.lazy(() => import('./views/PM'))
+const QrScanner = React.lazy(() => import('./views/QrScanner'))
 const CBMForm = React.lazy(() => import('./views/CBMForm'))
 const TBMForm = React.lazy(() => import('./views/TBMForm'))
 const editregisteruser = React.lazy(() => import('./views/pages/register/editregisteruser'))
@@ -105,6 +106,7 @@ const routes = [
   { path: '/editcbm/:id', name: 'editcbm', element: CBMEdit },
   { path: '/cbmForm', name: 'CBMForm', element: CBMForm },
   { path: '/tbmForm', name: 'TBMForm', element: TBMForm },
+  { path: '/qrscanner', name: 'QrScanner', element: QrScanner },
   { path: '/registeruser', name: 'registerUser', element: registerUser },
   { path: '/editRegisterUser/:id', name: 'editregisteruser', element: editregisteruser },
   { path: '/adminproduction', name: 'AdminProduction', element: AdminProduction },

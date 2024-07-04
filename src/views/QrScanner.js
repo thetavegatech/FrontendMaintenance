@@ -1,17 +1,19 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { QrReader } from '@blackbox-vision/react-qr-reader' // Adjust the import path
+import { QrReader } from '@blackbox-vision/react-qr-reader'
+import { useNavigate } from 'react-router-dom'
 
-const QRScanner = ({ onScan, onError, onClose }) => {
+const QRScanner = ({ onScan, onError }) => {
   const [delay, setDelay] = useState(500)
   const [scannedData, setScannedData] = useState()
+  const navigate = useNavigate()
 
   const handleScan = (data) => {
     if (data) {
       setScannedData(data)
       alert(`Scanned Data: ${data}`)
       window.open(data, '_blank') // Open the scanned URL in a new tab
-      onClose() // Close the scanner after a successful scan
+      navigate(-1) // Navigate back to the previous page after a successful scan
     }
   }
 
@@ -20,7 +22,7 @@ const QRScanner = ({ onScan, onError, onClose }) => {
   }
 
   return (
-    <div className="qr-scanner">
+    <div className="qr-scanner" style={{ width: '100vw', height: '100vh' }}>
       <QrReader
         delay={delay}
         onError={handleError}
@@ -30,10 +32,10 @@ const QRScanner = ({ onScan, onError, onClose }) => {
             handleScan(result.text)
           }
         }}
-        style={{ width: '100%' }}
+        style={{ width: '100%', height: '100%' }}
         constraints={{ facingMode: 'environment' }} // Use the rear camera
       />
-      <button onClick={onClose}>Close Scanner</button>
+      <button onClick={() => navigate(-1)}>Close Scanner</button>
     </div>
   )
 }
@@ -41,7 +43,6 @@ const QRScanner = ({ onScan, onError, onClose }) => {
 QRScanner.propTypes = {
   onScan: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
-  onClose: PropTypes.func.isRequired,
 }
 
 export default QRScanner

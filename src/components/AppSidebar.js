@@ -1,5 +1,4 @@
-import React from 'react'
-// import '../App.css'
+import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import logo from '../assets/logo.svg'
 import {
@@ -20,52 +19,44 @@ import CIcon from '@coreui/icons-react'
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
 
-// Sidebar navigation config
-import navigation from '../_nav'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { logout } from '../slices/authSlice'
 import { useLogoutMutation } from 'src/slices/usersApiSlice'
 
 const AppSidebar = () => {
   const dispatch = useDispatch()
-  const unfoldable = useSelector((state) => state.custom.sidebarUnfoldable) // Update 'custom' based on your actual reducer key
-  const sidebarShow = useSelector((state) => state.custom.sidebarShow) // Update 'custom' based on your actual reducer key
+  const unfoldable = useSelector((state) => state.custom.sidebarUnfoldable)
+  const sidebarShow = useSelector((state) => state.custom.sidebarShow)
   const userrole = useSelector((state) => state.auth.userInfo?.role)
 
   const navigate = useNavigate()
   const [logoutApiCall] = useLogoutMutation()
 
-  const logoutHandler = async () => {
-    // Show a confirmation dialog
-    const confirmLogout = window.confirm('Are you sure you want to logout?')
+  const [activeNavItem, setActiveNavItem] = useState(null)
 
-    // If the user clicks "OK", proceed with logout
+  const logoutHandler = async () => {
+    const confirmLogout = window.confirm('Are you sure you want to logout?')
     if (confirmLogout) {
       try {
-        // Your logout API call and logic
         await logoutApiCall().unwrap()
-        // Dispatch the logout action
         dispatch(logout())
-        // Navigate to the login page
         navigate('/login')
       } catch (error) {
         console.error('Logout error:', error)
       }
     } else {
-      // If the user clicks "Cancel", do nothing or handle accordingly
       console.log('Logout canceled')
     }
   }
 
   const sidebarStyles = {
-    backgroundColor: '#000026', // Dark background color
-    color: '#ffffff', // Text color
+    backgroundColor: '#000026',
+    color: '#ffffff',
   }
 
   const sidebarNavStyles = {
-    backgroundColor: '#000026', // Ensures the nav has the same background
+    backgroundColor: '#000026',
   }
-  // #eefbfd
 
   const brandTextStyles = {
     fontSize: '25px',
@@ -73,26 +64,22 @@ const AppSidebar = () => {
   }
 
   const navItemStyles = {
-    color: '#ffffff', // Nav item text color
-  }
-
-  const navItemHoverStyles = {
-    color: '#1e90ff', // Hover color
+    color: '#ffffff',
   }
 
   const activeNavItemStyles = {
-    backgroundColor: '#1e90ff', // Active link background color
-    color: '#ffffff', // Active link text color
+    backgroundColor: '#1e90ff',
+    color: '#ffffff',
   }
 
   const logoutButtonStyles = {
-    backgroundColor: '#000026', // Info button background color
+    backgroundColor: '#000026',
     border: '1px solid #ddd',
-    color: '#ffffff', // Info button text color
+    color: '#ffffff',
   }
 
-  const logoutButtonHoverStyles = {
-    backgroundColor: '#138496', // Info button hover color
+  const handleNavItemClick = (index) => {
+    setActiveNavItem(index)
   }
 
   return (
@@ -126,8 +113,11 @@ const AppSidebar = () => {
                 <CNavItem
                   component={NavLink}
                   to="/dashboard"
-                  style={navItemStyles}
-                  activeStyle={activeNavItemStyles}
+                  style={{
+                    ...navItemStyles,
+                    ...(activeNavItem === 0 ? activeNavItemStyles : {}),
+                  }}
+                  onClick={() => handleNavItemClick(0)}
                 >
                   <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
                   Dashboard
@@ -135,8 +125,11 @@ const AppSidebar = () => {
                 <CNavItem
                   component={NavLink}
                   to="/assetTable"
-                  style={navItemStyles}
-                  activeStyle={activeNavItemStyles}
+                  style={{
+                    ...navItemStyles,
+                    ...(activeNavItem === 1 ? activeNavItemStyles : {}),
+                  }}
+                  onClick={() => handleNavItemClick(1)}
                 >
                   <CIcon customClassName="nav-icon" icon={cilCalculator} />
                   AssetTable
@@ -145,8 +138,11 @@ const AppSidebar = () => {
                 <CNavItem
                   component={NavLink}
                   to="/cbm"
-                  style={navItemStyles}
-                  activeStyle={activeNavItemStyles}
+                  style={{
+                    ...navItemStyles,
+                    ...(activeNavItem === 2 ? activeNavItemStyles : {}),
+                  }}
+                  onClick={() => handleNavItemClick(2)}
                 >
                   <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
                   CBM
@@ -154,47 +150,71 @@ const AppSidebar = () => {
                 <CNavItem
                   component={NavLink}
                   to="/tbm"
-                  style={navItemStyles}
-                  activeStyle={activeNavItemStyles}
+                  style={{
+                    ...navItemStyles,
+                    ...(activeNavItem === 3 ? activeNavItemStyles : {}),
+                  }}
+                  onClick={() => handleNavItemClick(3)}
                 >
                   <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
                   TBM
                 </CNavItem>
-                <CNavItem component={NavLink} style={navItemStyles} to="/adminproduction">
+                <CNavItem
+                  component={NavLink}
+                  to="/adminproduction"
+                  style={{
+                    ...navItemStyles,
+                    ...(activeNavItem === 4 ? activeNavItemStyles : {}),
+                  }}
+                  onClick={() => handleNavItemClick(4)}
+                >
                   <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
                   Production
                 </CNavItem>
-                <CNavItem component={NavLink} style={navItemStyles} to="/adminbreakdown">
+                <CNavItem
+                  component={NavLink}
+                  to="/adminbreakdown"
+                  style={{
+                    ...navItemStyles,
+                    ...(activeNavItem === 5 ? activeNavItemStyles : {}),
+                  }}
+                  onClick={() => handleNavItemClick(5)}
+                >
                   <CIcon customClassName="nav-icon" icon={cilPuzzle} />
                   Breakdown
                 </CNavItem>
-                <CNavItem component={NavLink} style={navItemStyles} to="/adminbdhistory">
+                <CNavItem
+                  component={NavLink}
+                  to="/adminbdhistory"
+                  style={{
+                    ...navItemStyles,
+                    ...(activeNavItem === 6 ? activeNavItemStyles : {}),
+                  }}
+                  onClick={() => handleNavItemClick(6)}
+                >
                   <CIcon customClassName="nav-icon" icon={cilPuzzle} />
                   Breakdown History
                 </CNavItem>
                 <CNavItem
                   component={NavLink}
                   to="/pmSchedule"
-                  style={navItemStyles}
-                  activeStyle={activeNavItemStyles}
+                  style={{
+                    ...navItemStyles,
+                    ...(activeNavItem === 7 ? activeNavItemStyles : {}),
+                  }}
+                  onClick={() => handleNavItemClick(7)}
                 >
                   <CIcon customClassName="nav-icon" icon={cilPuzzle} />
                   PM Schedule
                 </CNavItem>
-                {/* <CNavItem
-                  component={NavLink}
-                  style={navItemStyles}
-                  activeStyle={activeNavItemStyles}
-                  to="/users"
-                >
-                  <CIcon customClassName="nav-icon" icon={cilNotes} />
-                  Users
-                </CNavItem> */}
                 <CNavItem
                   component={NavLink}
-                  style={navItemStyles}
-                  activeStyle={activeNavItemStyles}
                   to="/registeruser"
+                  style={{
+                    ...navItemStyles,
+                    ...(activeNavItem === 8 ? activeNavItemStyles : {}),
+                  }}
+                  onClick={() => handleNavItemClick(8)}
                 >
                   <CIcon customClassName="nav-icon" icon={cilNotes} />
                   Registered Users
@@ -207,8 +227,11 @@ const AppSidebar = () => {
                 <CNavItem
                   component={NavLink}
                   to="/production"
-                  style={navItemStyles}
-                  activeStyle={activeNavItemStyles}
+                  style={{
+                    ...navItemStyles,
+                    ...(activeNavItem === 0 ? activeNavItemStyles : {}),
+                  }}
+                  onClick={() => handleNavItemClick(0)}
                 >
                   <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
                   Production
@@ -221,8 +244,11 @@ const AppSidebar = () => {
                 <CNavItem
                   component={NavLink}
                   to="/breakdown"
-                  style={navItemStyles}
-                  activeStyle={activeNavItemStyles}
+                  style={{
+                    ...navItemStyles,
+                    ...(activeNavItem === 0 ? activeNavItemStyles : {}),
+                  }}
+                  onClick={() => handleNavItemClick(0)}
                 >
                   <CIcon customClassName="nav-icon" icon={cilPuzzle} />
                   Breakdown
@@ -230,8 +256,11 @@ const AppSidebar = () => {
                 <CNavItem
                   component={NavLink}
                   to="/breakdownHistory"
-                  style={navItemStyles}
-                  activeStyle={activeNavItemStyles}
+                  style={{
+                    ...navItemStyles,
+                    ...(activeNavItem === 1 ? activeNavItemStyles : {}),
+                  }}
+                  onClick={() => handleNavItemClick(1)}
                 >
                   <CIcon customClassName="nav-icon" icon={cilPuzzle} />
                   Breakdown History
@@ -239,8 +268,11 @@ const AppSidebar = () => {
                 <CNavItem
                   component={NavLink}
                   to="/taskTable"
-                  style={navItemStyles}
-                  activeStyle={activeNavItemStyles}
+                  style={{
+                    ...navItemStyles,
+                    ...(activeNavItem === 2 ? activeNavItemStyles : {}),
+                  }}
+                  onClick={() => handleNavItemClick(2)}
                 >
                   <CIcon customClassName="nav-icon" icon={cilPuzzle} />
                   PM Schedule

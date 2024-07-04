@@ -1,18 +1,18 @@
 import { apiSlice } from './apiSlice'
-const USERS_URL = 'https://backendmaintenx.onrender.com/api/users'
+const USERS_URL = 'http://localhost:4000/api/users'
 
 export const usersApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.mutation({
       query: (data) => ({
-        url: `${'https://backendmaintenx.onrender.com/api/users'}/auth`,
+        url: `${'http://localhost:4000/api/users'}/auth`,
         method: 'POST',
         body: data,
       }),
     }),
     logout: builder.mutation({
       query: () => ({
-        url: `${'https://backendmaintenx.onrender.com/api/users'}/logout`,
+        url: `${'http://localhost:4000/api/users'}/logout`,
         method: 'POST',
       }),
     }),
