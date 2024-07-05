@@ -9,6 +9,9 @@ import { MdDelete } from 'react-icons/md'
 import { FaEdit } from 'react-icons/fa'
 import { NavLink } from 'react-router-dom'
 import './table.css'
+import './asset.css'
+import classNames from 'classnames'
+import { MdDashboard } from 'react-icons/md'
 
 const Inventory = () => {
   const { id } = useParams()
@@ -145,25 +148,56 @@ const Inventory = () => {
       </CNav>
       <CTabContent>
         <CTabPane role="tabpanel" aria-labelledby="home-tab-pane" visible={activeKey === 1}>
-          <div>
-            <h4>Asset Details</h4>
-            <p>
-              <strong>Machine Name:</strong> {assetDetails.AssetName}
-            </p>
-            <p>
-              <strong>Machine Type:</strong> {assetDetails.MachineType}
-            </p>
-            <p>
-              <strong>Location:</strong> {assetDetails.Location}
-            </p>
-            {assetDetails.Image && (
-              <div>
-                <p>
-                  <strong>Image:</strong>
-                </p>
-                <img src={assetDetails.Image} alt="Asset" width={200} height={200} />
+          <div className="card shadow-sm mx-auto" style={{ marginTop: '0.5rem' }}>
+            {/* <Link
+              to="/temperature"
+              style={{ position: 'absolute', top: '10px', right: '10px', overflow: 'hidden' }}
+            ></Link> */}
+
+            <div style={{ display: '', alignItems: 'center', marginBottom: '20px' }}>
+              <div
+                // className="d-flex justify-content-center align-items-center"
+                className={classNames(
+                  'box',
+                  'd-flex',
+                  'justify-content-center',
+                  'align-items-center',
+                  'd-flex justify-content-center align-items-center',
+                )}
+              >
+                <MdDashboard
+                  className="icon"
+                  style={{
+                    width: '30px',
+                    height: '30px',
+                    fill: 'white',
+                    marginTop: '1px',
+                    marginLeft: '3px',
+                  }}
+                />
               </div>
-            )}
+              <div style={{ margin: '2rem', paddingLeft: '10%' }}>
+                {/* <div className="" style={{ marginLeft: '10px' }}> */}
+                <h4>Asset Details</h4>
+                <p>
+                  <strong>Machine Name:</strong> {assetDetails.AssetName}
+                </p>
+                <p>
+                  <strong>Machine Type:</strong> {assetDetails.MachineType}
+                </p>
+                <p>
+                  <strong>Location:</strong> {assetDetails.Location}
+                </p>
+                {assetDetails.Image && (
+                  <div>
+                    <p>
+                      <strong>Image:</strong>
+                    </p>
+                    <img src={assetDetails.Image} alt="Asset" width={200} height={200} />
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </CTabPane>
         <CTabPane role="tabpanel" aria-labelledby="profile-tab-pane" visible={activeKey === 2}>
@@ -189,48 +223,80 @@ const BreakdownData = ({ assetName, breakdownData }) => {
   }
 
   return (
-    <div>
-      <h5>{assetName} Breakdown</h5>
-      <div className="table-responsive">
-        <table className="table table-bordered table-hover">
-          <thead className="table-dark">
-            <tr>
-              <th style={{ backgroundColor: '#002244', color: 'white' }}>Machine Name</th>
-              <th style={{ backgroundColor: '#002244', color: 'white' }}>Line Name</th>
-              <th style={{ backgroundColor: '#002244', color: 'white' }}>Operations</th>
-              <th style={{ backgroundColor: '#002244', color: 'white' }}>Location</th>
-              <th style={{ backgroundColor: '#002244', color: 'white' }}>Breakdown Start Date</th>
-              <th style={{ backgroundColor: '#002244', color: 'white' }}>Breakdown End Date</th>
-              <th style={{ backgroundColor: '#002244', color: 'white' }}>Status</th>
-              <th style={{ textAlign: 'center' }}>Edit </th>
-              <th style={{ textAlign: 'center' }}>Delete</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredData.map((item) => (
-              <tr key={item._id}>
-                <td>{item.MachineName}</td>
-                <td>{item.LineName}</td>
-                <td>{item.Operations}</td>
-                <td>{item.Location}</td>
-                <td>{item.BreakdownStartDate}</td>
-                <td>{item.BreakdownEndDate}</td>
-                <td>{item.Status}</td>
-                <td style={{ textAlign: 'center' }}>
-                  <NavLink to={`/productionBD/${item._id}`} style={{ color: '#000080' }}>
-                    <FaEdit />
-                  </NavLink>
-                </td>
-                <td style={{ textAlign: 'center' }}>
-                  <button className="btn" style={{ color: 'red' }}>
-                    {/* <img src={dlt} alt="" width={30} height={30} /> */}
-                    <MdDelete />
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <div className="card shadow-sm mx-auto" style={{ marginTop: '0.5rem' }}>
+      {/* <Link
+              to="/temperature"
+              style={{ position: 'absolute', top: '10px', right: '10px', overflow: 'hidden' }}
+            ></Link> */}
+
+      <div style={{ display: '', alignItems: 'center', marginBottom: '20px' }}>
+        <div
+          // className="d-flex justify-content-center align-items-center"
+          className={classNames(
+            'box',
+            'd-flex',
+            'justify-content-center',
+            'align-items-center',
+            'd-flex justify-content-center align-items-center',
+          )}
+        >
+          <MdDashboard
+            className="icon"
+            style={{
+              width: '30px',
+              height: '30px',
+              fill: 'white',
+              marginTop: '1px',
+              marginLeft: '3px',
+            }}
+          />
+        </div>
+        <div style={{ margin: '2rem', paddingLeft: '10px' }}>
+          <h5>{assetName} Breakdown</h5>
+          <div className="table-responsive">
+            <table className="table table-bordered table-hover">
+              <thead className="table-dark">
+                <tr>
+                  <th style={{ backgroundColor: '#002244', color: 'white' }}>Machine Name</th>
+                  <th style={{ backgroundColor: '#002244', color: 'white' }}>Line Name</th>
+                  <th style={{ backgroundColor: '#002244', color: 'white' }}>Operations</th>
+                  <th style={{ backgroundColor: '#002244', color: 'white' }}>Location</th>
+                  <th style={{ backgroundColor: '#002244', color: 'white' }}>
+                    Breakdown Start Date
+                  </th>
+                  <th style={{ backgroundColor: '#002244', color: 'white' }}>Breakdown End Date</th>
+                  <th style={{ backgroundColor: '#002244', color: 'white' }}>Status</th>
+                  <th style={{ textAlign: 'center' }}>Edit </th>
+                  <th style={{ textAlign: 'center' }}>Delete</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredData.map((item) => (
+                  <tr key={item._id}>
+                    <td>{item.MachineName}</td>
+                    <td>{item.LineName}</td>
+                    <td>{item.Operations}</td>
+                    <td>{item.Location}</td>
+                    <td>{item.BreakdownStartDate}</td>
+                    <td>{item.BreakdownEndDate}</td>
+                    <td>{item.Status}</td>
+                    <td style={{ textAlign: 'center' }}>
+                      <NavLink to={`/productionBD/${item._id}`} style={{ color: '#000080' }}>
+                        <FaEdit />
+                      </NavLink>
+                    </td>
+                    <td style={{ textAlign: 'center' }}>
+                      <button className="btn" style={{ color: 'red' }}>
+                        {/* <img src={dlt} alt="" width={30} height={30} /> */}
+                        <MdDelete />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
   )
@@ -280,51 +346,80 @@ const PMData = ({ assetName, pmData }) => {
   // }
 
   return (
-    <div>
-      <h5>{assetName} PM Data</h5>
+    <div className="card shadow-sm mx-auto" style={{ marginTop: '0.5rem' }}>
+      {/* <Link
+              to="/temperature"
+              style={{ position: 'absolute', top: '10px', right: '10px', overflow: 'hidden' }}
+            ></Link> */}
 
-      <div className="table-responsive">
-        <table className="table table-bordered table-hover">
-          <thead className="table-dark">
-            <tr>
-              <th style={{ backgroundColor: '#002244', color: 'white' }}>Asset Name</th>
-              <th style={{ backgroundColor: '#002244', color: 'white' }}>Task Name</th>
-              <th style={{ backgroundColor: '#002244', color: 'white' }}>Location</th>
-              <th style={{ backgroundColor: '#002244', color: 'white' }}>PM Schedule Date</th>
-              <th style={{ backgroundColor: '#002244', color: 'white' }}>Next Schedule Date</th>
-              <th style={{ backgroundColor: '#002244', color: 'white' }}>Scheduled Frequency</th>
-              <th style={{ textAlign: 'center' }}>Edit </th>
-              <th style={{ textAlign: 'center' }}>Delete</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredData.map((item) => (
-              <tr key={item._id}>
-                <td>{item.AssetName}</td>
-                <td>{item.TaskName}</td>
-                <td>{item.Location}</td>
-                <td>{item.startDate}</td>
-                <td>{item.nextDate}</td>
-                <td>{item.ScheduledMaintenanceDatesandIntervals}</td>
-                <td style={{ textAlign: 'center' }}>
-                  <NavLink to={`/editPM/${item._id}`} style={{ color: '#000080' }}>
-                    <FaEdit />
-                  </NavLink>
-                </td>
-                <td style={{ textAlign: 'center' }}>
-                  <button
-                    className="btn"
-                    onClick={() => deleteData(item._id)}
-                    style={{ color: 'red' }}
-                  >
-                    {/* <img src={dlt} alt="" width={30} height={30} /> */}
-                    <MdDelete />
-                  </button>
-                </td>
+      <div style={{ display: '', alignItems: 'center', marginBottom: '20px' }}>
+        <div
+          // className="d-flex justify-content-center align-items-center"
+          className={classNames(
+            'box',
+            'd-flex',
+            'justify-content-center',
+            'align-items-center',
+            'd-flex justify-content-center align-items-center',
+          )}
+        >
+          <MdDashboard
+            className="icon"
+            style={{
+              width: '30px',
+              height: '30px',
+              fill: 'white',
+              marginTop: '1px',
+              marginLeft: '3px',
+            }}
+          />
+        </div>
+        {/* <div style={{ margin: '2rem', paddingLeft: '10px' }}> */}
+        <h5>{assetName} PM Data</h5>
+
+        <div className="table-responsive" style={{ margin: '2rem', paddingLeft: '10px' }}>
+          <table className="table table-bordered table-hover">
+            <thead className="table-dark">
+              <tr>
+                <th style={{ backgroundColor: '#002244', color: 'white' }}>Asset Name</th>
+                <th style={{ backgroundColor: '#002244', color: 'white' }}>Task Name</th>
+                <th style={{ backgroundColor: '#002244', color: 'white' }}>Location</th>
+                <th style={{ backgroundColor: '#002244', color: 'white' }}>PM Schedule Date</th>
+                <th style={{ backgroundColor: '#002244', color: 'white' }}>Next Schedule Date</th>
+                <th style={{ backgroundColor: '#002244', color: 'white' }}>Scheduled Frequency</th>
+                <th style={{ textAlign: 'center' }}>Edit </th>
+                <th style={{ textAlign: 'center' }}>Delete</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {filteredData.map((item) => (
+                <tr key={item._id}>
+                  <td>{item.AssetName}</td>
+                  <td>{item.TaskName}</td>
+                  <td>{item.Location}</td>
+                  <td>{item.startDate}</td>
+                  <td>{item.nextDate}</td>
+                  <td>{item.ScheduledMaintenanceDatesandIntervals}</td>
+                  <td style={{ textAlign: 'center' }}>
+                    <NavLink to={`/editPM/${item._id}`} style={{ color: '#000080' }}>
+                      <FaEdit />
+                    </NavLink>
+                  </td>
+                  <td style={{ textAlign: 'center' }}>
+                    <button
+                      className="btn"
+                      onClick={() => deleteData(item._id)}
+                      style={{ color: 'red' }}
+                    >
+                      {/* <img src={dlt} alt="" width={30} height={30} /> */}
+                      <MdDelete />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   )
@@ -525,39 +620,68 @@ const Breakdown = ({ assetName }) => {
       })
   }
   return (
-    <div
-      className="container"
-      style={{
-        border: '2px solid #ccc',
-        backgroundColor: '',
-        padding: '20px',
-        borderRadius: '10px',
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-        width: '95%',
-      }}
-    >
-      {/* Display success message if it exists */}
-      {successMessage && (
-        <div className="alert alert-success" role="alert" style={{ marginTop: '10px' }}>
-          {successMessage}
-        </div>
-      )}
+    <div className="card shadow-sm mx-auto" style={{ marginTop: '0.5rem' }}>
+      {/* <Link
+              to="/temperature"
+              style={{ position: 'absolute', top: '10px', right: '10px', overflow: 'hidden' }}
+            ></Link> */}
 
-      <form action="" method="post" onSubmit={handleSubmit}>
-        <div className="row g-2">
-          <div className="col-md-6">
-            <label htmlFor="machineName" style={{ marginBottom: '10px', fontSize: '16px' }}>
-              Machine Name:
-            </label>
-            <input
-              type="string"
-              id="assetName"
-              className="form-control col-sm-6"
-              // name="BreakdownStartTime"
-              value={assetName}
-              onChange={handleChange}
-            ></input>
-            {/* <Select
+      <div style={{ display: '', alignItems: 'center', marginBottom: '20px' }}>
+        <div
+          // className="d-flex justify-content-center align-items-center"
+          className={classNames(
+            'box',
+            'd-flex',
+            'justify-content-center',
+            'align-items-center',
+            'd-flex justify-content-center align-items-center',
+          )}
+        >
+          <MdDashboard
+            className="icon"
+            style={{
+              width: '30px',
+              height: '30px',
+              fill: 'white',
+              marginTop: '1px',
+              marginLeft: '3px',
+            }}
+          />
+        </div>
+        <div style={{ margin: '2rem', paddingLeft: '10px' }}>
+          <div
+          // className="container"
+          // style={{
+          //   border: '2px solid #ccc',
+          //   backgroundColor: '',
+          //   padding: '20px',
+          //   borderRadius: '10px',
+          //   boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+          //   width: '95%',
+          // }}
+          >
+            {/* Display success message if it exists */}
+            {successMessage && (
+              <div className="alert alert-success" role="alert" style={{ marginTop: '10px' }}>
+                {successMessage}
+              </div>
+            )}
+
+            <form action="" method="post" onSubmit={handleSubmit}>
+              <div className="row g-2">
+                <div className="col-md-6">
+                  <label htmlFor="machineName" style={{ marginBottom: '10px', fontSize: '16px' }}>
+                    Machine Name:
+                  </label>
+                  <input
+                    type="string"
+                    id="assetName"
+                    className="form-control col-sm-6"
+                    // name="BreakdownStartTime"
+                    value={assetName}
+                    onChange={handleChange}
+                  ></input>
+                  {/* <Select
               className="form-control col-sm-6"
               required
               name="MachineName"
@@ -575,171 +699,208 @@ const Breakdown = ({ assetName }) => {
                 }),
               }}
             /> */}
-          </div>
-          <div className="col-md-6">
-            <label htmlFor="assetLocation" className="form-label" style={{ marginBottom: '10px' }}>
-              Location:
-            </label>
-            <select
-              className="form-control col-sm-6"
-              required
-              // id="assetLocation"
-              name="Location"
-              value={formData.Location}
-              onChange={handleChange}
-            >
-              <option value="">Select an option</option>
-              <option value="Plant 1">Plant 1</option>
-              <option value="Plant 2">Plant 2</option>
-              <option value="Plant 3">Plant 3</option>
-              <option value="Plant 4">Plant 4</option>
-            </select>
-          </div>
-          <div className="col-md-6">
-            <label htmlFor="breakdownDate" style={{ marginBottom: '10px' }}>
-              Breakdown Start Date:
-            </label>
-            <input
-              type="date"
-              required
-              className="form-control col-sm-6"
-              name="BreakdownStartDate"
-              value={formData.BreakdownStartDate}
-              onChange={handleChange}
-              placeholder=""
-            />
-          </div>
-          <div className="col-md-6">
-            <label htmlFor="shift" style={{ marginBottom: '10px' }}>
-              Shift:
-            </label>
-            <input
-              type="text"
-              required
-              className="form-control col-sm-6"
-              name="Shift"
-              value={formData.Shift}
-              onChange={handleChange}
-              placeholder=""
-            />
-          </div>
-          <div className="col-md-6">
-            <label htmlFor="breakdownStartTime" style={{ marginBottom: '10px' }}>
-              Breakdown Start Time:
-            </label>
-            <input
-              type="time"
-              id="breakdownStartTime"
-              className="form-control col-sm-6"
-              name="BreakdownStartTime"
-              value={formData.BreakdownStartTime}
-              onChange={handleChange}
-            ></input>
-          </div>
-          <div className="col-md-6">
-            <label htmlFor="lineName" style={{ marginBottom: '10px' }}>
-              Line Name:
-            </label>
-            <input
-              type="text"
-              required
-              name="LineName"
-              className="form-control col-sm-6"
-              value={formData.LineName}
-              onChange={handleChange}
-              placeholder=""
-            />
-          </div>
-          <div className="col-md-6">
-            <label htmlFor="operations" style={{ marginBottom: '10px' }}>
-              Operations:
-            </label>
-            <input
-              type="text"
-              required
-              className="form-control col-sm-6"
-              name="Operations"
-              value={formData.Operations}
-              onChange={handleChange}
-              placeholder=""
-            />
-          </div>
-          <div className="col-md-6">
-            <label htmlFor="breakdownPhenomen" style={{ marginBottom: '10px' }}>
-              Breakdown Phenomenon:
-            </label>
-            <input
-              type="text"
-              required
-              name="BreakdownPhenomenons"
-              className="form-control col-sm-6"
-              value={formData.BreakdownPhenomenons}
-              onChange={handleChange}
-              placeholder=""
-            />
-          </div>
-          <div className="row lg-2">
-            <div className="col-md-6" style={{ marginTop: '2vh', overflowY: 'auto' }}>
-              <label style={{ marginBottom: '10px' }}>Select users:</label>
-              <div className="row">
-                {usernos.map((user, index) => (
-                  <React.Fragment key={user.phoneNumber}>
-                    <div className="col-md-6">
-                      <div className="form-check">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          id={`checkbox-${user.phoneNumber}`}
-                          // checked={selectedUserNumbers.includes(user.phoneNumber)}
-                          // onChange={() => handleUserSelect(user.phoneNumber)}
-                        />
-                        <label
-                          className="form-check-label"
-                          htmlFor={`checkbox-${user.phoneNumber}`}
-                        >
-                          {user.name}
-                        </label>
-                      </div>
+                </div>
+                <div className="col-md-6">
+                  <label
+                    htmlFor="assetLocation"
+                    className="form-label"
+                    style={{ marginBottom: '10px' }}
+                  >
+                    Location:
+                  </label>
+                  <select
+                    className="form-control col-sm-6"
+                    required
+                    // id="assetLocation"
+                    name="Location"
+                    value={formData.Location}
+                    onChange={handleChange}
+                  >
+                    <option value="">Select an option</option>
+                    <option value="Plant 1">Plant 1</option>
+                    <option value="Plant 2">Plant 2</option>
+                    <option value="Plant 3">Plant 3</option>
+                    <option value="Plant 4">Plant 4</option>
+                  </select>
+                </div>
+                <div className="col-md-6">
+                  <label htmlFor="breakdownDate" style={{ marginBottom: '10px' }}>
+                    Breakdown Start Date:
+                  </label>
+                  <input
+                    type="date"
+                    required
+                    className="form-control col-sm-6"
+                    name="BreakdownStartDate"
+                    value={formData.BreakdownStartDate}
+                    onChange={handleChange}
+                    placeholder=""
+                  />
+                </div>
+                <div className="col-md-6">
+                  <label htmlFor="shift" style={{ marginBottom: '10px' }}>
+                    Shift:
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    className="form-control col-sm-6"
+                    name="Shift"
+                    value={formData.Shift}
+                    onChange={handleChange}
+                    placeholder=""
+                  />
+                </div>
+                <div className="col-md-6">
+                  <label htmlFor="breakdownStartTime" style={{ marginBottom: '10px' }}>
+                    Breakdown Start Time:
+                  </label>
+                  <input
+                    type="time"
+                    id="breakdownStartTime"
+                    className="form-control col-sm-6"
+                    name="BreakdownStartTime"
+                    value={formData.BreakdownStartTime}
+                    onChange={handleChange}
+                  ></input>
+                </div>
+                <div className="col-md-6">
+                  <label htmlFor="lineName" style={{ marginBottom: '10px' }}>
+                    Line Name:
+                  </label>
+                  <select
+                    className="form-control col-sm-6"
+                    required
+                    name="LineName"
+                    value={formData.LineName}
+                    onChange={handleChange}
+                  >
+                    <option value="">Select an option</option>
+                    <option value="BOSSES">BOSSES</option>
+                    <option value="ARMATURE SHAFT/ RCI GEAR SHAFT">
+                      ARMATURE SHAFT/ RCI GEAR SHAFT
+                    </option>
+                    <option value="SPROCKET">SPROCKET</option>
+                    <option value="WORM SHAFT">WORM SHAFT</option>
+                    <option value="K B CELL">K B CELL</option>
+                    <option value="SSP TSP">SSP TSP</option>
+                    <option value="HEAT TREATMENT">HEAT TREATMENT</option>
+                    <option value="FORGING">FORGING</option>
+                    <option value="CHANGE ARM/ BRACKET">CHANGE ARM/ BRACKET</option>
+                    <option value="BSC">BSC</option>
+                    <option value="SECTOR LEVER">SECTOR LEVER</option>
+                    <option value="SLIDER BLOCK">SLIDER BLOCK</option>
+                    <option value="CAM SHAFT GRINDING">CAM SHAFT GRINDING</option>
+                    <option value="CAM SHAFT SOFT">CAM SHAFT SOFT</option>
+                  </select>
+                </div>
+                <div className="col-md-6">
+                  <label htmlFor="operations" style={{ marginBottom: '10px' }}>
+                    Operations:
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    className="form-control col-sm-6"
+                    name="Operations"
+                    value={formData.Operations}
+                    onChange={handleChange}
+                    placeholder=""
+                  />
+                </div>
+                <div className="col-md-6">
+                  <label htmlFor="breakdownPhenomen" style={{ marginBottom: '10px' }}>
+                    Breakdown Phenomenon:
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    name="BreakdownPhenomenons"
+                    className="form-control col-sm-6"
+                    value={formData.BreakdownPhenomenons}
+                    onChange={handleChange}
+                    placeholder=""
+                  />
+                </div>
+                {/* <div className="row lg-2">
+                  <div className="col-md-6" style={{ marginTop: '2vh', overflowY: 'auto' }}>
+                    <label style={{ marginBottom: '10px' }}>Select users:</label>
+                    <div className="row">
+                      {usernos.map((user, index) => (
+                        <React.Fragment key={user.phoneNumber}>
+                          <div className="col-md-6">
+                            <div className="form-check">
+                              <input
+                                className="form-check-input"
+                                type="checkbox"
+                                id={`checkbox-${user.phoneNumber}`}
+                                // checked={selectedUserNumbers.includes(user.phoneNumber)}
+                                // onChange={() => handleUserSelect(user.phoneNumber)}
+                              />
+                              <label
+                                className="form-check-label"
+                                htmlFor={`checkbox-${user.phoneNumber}`}
+                              >
+                                {user.name}
+                              </label>
+                            </div>
+                          </div>
+                          {index % 2 !== 0 && <div className="w-100"></div>}
+                        </React.Fragment>
+                      ))}
                     </div>
-                    {/* Insert a new row after every two users */}
-                    {index % 2 !== 0 && <div className="w-100"></div>}
-                  </React.Fragment>
-                ))}
-              </div>
-            </div>
+                  </div>
 
-            <div className="col-md-6" style={{ marginTop: '2vh' }}>
-              <label>Selected Users:</label>
-              <ul>
-                {/* {usernos
+                  <div className="col-md-6" style={{ marginTop: '2vh' }}>
+                    <label>Selected Users:</label>
+                    <ul>
+                       {usernos
                         .filter((user) => selectedUserNumbers.includes(user.phoneNumber))
                         .map((user) => (
                           <li key={user.phoneNumber}>
                             {user.name} - {user.phoneNumber}
                           </li>
-                        ))} */}
-              </ul>
-            </div>
+                        ))} 
+                    </ul>
+                  </div>
 
-            <div className="col-xs-12">
-              <button
-                type="submit"
-                onClick={handleButtonClick}
-                className="btn btn-primary"
-                style={{
-                  marginTop: '20px',
-                  fontSize: '16px',
-                  backgroundColor: '#3448db',
-                  marginBottom: '10px',
-                }}
-              >
-                Submit
-              </button>
-            </div>
+                  <div className="col-xs-12">
+                    <button
+                      type="submit"
+                      onClick={handleButtonClick}
+                      className="btn btn-primary"
+                      style={{
+                        marginTop: '20px',
+                        fontSize: '16px',
+                        backgroundColor: '#3448db',
+                        marginBottom: '10px',
+                      }}
+                    >
+                      Submit
+                    </button>
+                  </div>
+                </div> */}
+                {/* </div> */}
+                <div className="col-xs-12">
+                  <button
+                    type="submit"
+                    onClick={handleButtonClick}
+                    className="btn btn-primary"
+                    style={{
+                      marginTop: '20px',
+                      fontSize: '16px',
+                      backgroundColor: '#3448db',
+                      marginBottom: '10px',
+                    }}
+                  >
+                    Submit
+                  </button>
+                </div>
+              </div>
+            </form>
           </div>
-          {/* </div> */}
         </div>
-      </form>
+      </div>
     </div>
   )
 }

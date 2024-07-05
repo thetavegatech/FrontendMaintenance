@@ -16,14 +16,22 @@ import { cilQrCode, cilMenu } from '@coreui/icons'
 import { AppBreadcrumb } from './index'
 import { useLogoutMutation } from 'src/slices/usersApiSlice'
 import { logout } from '../slices/authSlice'
+import QrScanner from '../views/QrScanner'
 
 const AppHeader = () => {
+  const [isQrScannerOpen, setIsQrScannerOpen] = useState(false)
+  const [qrModal, setQrModal] = useState()
+  const [scanResult, setScanResult] = useState('')
   const sidebarShow = useSelector((state) => state.custom.sidebarShow)
   const userrole = useSelector((state) => state.auth.userInfo?.plant) || ''
   const username = useSelector((state) => state.auth.userInfo?.name)
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [logoutApiCall] = useLogoutMutation()
+
+  const toggleQrScanner = () => {
+    setIsQrScannerOpen(!isQrScannerOpen)
+  }
 
   const logoutHandler = async () => {
     try {
