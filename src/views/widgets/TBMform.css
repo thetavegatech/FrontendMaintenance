@@ -38,18 +38,6 @@
   width: 25%;
 }
 
-.form-group1 {
-  flex: 1;
-  width: '33.5%';
-  /* marginRight: '20rem'; */
-}
-
-.form-group2 {
-  flex: 1;
-  width: '33.5%';
-  margin-right: '20rem';
-}
-
 .form-group label {
   display: block;
   margin-bottom: 5px;
@@ -64,28 +52,21 @@
   transition: border-color 0.3s;
 }
 
+.form-group1 {
+  flex: 1;
+  width: '33.5%';
+  /* marginRight: '20rem'; */
+}
+
+.form-group2 {
+  flex: 1;
+  width: '33.5%';
+  margin-right: '20rem';
+}
+
 .form-control:focus {
   border-color: #007bff;
   outline: none;
-}
-
-
-.icon {
-  width: 30px;
-  height: 30px;
-  fill: white;
-  margin-top: 1px;
-  margin-left: 3px;
-}
-.box {
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  width: 10%;
-  background-color: #CA226B;
-  border-radius: 7px;
-  height: 5rem;
-  margin-left: 20px;
-  position: relative;
-  bottom: 20px;
 }
 
 .submit-button {
@@ -109,6 +90,24 @@
   text-align: center;
   color: red;
   margin-top: 10px;
+}
+
+.icon {
+  width: 30px;
+  height: 30px;
+  fill: white;
+  margin-top: 1px;
+  margin-left: 3px;
+}
+.box {
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  width: 10%;
+  background-color: #CA226B;
+  border-radius: 7px;
+  height: 5rem;
+  margin-left: 20px;
+  position: relative;
+  bottom: 20px;
 }
 
 /* Responsive Styles */

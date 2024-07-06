@@ -1,130 +1,85 @@
 import React, { useEffect, useState } from 'react'
-// import editForm from './css/editform.css';
-// import { Form, FormGroup, Label, Input, Button, Container, Col } from 'reactstrap';
-import { useParams, useNavigate } from 'react-router-dom'
+import { MdDashboard } from 'react-icons/md'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import { NavLink } from 'react-router-dom'
+import classNames from 'classnames'
+import '../form.css'
 
 export default function EditForm() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const [AssetName, setAssetName] = useState('')
-  const [TaskName, setTaskName] = useState('')
-  const [TaskDescription, setTaskDescription] = useState('')
-  const [AssetCategory, setAssetCategory] = useState('') // Default to false
-  const [Location, setLocation] = useState('') // Default to false
-  const [ManufacturersName, setManufacturersName] = useState('')
-  const [ManufacturersAddress, setManufacturersAddress] = useState('')
-  const [ManufacturersContactNo, setManufacturersContactNo] = useState('')
-  const [SupplierVendorInformation, setSupplierVendorInformation] = useState('')
-  const [CurrentOwner, setCurrentOwner] = useState('')
-  const [DepartmentResponsible, setDepartmentResponsible] = useState('')
-  const [LocationDepartment, setLocationDepartment] = useState('')
-  const [PhysicalLocation, setPhysicalLocation] = useState('')
-  const [CurrentStatus, setCurrentStatus] = useState('')
-  const [ExpectedUsefulLife, setExpectedUsefulLife] = useState('')
-  const [DateofLastMaintenance, setDateofLastMaintenance] = useState('')
-  const [DetailsofMaintenanceActivities, setDetailsofMaintenanceActivities] = useState('')
-  const [ScheduledMaintenanceDatesandIntervals, setScheduledMaintenanceDatesandIntervals] =
-    useState('')
-  const [ManufacturersEmail, setManufacturersEmail] = useState('')
-  const [status, setstatus] = useState('')
-  const [ModelNumber, setModelNumber] = useState('')
-  const [SerialNumber, setSerialNumber] = useState('')
-  const [PurchaseCost, setPurchaseCost] = useState('')
-  const [PurchaseDate, setPurchaseDate] = useState('')
-  const [WarrantyStartDate, setWarrantyStartDate] = useState('')
-  const [WarrantyEndDate, seWarrantyEndDate] = useState('')
-  const [AcquisitionMethod, setAcquisitionMethod] = useState('')
-  const [WarrantyProviderManufacturerContact, setWarrantyProviderManufacturerContact] = useState('')
-  const [WarrantyTermsandConditions, setWarrantyTermsandConditions] = useState('')
-  const [PMDetails, setPMDetails] = useState('')
-  const [Image, setImage] = useState('')
-  const [startDate, setstartDate] = useState('')
-  const [nextDate, setnextDate] = useState('')
-  const [successMessage, setSuccessMessage] = useState('')
-  const [file, setFile] = useState(null)
 
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0])
-  }
+  // State variables
+  const [formData, setFormData] = useState({
+    taskName: '',
+    description: '',
+    startFrom: '',
+    nextDate: '',
+    scheduledMaintenance: '',
+    status: '',
+    attachment: null, // File handling example
+  })
 
+  // Fetch data on mount
   useEffect(() => {
     fetchData()
   }, [])
 
-  function convertToBse64(e) {
-    console.log(e)
-    let reader = new FileReader()
-    reader.readAsDataURL(e.target.files[0])
-    reader.onload = () => {
-      console.log(reader.result) // base64encoded string
-      setImage(reader.result)
-    }
-    reader.onerror = (err) => {
-      console.log(err)
-    }
-  }
-
+  // Fetch initial data
   const fetchData = async () => {
     try {
       const response = await axios.get(`https://backendmaintenx.onrender.com/api/pm/${id}`)
-      console.log(response)
-      setAssetName(response.data.AssetName)
-      setTaskName(response.data.TaskName)
-      setTaskDescription(response.data.TaskDescription)
-      setAssetCategory(response.data.AssetCategory)
-      setLocation(response.data.Location)
-      setCurrentStatus(response.data.CurrentStatus)
-      setPMDetails(response.data.PMDetails)
-      setImage(response.data.Image)
-      setstartDate(formatDate(response.data.startDate))
-      setnextDate(formatDate(response.data.nextDate))
-      setstatus(response.data.status)
+      const { data } = response
+
+      // Update formData state
+      setFormData({
+        taskName: data.TaskName,
+        description: data.TaskDescription,
+        startFrom: formatDate(data.startDate),
+        nextDate: formatDate(data.nextDate),
+        scheduledMaintenance: data.ScheduledMaintenanceDatesandIntervals,
+        status: data.status,
+        // Update other fields as needed
+      })
     } catch (error) {
       console.error('Error fetching data:', error)
     }
   }
 
-  const Update = (e) => {
+  // Handle form submit
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    axios
-      .put(`https://backendmaintenx.onrender.com/api/pm/${id}`, {
-        AssetName,
-        TaskName,
-        TaskDescription,
-        AssetCategory,
-        Location,
-        ModelNumber,
-        DetailsofMaintenanceActivities,
-        ScheduledMaintenanceDatesandIntervals,
-        PMDetails,
-        status,
-        Image,
-        startDate,
-        nextDate,
+    try {
+      const response = await axios.put(
+        `https://backendmaintenx.onrender.com/api/pm/${id}`,
+        formData,
+      )
+      console.log('Update successful:', response.data)
+      setFormData({
+        taskName: '',
+        description: '',
+        startFrom: '',
+        nextDate: '',
+        scheduledMaintenance: '',
+        status: '',
+        attachment: null,
       })
-      .then((result) => {
-        console.log(result)
-        setAssetName('')
-        setTaskName('')
-        setTaskDescription('')
-        setAssetCategory('')
-        setLocation('')
-        setstartDate('')
-        setScheduledMaintenanceDatesandIntervals('')
-        setnextDate('')
-        setstatus('')
-        setImage('')
-        setnextDate('')
-
-        // Assuming you have a navigate function or useHistory from react-router-dom
-        // Navigate back to the previous page
-        navigate(-1)
-      })
-      .catch((err) => console.log(err))
+      navigate(-1) // Navigate back to previous page
+    } catch (error) {
+      console.error('Error updating data:', error)
+    }
   }
-  // Create a function to format the date
+
+  // Handle input change
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setFormData({
+      ...formData,
+      [name]: value,
+    })
+  }
+
+  // Function to format date
   const formatDate = (dateString) => {
     const parsedDate = new Date(dateString)
     return parsedDate.toLocaleDateString('en-US', {
@@ -134,138 +89,142 @@ export default function EditForm() {
     })
   }
 
+  // Handle file change
+  const handleFileChange = (e) => {
+    const file = e.target.files[0]
+    setFormData({
+      ...formData,
+      attachment: file,
+    })
+  }
+
   return (
-    <>
-      <div
-        className="container"
-        style={{
-          border: '1px solid #ccc',
-          padding: '20px',
-          // backgroundColor: '#f9f9f9',
-          borderRadius: '10px',
-          boxShadow: '2px 4px 4px rgba(0, 0, 0, 0.1)',
-          width: '100%',
-        }}
-      >
-        {/* Step 1: Asset Identification */}
-        <div>
-          <form onSubmit={Update}>
-            <div className="row g-2">
-              <div className="col-md-3">
-                <label htmlFor="taskName">Task Name:</label>
-                <input
-                  disabled
-                  type="text"
-                  className="form-control"
-                  name="taskName"
-                  id="taskName"
-                  // style={{ width: '100%' }}
-                  value={TaskName}
-                  onChange={(e) => setTaskName(e.target.value)}
-                />
-              </div>
-              <div className="col-md-3">
-                <label htmlFor="assetDescription">Description:</label>
-                <textarea
-                  className="form-control"
-                  disabled
-                  // style={{ width: '80%' }}
-                  id="taskDescription"
-                  defaultValue={''}
-                  name="TaskDescription"
-                  value={TaskDescription}
-                  onChange={(e) => setTaskDescription(e.target.value)}
-                />
-              </div>
-              <div className="col-md-3">
-                <label htmlFor="startDate">Start From :</label>
-                <input
-                  type="text" // Change input type to text
-                  className="form-control"
-                  id="startDate"
-                  // style={{ width: '80%' }}
-                  name="startDate"
-                  value={startDate}
-                  disabled // to make it non-editable
-                />
-              </div>
-              <div className="col-md-3">
-                <label htmlFor="startDate">Next Date :</label>
-                <input
-                  type="text" // Change input type to text
-                  className="form-control"
-                  id="nextDate"
-                  // style={{ width: '80%' }}
-                  name="nextDate"
-                  value={nextDate}
-                  onChange={(e) => setnextDate(e.target.value)}
-                />
-              </div>
-              <div className="col-md-3">
-                <label htmlFor="scheduledMaintenance">Scheduled Maintenance Intervals:</label>
-                <select
-                  disabled
-                  className="form-control"
-                  // style={{ width: '80%' }}
-                  id="scheduledMaintenance"
-                  name="ScheduledMaintenanceDatesandIntervals"
-                  value={ScheduledMaintenanceDatesandIntervals}
-                  onChange={(e) => setScheduledMaintenanceDatesandIntervals(e.target.value)}
-                >
-                  <option value="daily">Daily</option>
-                  <option value="weekly">Weekly</option>
-                  <option value="fifteen days">Fifteen Days</option>
-                  <option value="monthly">Monthly</option>
-                  <option value="quarterly">Quarterly</option>
-                  <option value="half year">Half Year</option>
-                  <option value="yearly">Yearly</option>
-                </select>
-              </div>
-              <div className="col-md-3">
-                <label htmlFor="status">Status</label>
-                <select
-                  className="form-control"
-                  // style={{ width: '80%' }}
-                  required
-                  id="status"
-                  name="status"
-                  value={status}
-                  onChange={(e) => setstatus(e.target.value)}
-                >
-                  <option value="Pending">Pending</option>
-                  <option value="Completed">Completed</option>
-                  {/* <option value="open">Open</option> */}
-                </select>
-              </div>
-              <div className="col-md-3">
-                <label htmlFor="attachment">Attachment:</label>
-                <input
-                  type="file"
-                  className="form-control col-sm-6"
-                  onChange={convertToBse64}
-                ></input>
-              </div>
-              <div className="col-12">
-                <button
-                  type="submit"
-                  className="btn btn-primary"
-                  style={{
-                    marginTop: '10px',
-                    fontSize: '16px',
-                    backgroundColor: '#000026',
-                    // transition: 'background-color 0.3s',
-                    cursor: 'pointer',
-                  }}
-                  // onMouseOver={(e) => (e.target.style.backgroundColor = '#009bff')}
-                  // onMouseOut={(e) => (e.target.style.backgroundColor = '#007bff')}
-                >
-                  Submit
-                </button>
-              </div>
-            </div>
-          </form>
+    <div className="card shadow-sm mx-auto">
+      <Link to="/temperature" style={{ position: 'absolute', top: '15px', right: '10px' }}></Link>
+
+      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+        <div
+          className={classNames('box', 'd-flex', 'justify-content-center', 'align-items-center')}
+        >
+          <MdDashboard
+            className="icon"
+            style={{
+              width: '30px',
+              height: '30px',
+              fill: 'white',
+              marginTop: '1px',
+              marginLeft: '3px',
+            }}
+          />
         </div>
+        <h5 style={{ marginLeft: '25px' }}>PM Edit</h5>
       </div>
-    </>
+
+      <form onSubmit={handleSubmit} style={{ marginBottom: '5rem', marginTop: '0px' }}>
+        <div className="form-row1" style={{ marginLeft: '25px' }}>
+          <div className="form-row">
+            <div className="form-group" style={{ width: '25%' }}>
+              <label>Task Name:</label>
+              <input
+                name="taskName"
+                className="form-control col-sm-6"
+                value={formData.taskName}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="form-group" style={{ width: '25%' }}>
+              <label htmlFor="location">Description:</label>
+              <input
+                type="text"
+                name="description"
+                className="form-control"
+                value={formData.description}
+                readOnly
+                required
+                style={{ height: '40px' }}
+              />
+            </div>
+
+            <div className="form-group" style={{ width: '25%' }}>
+              <label htmlFor="startFrom">Start From</label>
+              <input
+                type="date"
+                name="startFrom"
+                className="form-control"
+                value={formData.startFrom}
+                onChange={handleChange}
+                required
+                style={{ height: '40px' }}
+              />
+            </div>
+          </div>
+
+          <div
+            className="form-row"
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              gap: '10px',
+              marginTop: '20px',
+            }}
+          >
+            <div className="form-group" style={{ width: '25%' }}>
+              <label htmlFor="nextDate">Next Date:</label>
+              <input
+                name="nextDate"
+                className="form-control"
+                value={formData.nextDate}
+                onChange={handleChange}
+                required
+                style={{ height: '40px' }}
+              ></input>
+            </div>
+
+            <div className="form-group" style={{ width: '25%' }}>
+              <label htmlFor="scheduledMaintenance">
+                Scheduled Maintenance Date and Intervals:
+              </label>
+              <input
+                type="date"
+                name="scheduledMaintenance"
+                className="form-control"
+                value={formData.scheduledMaintenance}
+                onChange={handleChange}
+                required
+                style={{ height: '40px' }}
+              />
+            </div>
+
+            <div className="form-group" style={{ width: '25%' }}>
+              <label htmlFor="status">Status:</label>
+              <input
+                type="text"
+                name="status"
+                className="form-control"
+                value={formData.status}
+                onChange={handleChange}
+                required
+                style={{ height: '40px' }}
+              />
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            className="btn btn-primary"
+            style={{
+              float: 'left',
+              backgroundColor: '#CA226B',
+              marginTop: '15px',
+              alignItems: 'end',
+            }}
+          >
+            Save
+          </button>
+        </div>
+      </form>
+    </div>
   )
 }

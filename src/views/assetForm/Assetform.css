@@ -10,13 +10,10 @@
   border-radius: 10px;
   box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.1);
   background-color: #fff;
-  max-width: 1900px;
+  max-width: 1950px;
   margin: 20px auto;
-  height: 500px;
-  margin-top: 4rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #f9f9f9;
+  height: 550px;
+  margin-top: 2.5rem;
   display: grid;
 }
 
@@ -32,22 +29,13 @@
   justify-content: space-between;
 }
 
+.form-row1 {
+  width: 95%;
+}
+
 .form-group {
   flex: 1;
-  margin-bottom: px;
-  width: 25%;
-}
-
-.form-group1 {
-  flex: 1;
-  width: '33.5%';
-  /* marginRight: '20rem'; */
-}
-
-.form-group2 {
-  flex: 1;
-  width: '33.5%';
-  margin-right: '20rem';
+  margin-bottom: 15px;
 }
 
 .form-group label {
@@ -58,7 +46,7 @@
 
 .form-control {
   width: 80%;
-  padding: 5px;
+  padding: 8px;
   border: 1px solid #ccc;
   border-radius: 5px;
   transition: border-color 0.3s;
@@ -67,25 +55,6 @@
 .form-control:focus {
   border-color: #007bff;
   outline: none;
-}
-
-
-.icon {
-  width: 30px;
-  height: 30px;
-  fill: white;
-  margin-top: 1px;
-  margin-left: 3px;
-}
-.box {
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  width: 10%;
-  background-color: #CA226B;
-  border-radius: 7px;
-  height: 5rem;
-  margin-left: 20px;
-  position: relative;
-  bottom: 20px;
 }
 
 .submit-button {
@@ -129,13 +98,12 @@
     font-size: 18px;
   }
 
-  .box {
-    width: 30%;
-    /* height: 8.5rem; */
+  .form-control {
+    width: 100%;
   }
-  .icon {
-    width: 30px;
-    height: 15px;
+
+  .submit-button {
+    width: 100%;
   }
 }
 

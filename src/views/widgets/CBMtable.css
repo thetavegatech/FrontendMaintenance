@@ -1,38 +1,41 @@
 /* General Styles */
-.container {
+/* .container {
   margin: 20px auto;
-  max-width: 1200px;
+  max-width: 800px;
   background-color: #f8f9fa;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  margin-top: 2rem;
-  height: 200px;
-}
+} */
 
 .table-container {
   overflow-x: auto;
   border-radius: 8px;
+  width: 58rem;
+  margin-left: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .custom-table {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 20px;
+  overflow-x: auto;
 }
 
 .custom-table th, .custom-table td {
   padding: 12px;
   text-align: left;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #ffffff;
 }
 
 .custom-table th {
   background-color: #ffffff;
-  color: rgb(193, 190, 190);
+  color: rgb(9, 5, 5);
 }
 
 .custom-table tr:nth-child(even) {
-  background-color: #fcf0f5;
+  background-color: #cef9c8;
+  height: 2px;
 }
 
 /* List View Styles */
@@ -92,36 +95,15 @@
   width: 100%;
   margin-bottom: 10px;
 }
-.icon {
-  width: 30px;
-  height: 30px;
-  fill: white;
-  margin-top: 1px;
-  margin-left: 3px;
-}
-.box {
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  width: 10%;
-  background-color: #CA226B;
-  border-radius: 7px;
-  height: 5rem;
-  margin-left: 20px;
-  position: relative;
-  bottom: 20px;
+
+.CButton {
+  margin-left: 2rem;
 }
 
 /* Mobile View - List Style */
 @media screen and (max-width: 768px) {
   .mb-2 {
     width: 70%;
-  }
-  .box {
-    width: 30%;
-    /* height: 8.5rem; */
-  }
-  .icon {
-    width: 30px;
-    height: 15px;
   }
     .custom-table {
       display: none; /* Hide the table on small screens */

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, Link } from 'react-router-dom'
 import {
   CRow,
   CCol,
@@ -24,7 +24,6 @@ import {
   cilTask,
   cilCheckCircle,
 } from '@coreui/icons'
-import { CButton } from '@coreui/react'
 import {
   BarChart,
   Bar,
@@ -39,8 +38,11 @@ import {
 } from 'recharts'
 import { Date } from 'core-js'
 import './WidgetsDropdown.css'
-import { Icons } from 'react-toastify'
-import axios from 'axios'
+import { CiMenuKebab } from 'react-icons/ci'
+import { MdOutlinePendingActions } from 'react-icons/md'
+import { BsFillCassetteFill } from 'react-icons/bs'
+import { BsFillCheckCircleFill } from 'react-icons/bs'
+import { MdDashboard } from 'react-icons/md'
 
 const WidgetsDropdown = () => {
   const navigate = useNavigate()
@@ -52,6 +54,7 @@ const WidgetsDropdown = () => {
   const [totalBreakdown, setTotalBreakdown] = useState(0)
   const [pendingTaskCount, setPendingTaskCount] = useState(0)
   const [completdTasksCount, setcompletdTasksCount] = useState(0)
+  const [todaysTaskCount, setTodaysTaskCount] = useState(0)
   const [completedTasksCount, setCompletedTasksCount] = useState(0)
   const today = new Date()
   const formattedToday = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(
@@ -152,75 +155,6 @@ const WidgetsDropdown = () => {
     fetchData()
   }, [])
 
-  const [cbms, setCbms] = useState([])
-  const [filteredCbms, setFilteredCbms] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [cbmLength, setCbmLength] = useState(0)
-
-  useEffect(() => {
-    axios
-      .get('https://backendmaintenx.onrender.com/api/cbm')
-      .then((response) => {
-        const cbmData = Array.isArray(response.data) ? response.data : [response.data]
-        setCbms(cbmData)
-        setFilteredCbms(cbmData)
-        setCbmLength(cbmData.length) // Set the length of cbmData
-        setLoading(false)
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error)
-        alert('Error fetching data')
-        setLoading(false)
-      })
-  }, [])
-
-  const [tbms, setTbms] = useState([])
-  const [filteredTbms, setFilteredTbms] = useState([])
-  const [tbmLength, setTbmLength] = useState(0) // New state variable for length
-
-  useEffect(() => {
-    axios
-      .get('https://backendmaintenx.onrender.com/api/tbm')
-      .then((response) => {
-        const tbmData = Array.isArray(response.data) ? response.data : [response.data]
-        setTbms(tbmData)
-        setFilteredTbms(tbmData)
-        setTbmLength(tbmData.length) // Set the length of tbmData
-        setLoading(false)
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error)
-        alert('Error fetching data')
-        setLoading(false)
-      })
-  }, [])
-
-  const [tasks, setTasks] = useState([])
-  const [todaysTaskCount, setTodaysTaskCount] = useState(0) // State variable for task count
-
-  useEffect(() => {
-    const fetchTodaysTasks = async () => {
-      try {
-        const response = await axios.get('https://backendmaintenx.onrender.com/api/pm')
-        const fetchedTasks = response.data
-        const today = new Date().toISOString().split('T')[0]
-
-        const todaysTasks = fetchedTasks.filter(
-          (task) => new Date(task.nextDate).toISOString().split('T')[0] === today,
-        )
-
-        setTasks(todaysTasks)
-        setTodaysTaskCount(todaysTasks.length) // Set the count of today's tasks
-        setLoading(false)
-      } catch (error) {
-        console.error("Error fetching today's tasks:", error)
-        setLoading(false)
-      }
-    }
-
-    fetchTodaysTasks()
-  }, [])
-
   const [formData, setFormData] = useState({
     MachineName: '',
     BreakdownStartDate: '',
@@ -252,7 +186,14 @@ const WidgetsDropdown = () => {
   const sendSMS = (formData, selectedUsers) => {
     const { MachineName, BreakdownStartDate, Shift, LineName, Operations, BreakdownPhenomenons } =
       formData
-
+    // Formulate a simple message
+    // const message = encodeURIComponent(
+    //   'Breakdown For ' +
+    //     pendingTaskCount +
+    //     ' please visit concerned department Details are ' +
+    //     pendingTaskCount +
+    //     ' - Aurangabad Auto Ancillary',
+    // )
     const message = encodeURIComponent(
       `Breakdown For ${pendingTaskCount} pending tasks. please visit concerned department Details are ${pendingTaskCount} - Aurangabad Auto Ancillary`,
     )
@@ -299,125 +240,230 @@ const WidgetsDropdown = () => {
 
   return (
     <CRow>
-      <CCol sm={6} lg={3}>
-        <div className="custom-widget primary custom-card">
-          <div className="icon">
-            <CIcon icon={cilGraph} size="3xl" />
+      <div className="container-fluid w-100">
+        <div className="row mx-auto flex-column flex-sm-row justify-content-center w-100 dashboard-row">
+          {/* Total Breakdown */}
+          <div className="card shadow-sm mx-auto dashboard-card">
+            <Link to="/temperature" className="card-link"></Link>
+            <div className="card-content" style={{ marginTop: '5px', width: '16rem' }}>
+              <div className="icon-container" style={{ backgroundColor: '#FF8C00' }}>
+                <MdDashboard
+                  className="icon"
+                  style={{
+                    width: '30px',
+                    height: '30px',
+                    fill: 'white',
+                    marginTop: '1px',
+                    marginLeft: '3px',
+                  }}
+                />
+              </div>
+              <div className="text-container">
+                <div className="label">
+                  <span>Total Breakdown</span>
+                </div>
+                <h3 className="count">{totalBreakdown}</h3>
+              </div>
+            </div>
+            <hr className="divider" />
+            <div className="button-container">
+              <button className="more-button">Get more</button>
+            </div>
           </div>
-          <div className="details">
-            <div className="stat-number">{totalBreakdown}</div>
-            <div className="stat-label">Total Breakdown</div>
+
+          {/* All Assets */}
+          <div className="card shadow-sm mx-auto dashboard-card">
+            <Link to="/temperature" className="card-link"></Link>
+            <div className="card-content" style={{ marginTop: '5px', width: '16rem' }}>
+              <div className="icon-container" style={{ backgroundColor: '#1AA260' }}>
+                <BsFillCassetteFill
+                  className="icon"
+                  style={{
+                    width: '30px',
+                    height: '35px',
+                    fill: 'white',
+                    marginTop: '1px',
+                    marginLeft: '3px',
+                  }}
+                />
+              </div>
+              <div className="text-container">
+                <div className="label">
+                  <span>All Assets</span>
+                </div>
+                <h3 className="count">{totalTasks}</h3>
+              </div>
+            </div>
+            <hr className="divider" />
+            <div className="button-container">
+              <button className="more-button">Get more</button>
+            </div>
           </div>
-          <CDropdown alignment="end" className="options">
-            <CDropdownToggle color="transparent" caret={false} className="p-0">
-              <CIcon icon={cilOptions} color="black" className="text-high-emphasis-inverse" />
-            </CDropdownToggle>
-            <CDropdownMenu>
-              <NavLink to="/production" className="nav-link">
-                <CDropdownItem>View More</CDropdownItem>
-              </NavLink>
-            </CDropdownMenu>
-          </CDropdown>
-        </div>
-      </CCol>
-      <CCol sm={6} lg={3}>
-        <div className="custom-widget info custom-card">
-          <div className="icon">
-            <CIcon icon={cilStorage} size="3xl" />
+
+          {/* Pending Task */}
+          <div className="card shadow-sm mx-auto dashboard-card">
+            <Link to="/currentvfd" className="card-link"></Link>
+            <div className="card-content" style={{ marginTop: '5px', width: '16rem' }}>
+              <div className="icon-container" style={{ backgroundColor: '#E41B17' }}>
+                <MdOutlinePendingActions
+                  className="icon"
+                  style={{
+                    width: '30px',
+                    height: '30px',
+                    fill: 'white',
+                    marginTop: '1px',
+                    marginLeft: '3px',
+                  }}
+                />
+              </div>
+              <div className="text-container">
+                <div className="label">
+                  <span>Pending Task</span>
+                </div>
+                <h3 className="count">{todaysTaskCount}</h3>
+              </div>
+            </div>
+            <hr className="divider" />
+            <div className="button-container">
+              <button className="more-button">Get more</button>
+            </div>
           </div>
-          <div className="details">
-            <div className="stat-number">{totalTasks}</div>
-            <div className="stat-label">All Assets</div>
+
+          {/* Completed Task */}
+          <div className="card shadow-sm mx-auto dashboard-card">
+            <Link to="/voltagevfd" className="card-link"></Link>
+            <div className="card-content" style={{ marginTop: '5px', width: '16rem' }}>
+              <div
+                className="icon-container"
+                style={{ backgroundColor: '#14A3C7', marginTop: '2px' }}
+              >
+                <BsFillCheckCircleFill
+                  className="icon"
+                  style={{
+                    width: '30px',
+                    height: '30px',
+                    fill: 'white',
+                    marginTop: '1px',
+                    marginLeft: '3px',
+                  }}
+                />
+              </div>
+              <div className="text-container">
+                <div className="label">
+                  <span>Completed Task</span>
+                </div>
+                <h3 className="count">{completdTasksCount}</h3>
+              </div>
+            </div>
+            <hr className="divider" />
+            <div className="button-container">
+              <button className="more-button">Get more</button>
+            </div>
           </div>
-          <CDropdown alignment="end" className="options">
-            <CDropdownToggle color="transparent" caret={false} className="p-0">
-              <CIcon icon={cilOptions} className="text-high-emphasis-inverse" />
-            </CDropdownToggle>
-            <CDropdownMenu>
-              <NavLink to="/assetTable" className="nav-link">
-                <CDropdownItem>View More</CDropdownItem>
-              </NavLink>
-            </CDropdownMenu>
-          </CDropdown>
         </div>
-      </CCol>
-      <CCol sm={6} lg={3}>
-        <div className="custom-widget warning custom-card">
-          <div className="icon">
-            <CIcon icon={cilTask} size="3xl" />
-          </div>
-          <div className="details">
-            <div className="stat-number">{todaysTaskCount}</div>
-            <div className="stat-label">Pending Tasks</div>
-          </div>
-          <CDropdown alignment="end" className="options">
-            <CDropdownToggle color="transparent" caret={false} className="p-0">
-              <CIcon icon={cilOptions} className="text-high-emphasis-inverse" />
-            </CDropdownToggle>
-            <CDropdownMenu>
-              <NavLink to="/pmSchedule" className="nav-link">
-                <CDropdownItem>View More</CDropdownItem>
-              </NavLink>
-            </CDropdownMenu>
-          </CDropdown>
-        </div>
-      </CCol>
-      <CCol sm={6} lg={3}>
-        <div className="custom-widget danger custom-card">
-          <div className="icon">
-            <CIcon icon={cilCheckCircle} size="3xl" />
-          </div>
-          <div className="details">
-            <div className="stat-number">{completedTasksCount}</div>
-            <div className="stat-label">Completed Tasks</div>
-          </div>
-          <CDropdown alignment="end" className="options">
-            <CDropdownToggle color="transparent" caret={false} className="p-0">
-              <CIcon icon={cilOptions} className="text-high-emphasis-inverse" />
-            </CDropdownToggle>
-            <CDropdownMenu>
-              <NavLink to="/pmSchedule" className="nav-link">
-                <CDropdownItem>View More</CDropdownItem>
-              </NavLink>
-            </CDropdownMenu>
-          </CDropdown>
-        </div>
-      </CCol>
-      <CCol sm={2} lg={3}>
-        <div className="custom-widget1 custom-card">
-          {/* <CButton
-            color="transparent"
-            // className="text-primary" // Adjust class as needed for styling
-            // onClick={onClick}
-          >
-            Calculate MTBF/MTTR */}
-          <NavLink to="/adminbdhistory">
-            <button className="btn">Calculate MTBF/MTTR</button>
-          </NavLink>
-          {/* </CButton> */}
-        </div>
-      </CCol>
-      <CCol sm={2} lg={3}>
-        <div className="custom-widget2 custom-card">
-          <NavLink to="/cbm">
-            <button className="btn">CBM {cbmLength}</button>
-          </NavLink>
-        </div>
-      </CCol>
-      <CCol sm={2} lg={3}>
-        <div className="custom-widget3 custom-card">
-          <NavLink to="/tbm">
-            <button className="btn">TBM {tbmLength}</button>
-          </NavLink>
-        </div>
-      </CCol>
-      <CCol sm={2} lg={3}>
-        <div className="custom-widget4 custom-card">
-          <NavLink to="/pm">
-            <button className="btn">Todays Tasks {todaysTaskCount}</button>
-          </NavLink>
-        </div>
-      </CCol>
+      </div>
+      <style>{`
+        .dashboard-row {
+          margin-top: 2rem;
+          position: relative;
+        }
+        .dashboard-card {
+          border-radius: 8px;
+          padding: 10px;
+          width: 235px;
+          background-color: #ffffff;
+          margin: 10px;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          height: 7rem;
+          position: relative;
+        }
+        .card-link {
+          position: absolute;
+          top: 5px;
+          right: 10px;
+        }
+        .card-content {
+          display: flex;
+          align-items: center;
+          height: 50%;
+          padding: 10px;
+          top: 10px;
+        }
+        .icon-container {
+          box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+          width: 40%;
+          border-radius: 7px;
+          height: 5rem;
+          margin-bottom: 30px;
+          margin-left: 10px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+        .text-container {
+          text-align: left;
+          margin-left: 10px;
+          width: 70%;
+          margin-top: 25px;
+        }
+        .label {
+          text-align: left;
+          margin-left: 8px;
+          width: 90%;
+          margin-top: 30px;
+          display: flex;
+        }
+        .label span {
+          color: #d8d8d8;
+          margin-top: 2rem;
+          margin-left: 2px;
+          font-size: 0.9rem;
+        }
+        .count {
+          color: #5b5c5c;
+          margin-top: 0;
+          margin-bottom: 5.5rem;
+          margin-left: 80px;
+        }
+        .divider {
+          width: 100%;
+          border: 0.2px solid gray;
+          margin: 0px 0;
+        }
+        .button-container {
+          text-align: start;
+        }
+        .more-button {
+          background: none;
+          border: none;
+          color: #d8d8d8;
+          cursor: pointer;
+          padding: 0;
+          margin: 0;
+        }
+
+        @media (max-width: 576px) {
+          .dashboard-row {
+            flex-direction: column !important;
+          }
+          .dashboard-card {
+            width: 90% !important;
+            height: 135px !important;
+          }
+        }
+        @media (min-width: 576px) and (max-width: 768px) {
+          .dashboard-card {
+            width: 45% !important;
+          }
+        }
+        @media (min-width: 768px) and (max-width: 992px) {
+          .dashboard-card {
+            width: 30% !important;
+          }
+        }
+      `}</style>
     </CRow>
   )
 }

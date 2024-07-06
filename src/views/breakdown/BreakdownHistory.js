@@ -8,19 +8,12 @@ import { format } from 'date-fns'
 import * as XLSX from 'xlsx'
 import { useDispatch, useSelector } from 'react-redux'
 import { Placeholder } from 'reactstrap'
-import '../assetTable/asset.css'
-import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table'
-import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css'
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-// import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
-import { FaChevronUp, FaChevronDown } from 'react-icons/fa'
 
 function BreakdownHistory() {
   const [breakdowns, setBreakdowns] = useState([])
   const [selectedMachine, setSelectedMachine] = useState('')
   const [mttr, setMttr] = useState('')
   const [mtbf, setMtbf] = useState('')
-  const [expandedItems, setExpandedBreakdowns] = useState([])
   const [selectedLocation, setSelectedLocation] = useState('')
   const [searchLocation, setSearchLocation] = useState('')
   const [Location, setLoction] = useState('')
@@ -32,7 +25,6 @@ function BreakdownHistory() {
   const [searchTerm, setSearchTerm] = useState('')
   // const [loggedInUsername, setLoggedInUsername] = useState('Mayuri ')
   const [filteredAssets, setFilteredAssets] = useState([])
-  const [prevState, setprevstate] = useState([])
 
   const loggedInUsername = useSelector((state) => state.auth.userInfo?.name)
 
@@ -259,190 +251,107 @@ function BreakdownHistory() {
     XLSX.writeFile(wb, 'reportdata.xlsx')
   }
 
-  const toggleExpand = (index) => {
-    setExpandedBreakdowns((prev) => ({
-      ...prev,
-      [index]: !prev[index],
-    }))
-  }
-
   return (
     <>
       <div className="container" style={{ marginTop: '0px' }}>
         <div>
           <CButton
-            className="mb-2"
-            style={{ marginTop: '5px', backgroundColor: '#000026' }}
+            color="info"
+            type="button"
+            style={{ margin: '1rem', marginRight: 'rem' }}
             onClick={exportToExcel}
           >
             Export to Excel
           </CButton>
         </div>
-        <div className="table-container">
-          <Table className="custom-table">
-            <Thead>
-              <Tr>
-                <Th style={{ textAlign: 'center', height: '40px' }}>Machine Name</Th>
-                <Th style={{ textAlign: 'center' }}>BreakDown Start Date</Th>
-                {/* <Td></Td> */}
-                <Th style={{ textAlign: 'center' }}>Shift</Th>
-                <Th style={{ textAlign: 'center' }}>Line Name</Th>
-                <Th style={{ textAlign: 'center' }}>Location</Th>
-                <Th style={{ textAlign: 'center' }}>End Date</Th>
-                <th style={{ textAlign: 'center' }}>TotalRepairtime</th>
-                <Th style={{ textAlign: 'center' }}>Status</Th>
-                <Th style={{ textAlign: 'center' }}>Edit</Th>
-                {/* <th>Images</th> */}
-              </Tr>
-            </Thead>
-            <Tbody>
-              {loading ? ( // Show loader when loading is true
-                <tr>
-                  <td colSpan="8" style={{ textAlign: 'center' }}>
-                    {/* Use an image tag for the loading GIF */}
-                    {/* <img src={loadingGif} alt="Loading..." />
-                      <p>Loading...</p> */}
-                  </td>
-                </tr>
-              ) : (
-                <>
-                  {message && (
-                    <tr>
-                      <td colSpan="11" style={{ textAlign: 'center' }}>
-                        {message}
-                      </td>
-                    </tr>
-                  )}
-                  {breakdowns
-                    .filter((breakdown) => {
-                      // Filter breakdowns based on the search term
-                      const searchTermLowerCase = searchTerm.toLowerCase()
-                      return breakdown.Location.toLowerCase().includes(searchTermLowerCase)
-                    })
-                    .map((breakdown) => (
-                      <Tr key={breakdown._id}>
-                        <Td style={{ textAlign: 'center' }}>{breakdown.MachineName}</Td>
-                        <Td style={{ textAlign: 'center' }}>
-                          {new Date(breakdown.BreakdownStartDate).toLocaleDateString()}
-                        </Td>
-                        {/* <Td></Td> */}
-                        <Td style={{ textAlign: 'center' }}>{breakdown.Shift}</Td>
-                        <Td style={{ textAlign: 'center' }}>{breakdown.LineName}</Td>
-                        <Td style={{ textAlign: 'center' }}>{breakdown.Location}</Td>
-                        <Td style={{ textAlign: 'center' }}>
-                          {new Date(breakdown.BreakdownEndDate).toLocaleDateString()}
-                        </Td>
-                        <Td style={{ textAlign: 'center' }}>
-                          {breakdown.TotalBDTime != null ? breakdown.TotalBDTime.toFixed(2) : 'N/A'}
-                        </Td>
-                        <Td style={{ textAlign: 'center' }}>{breakdown.Status}</Td>
-                        <Td style={{ textAlign: 'center' }}>
-                          <NavLink to={`/pbdStatus/${breakdown._id}`} style={{ color: '#000080' }}>
-                            <FaEdit />
-                          </NavLink>
-                        </Td>
-                        {/* <td style={{ textAlign: 'center' }}>
-                        <NavLink to={`/breakDownRecord/${breakdown._id}`}>
-                          <img src={breakdown.Image} height={50} width={50} />
-                        </NavLink>
-                      </td> */}
-                      </Tr>
-                    ))}
-                </>
-              )}
-            </Tbody>
-          </Table>
-          <div className="list-view">
+        <CTable
+          bordered
+          striped
+          hover
+          responsive
+          style={{
+            marginTop: '20px',
+            borderCollapse: 'collapse',
+            width: '100%',
+          }}
+        >
+          <CTableHead color="dark">
+            <tr>
+              <th style={{ textAlign: 'center' }}>Machine Number</th>
+              <th style={{ textAlign: 'center' }}>BreakDown Start Date</th>
+              <th style={{ textAlign: 'center' }}>BreakDown End Date</th>
+              <th style={{ textAlign: 'center' }}>Attended By</th>
+              <th style={{ textAlign: 'center' }}>BD Raised By</th>
+              <th style={{ textAlign: 'center' }}>Line Name</th>
+              <th style={{ textAlign: 'center' }}>Location</th>
+              {/* <th style={{ textAlign: 'center' }}>BD Raised By</th> */}
+              <th style={{ textAlign: 'center' }}>TotalRepairtime</th>
+              <th style={{ textAlign: 'center' }}>Status</th>
+              <th style={{ textAlign: 'center' }}>Edit</th>
+              <th>Attachment</th>
+            </tr>
+          </CTableHead>
+          <tbody>
             {loading ? (
-              <p>Loading...</p>
+              <tr>
+                <td colSpan="11" style={{ textAlign: 'center' }}>
+                  <CSpinner color="primary" />
+                  <div className="loader">Loading...</div>
+                </td>
+              </tr>
             ) : (
-              <>
-                {message && (
-                  <p style={{ textAlign: 'center', fontStyle: 'italic', color: 'red' }}>
-                    {message}
-                  </p>
-                )}
-                {breakdowns
-                  .filter((breakdown) => {
-                    // Filter breakdowns based on the search term
-                    const searchTermLowerCase = searchTerm.toLowerCase()
-                    return breakdown.Location.toLowerCase().includes(searchTermLowerCase)
-                  })
-                  .map((breakDown, index) => (
-                    <div
-                      key={breakDown._id}
-                      className={`list-item ${expandedItems[index] ? 'Collapse' : 'Expand'}`}
-                    >
-                      <div className="expand">
-                        {expandedItems.includes(index) ? (
-                          <FaChevronUp onClick={() => toggleExpand(index)} />
-                        ) : (
-                          <FaChevronDown onClick={() => toggleExpand(index)} />
-                        )}
-                      </div>
-                      <div>
-                        <span>{breakDown.MachineName}</span> - <span>{breakDown.Location}</span>
-                      </div>
-                      <div
-                        className={`expanded-content ${
-                          expandedItems.includes(index) ? 'visible' : 'hidden'
-                        }`}
-                      >
-                        <div className="table-like">
-                          <div className="table-row">
-                            <div className="table-cell">
-                              <strong>BreakdownStartDate:</strong>
-                            </div>
-                            <div className="table-cell">
-                              {new Date(breakDown.BreakdownStartDate).toLocaleDateString()}
-                            </div>
-                          </div>
-                          <div className="table-row">
-                            <div className="table-cell">
-                              <strong>BreakdownEndDate:</strong>
-                            </div>
-                            <div className="table-cell">
-                              {new Date(breakDown.BreakdownEndDate).toLocaleDateString()}
-                            </div>
-                          </div>
-                          <div className="table-row">
-                            <div className="table-cell">
-                              <strong>Shift:</strong>
-                            </div>
-                            <div className="table-cell">{breakDown.Shift}</div>
-                          </div>
-                          <div className="table-row">
-                            <div className="table-cell">
-                              <strong>LineName:</strong>
-                            </div>
-                            <div className="table-cell">{breakDown.LineName}</div>
-                          </div>
-                          <div className="table-row">
-                            <div className="table-cell">
-                              <strong>Status:</strong>
-                            </div>
-                            <div className="table-cell">{breakDown.Status}</div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="actions">
-                        <NavLink to={`/pbdStatus/${breakDown._id}`} style={{ color: '#000080' }}>
-                          <FaEdit />
-                        </NavLink>
-                        {/* <button
-                          className="btn"
-                          onClick={() => deleteData(cbm._id)}
-                          style={{ color: 'red' }}
-                        >
-                          <MdDelete />
-                        </button> */}
-                      </div>
-                    </div>
-                  ))}
-              </>
+              breakdowns
+                .filter((breakdown) => {
+                  // Filter breakdowns based on the search term
+                  const searchTermLowerCase = searchTerm.toLowerCase()
+                  return breakdown.Location.toLowerCase().includes(searchTermLowerCase)
+                })
+                .map((breakdown) => (
+                  <tr key={breakdown._id}>
+                    <td style={{ textAlign: 'center' }}>{breakdown.MachineName}</td>
+                    <td style={{ textAlign: 'center' }}>
+                      {new Date(breakdown.BreakdownStartDate).toISOString().split('T')[0]}
+                    </td>
+                    {/* <td>{new Date(breakdown.BreakdownStartDate).toISOString().split('T')[0]}</td> */}
+                    <td style={{ textAlign: 'center' }}>
+                      {new Date(breakdown.BreakdownEndDate).toISOString().split('T')[0]}
+                    </td>
+                    <td style={{ textAlign: 'center' }}>{breakdown.AttendedBy}</td>
+                    <td style={{ textAlign: 'center' }}>{breakdown.BDRaiseName}</td>
+                    <td style={{ textAlign: 'center' }}>{breakdown.LineName}</td>
+                    <td style={{ textAlign: 'center' }}>{breakdown.Location}</td>
+                    {/* <td style={{ textAlign: 'center' }}>
+                      {Number(breakdown.TotalBDTime).toFixed(2)}
+                    </td> */}
+                    <td>
+                      {breakdown.TotalBDTime != null ? breakdown.TotalBDTime.toFixed(2) : 'N/A'}
+                    </td>
+
+                    <td style={{ textAlign: 'center' }}>{breakdown.Status}</td>
+                    <td style={{ textAlign: 'center' }}>
+                      <NavLink to={`/pbdStatus/${breakdown._id}`} style={{ color: '#000080' }}>
+                        <FaEdit />
+                      </NavLink>
+                    </td>
+                    <td style={{ textAlign: 'center' }}>
+                      {breakdown.Image && (
+                        <a href={breakdown.Image} download>
+                          Download File
+                        </a>
+                      )}
+                    </td>
+                  </tr>
+                ))
             )}
+          </tbody>
+        </CTable>
+        {loading && (
+          <div className="loader-container">
+            {/* <div className="loader">Loading...</div> */}
+            <CSpinner color="primary" />
+            <div className="loader">Loading...</div>
           </div>
-        </div>
+        )}
 
         <div
           className="container"

@@ -52,15 +52,9 @@ import {
   cilUser,
   cilUserFemale,
 } from '@coreui/icons'
-// import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts'
-// import { BubbleChart, Bubble } from '@recharts-js'
 
 import {
   BarChart,
-  Area,
-  AreaChart,
-  ScatterChart,
-  Scatter,
   Bar,
   XAxis,
   YAxis,
@@ -72,10 +66,10 @@ import {
   Line,
 } from 'recharts'
 
-import WidgetsBrand from '../widgets/WidgetsBrand'
+// import WidgetsBrand from '../widgets/WidgetsBrand'
 import WidgetsDropdown from '../widgets/WidgetsDropdown'
-import BreakDown from './../production/ProductionBD'
-import axios from 'axios'
+// import BreakDown from './../production/ProductionBD'
+// import axios from 'axios'
 import { useLocation } from 'react-router-dom'
 
 const Dashboard = () => {
@@ -178,20 +172,6 @@ const Dashboard = () => {
     }))
   }
 
-  const scatterChartData = [
-    { x: 10, y: 30, z: 200 },
-    { x: 20, y: 20, z: 300 },
-    { x: 30, y: 40, z: 250 },
-    { x: 40, y: 50, z: 400 },
-  ]
-
-  const bubbleChartData = [
-    { name: 'A', x: 30, y: 20, z: 200 },
-    { name: 'B', x: 50, y: 30, z: 300 },
-    { name: 'C', x: 70, y: 40, z: 400 },
-    { name: 'D', x: 90, y: 50, z: 500 },
-  ]
-
   useEffect(() => {
     fetch('https://backendmaintenx.onrender.com/api/breakdown')
       .then((response) => response.json())
@@ -240,65 +220,56 @@ const Dashboard = () => {
       <div style={{ marginLeft: '70%' }}></div>
       <WidgetsDropdown />
       <CCard className="mb-4"></CCard>
-      <CRow>
+      {/* <CRow>
         <CCol xs={12} lg={6}>
           <CCard className="mb-4">
             <CCardHeader>BreakDown Type Wise Chart</CCardHeader>
             <CCardBody>
-              <ResponsiveContainer width="100%" height={300}>
-                <ScatterChart width={window.innerWidth >= 992 ? 500 : 300} height={300}>
-                  <CartesianGrid />
-                  <XAxis dataKey="breakdownType" />
-                  <YAxis dataKey="value" />
-                  <Tooltip cursor={{ strokeDasharray: '3 3' }} />
-                  <Legend />
-                  <Scatter
-                    name="Breakdown Typewise"
-                    data={formattedChartData}
-                    fill="#000026"
-                    backgroundColor="rgba(255,255,255,.2)"
-                    borderColor="rgba(255,255,255,.55)"
-                  />
-                </ScatterChart>
-              </ResponsiveContainer>
-            </CCardBody>
-          </CCard>
-        </CCol>
-
-        <CCol xs={12} lg={6}>
-          <CCard className="mb-4">
-            <CCardHeader>Area Chart</CCardHeader>
-            <CCardBody>
-              <ResponsiveContainer width="100%" height={300}>
-                <AreaChart data={lineChartData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="lineName" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Area type="monotone" dataKey="value" stroke="#E0E0E4" fill="#66667C" />
-                </AreaChart>
-              </ResponsiveContainer>
-            </CCardBody>
-          </CCard>
-        </CCol>
-        <CCol xs={12} lg={6}>
-          <CCard className="mb-4">
-            <CCardHeader>Polar Area Chart</CCardHeader>
-            <CCardBody>
-              <CChartPolarArea
-                data={{
-                  labels: formattedChartData.map((item) => item.breakdownType),
-                  datasets: [
-                    {
-                      data: formattedChartData.map((item) => item.value),
-                      backgroundColor: ['#ff7d98', '#4cacee', '#ffff00'],
-                      hoverBackgroundColor: ['#ff315b', '#137bc1', '#fff04d'],
-                      label: 'My dataset', // for legend
-                    },
-                  ],
+              <BarChart
+                width={window.innerWidth >= 992 ? 500 : 300}
+                height={300}
+                data={formattedChartData}
+                margin={{
+                  // top: 5,
+                  right: 20,
+                  // left: 5,
                 }}
-              />
+              >
+                <XAxis dataKey="breakdownType" />
+                <YAxis />
+                <Tooltip />
+                <Bar
+                  dataKey="value"
+                  fill="#8884d8"
+                  // name="My First dataset" // Add the label here
+                  backgroundColor="rgba(255,255,255,.2)" // Add the background color here
+                  borderColor="rgba(255,255,255,.55)" // Add the border color here
+                />
+              </BarChart>
+            </CCardBody>
+          </CCard>
+        </CCol>
+        <CCol xs={12} lg={6}>
+          <CCard className="mb-4">
+            <CCardHeader>LineName Wise Chart</CCardHeader>
+            <CCardBody>
+              <LineChart
+                width={window.innerWidth >= 992 ? 500 : 300}
+                height={300}
+                data={lineChartData}
+                margin={{
+                  // top: 5,
+                  right: 20,
+                  // left: 20,
+                }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="lineName" />
+                <YAxis data={lineChartData} />
+                <Tooltip />
+                <Legend />
+                <Line type="monotone" dataKey="value" stroke="#82ca9d" />
+              </LineChart>
             </CCardBody>
           </CCard>
         </CCol>
@@ -309,12 +280,11 @@ const Dashboard = () => {
             <CCardBody>
               <CChartDoughnut
                 data={{
-                  labels: lineChartData.map((item) => item.lineName),
+                  labels: formattedChartData.map((item) => item.breakdownType), // Assuming your API response has a 'label' field
                   datasets: [
                     {
-                      backgroundColor: ['#ff7d98', '#4cacee', '#ffff00'],
-                      hoverBackgroundColor: ['#ff315b', '#137bc1', '#FFCE56'],
-                      data: formattedChartData.map((item) => item.value),
+                      backgroundColor: ['#41B883', '#E46651', '#00D8FF', '#DD1B16'],
+                      data: formattedChartData.map((item) => item.value), // Assuming your API response has a 'value' field
                     },
                   ],
                 }}
@@ -322,7 +292,26 @@ const Dashboard = () => {
             </CCardBody>
           </CCard>
         </CCol>
-      </CRow>
+        <CCol xs={12} lg={6}>
+          <CCard className="mb-4 p">
+            <CCardHeader>Line wise Pie Chart</CCardHeader>
+            <CCardBody>
+              <CChartPie
+                data={{
+                  labels: lineChartData.map((item) => item.lineName), // Assuming your API response has a 'LineName' field
+                  datasets: [
+                    {
+                      data: lineChartData.map((item) => item.value), // Assuming your API response has a 'value' field
+                      backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'], // Specify the colors
+                      hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'], // Specify the hover colors
+                    },
+                  ],
+                }}
+              />
+            </CCardBody>
+          </CCard>
+        </CCol>
+      </CRow> */}
     </>
   )
 }

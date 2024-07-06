@@ -176,9 +176,6 @@ class BDList extends React.Component {
     return (
       <>
         <div className="container">
-          {/* </div> */}
-          {/* <div className="table-controls"> */}
-
           <div>
             <NavLink to="/breakdownForm">
               {' '}
@@ -191,14 +188,6 @@ class BDList extends React.Component {
                 Add New
               </CButton>
             </NavLink>
-            {/* <CButton
-              // color="info"
-              type="button"
-              style={{ margin: 'rem', backgroundColor: '#000026' }}
-              onClick={this.exportToExcel}
-            >
-              Export to Excel
-            </CButton> */}
             <label
               htmlFor="startDate"
               style={{

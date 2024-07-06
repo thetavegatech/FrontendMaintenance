@@ -22,6 +22,7 @@ import 'simplebar/dist/simplebar.min.css'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { logout } from '../slices/authSlice'
 import { useLogoutMutation } from 'src/slices/usersApiSlice'
+import { BiBorderRadius } from 'react-icons/bi'
 
 const AppSidebar = () => {
   const dispatch = useDispatch()
@@ -50,17 +51,17 @@ const AppSidebar = () => {
   }
 
   const sidebarStyles = {
-    backgroundColor: '#000026',
+    backgroundColor: '#000000',
     color: '#ffffff',
   }
 
   const sidebarNavStyles = {
-    backgroundColor: '#000026',
+    backgroundColor: '#000000',
   }
 
   const brandTextStyles = {
     fontSize: '25px',
-    color: 'orange',
+    color: 'white',
   }
 
   const navItemStyles = {
@@ -68,12 +69,13 @@ const AppSidebar = () => {
   }
 
   const activeNavItemStyles = {
-    backgroundColor: '#1e90ff',
+    backgroundColor: '#CA226B',
     color: '#ffffff',
+    borderRadius: '1rem', // Adjust the value as needed
   }
 
   const logoutButtonStyles = {
-    backgroundColor: '#000026',
+    backgroundColor: '#000000',
     border: '1px solid #ddd',
     color: '#ffffff',
   }
@@ -93,16 +95,16 @@ const AppSidebar = () => {
       style={sidebarStyles}
     >
       <CSidebarBrand className="d-md-none">
-        <img src={logo} className="logo1" alt="Before Logo" style={{ height: '45px' }} />
+        {/* <img src={logo} className="logo1" alt="Before Logo" style={{ height: '45px' }} /> */}
         <h4 style={brandTextStyles}>Thetavega Tech</h4>
       </CSidebarBrand>
       <CSidebarBrand className="d-none d-md-flex">
-        <img
+        {/* <img
           src={logo}
           className="logo1"
           alt="Before Logo"
           style={{ marginRight: '20px', height: '45px', marginLeft: '-10%' }}
-        />
+        /> */}
         <h4 style={brandTextStyles}>Thetavega Tech</h4>
       </CSidebarBrand>
       <CSidebarNav style={sidebarNavStyles}>
@@ -284,7 +286,7 @@ const AppSidebar = () => {
           }
         })()}
       </CSidebarNav>
-      <button
+      {/* <button
         type="button"
         className="btn btn-info"
         onClick={logoutHandler}
@@ -293,7 +295,7 @@ const AppSidebar = () => {
         onMouseOut={(e) => (e.target.style.backgroundColor = '#17a2b8')}
       >
         Logout
-      </button>
+      </button> */}
     </CSidebar>
   )
 }

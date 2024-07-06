@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { NavLink } from 'react-router-dom'
-import dlt from '../assetTable/delete.png'
+// import dlt from '../assetTable/delete.png'
 import { CTable, CButton, CTableHead } from '@coreui/react'
 import { FaEdit } from 'react-icons/fa'
 import { MdDelete } from 'react-icons/md'
-import loadingGif from '../assetTable/loader.gif'
+import { MdDashboard } from 'react-icons/md'
+import { Link } from 'react-router-dom'
+import { IoIosAddCircle } from 'react-icons/io'
+// import loadingGif from '../assetTable/loader.gif'
 import '../assetTable/asset.css'
+import classNames from 'classnames'
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table'
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css'
-import { FaPlusCircle, FaChevronUp, FaChevronDown } from 'react-icons/fa'
+import { FaChevronUp, FaChevronDown } from 'react-icons/fa'
 
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 // import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
@@ -392,34 +396,82 @@ class AssetTable extends React.Component {
     const { isClicked } = this.state
 
     return (
-      <div className="container" style={{ marginTop: '0px' }}>
-        <NavLink to="/taskform">
-          <FaPlusCircle className="add-asset-icon" />
-        </NavLink>
-        <NavLink to="/pm">
-          <button className="btn">Todays Tasks</button>
-        </NavLink>
+      <div className="card shadow-sm mx-auto">
+        <Link to="/temperature" style={{ position: 'absolute', top: '15px', right: '10px' }}></Link>
 
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+          <div
+            // className="d-flex justify-content-center align-items-center"
+            className={classNames(
+              'box',
+              'd-flex',
+              'justify-content-center',
+              'align-items-center',
+              'd-flex justify-content-center align-items-center',
+            )}
+            // style={{
+            //   boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
+            //   width: '10%',
+            //   backgroundColor: '#CA226B',
+            //   borderRadius: '7px',
+            //   height: '5rem',
+            //   alignItems: 'start',
+            //   marginLeft: '20px',
+            //   position: 'relative',
+            //   bottom: '20px',
+            // }}
+          >
+            <MdDashboard
+              className="icon"
+              style={{
+                width: '30px',
+                height: '30px',
+                fill: 'white',
+                marginTop: '1px',
+                marginLeft: '3px',
+              }}
+            />
+          </div>
+          <NavLink to="/taskForm">
+            <IoIosAddCircle
+              className="mb-2"
+              style={{
+                marginBottom: '1.5rem',
+                backgroundColor: 'black',
+                marginLeft: '2.5rem',
+                borderRadius: '2rem',
+                width: '2rem',
+                height: '2rem',
+                color: 'white',
+                alignContent: 'end',
+                position: '',
+              }}
+            ></IoIosAddCircle>
+          </NavLink>
+          {/* <h5 style={{ marginLeft: '20px' }}>Create TBM Record</h5> */}
+          <label htmlFor="searchTask" style={{ marginLeft: '0%' }}>
+            <span role="img" aria-label="search-icon"></span>
+          </label>
+          <input
+            type="text"
+            id="searchTask"
+            placeholder="Search Task"
+            style={{
+              marginBottom: '10px',
+              padding: '8px',
+              border: '1px solid ',
+              borderRadius: '4px',
+              width: '8rem',
+              transition: 'border-color 0.3s ease-in-out, background-color 0.3s ease-in-out',
+              backgroundColor: isClicked ? '#ccc' : 'transparent',
+            }}
+            onClick={this.handleClick}
+            value={this.searchQuery}
+            onChange={this.handleSearchChange}
+          />
+        </div>
+        {/* <div className="container" style={{ marginTop: '0px' }}> */}
         {/* <div> */}
-        <label htmlFor="searchTask" style={{ marginLeft: '0%' }}>
-          <span role="img" aria-label="search-icon"></span>
-        </label>
-        <input
-          type="text"
-          id="searchTask"
-          placeholder="Search Task"
-          style={{
-            marginBottom: '10px',
-            padding: '8px',
-            border: '1px solid ',
-            borderRadius: '4px',
-            transition: 'border-color 0.3s ease-in-out, background-color 0.3s ease-in-out',
-            backgroundColor: isClicked ? '#ccc' : 'transparent',
-          }}
-          onClick={this.handleClick}
-          value={this.searchQuery}
-          onChange={this.handleSearchChange}
-        />
         {/* </div> */}
 
         <div className="table-container">
@@ -598,6 +650,7 @@ class AssetTable extends React.Component {
             )}
           </div>
         </div>
+        {/* </div> */}
       </div>
     )
   }

@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { NavLink } from 'react-router-dom'
-import { CTable, CTableHead, CButton } from '@coreui/react'
+// import { CTable, CTableHead, CButton } from '@coreui/react'
 import { MdDelete } from 'react-icons/md'
+import { MdDashboard } from 'react-icons/md'
+import { Link } from 'react-router-dom'
+import { IoIosAddCircleOutline } from 'react-icons/io'
 import './assetTable/asset.css'
+import classNames from 'classnames'
 import { FaEdit } from 'react-icons/fa'
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table'
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css'
-import { FaPlusCircle, FaChevronUp, FaChevronDown } from 'react-icons/fa'
+import { FaChevronUp, FaChevronDown } from 'react-icons/fa'
 
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 // import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
@@ -171,25 +175,68 @@ const AssetTable = () => {
   }
 
   return (
-    <div className="container">
-      <NavLink to="/cbmform">
-        <FaPlusCircle className="add-asset-icon" />
-      </NavLink>
-      <label htmlFor="searchTask" style={{ marginLeft: '%' }}>
-        <span role="img" aria-label="search-icon"></span>
-      </label>
-      <input
-        placeholder="Search by Asset/Location"
-        style={{
-          marginBottom: '10px',
-          padding: '8px',
-          border: '1px solid ',
-          borderRadius: '4px',
-          transition: 'border-color 0.3s ease-in-out, background-color 0.3s ease-in-out',
-        }}
-        value={searchQuery}
-        onChange={handleSearchChange}
-      />
+    <div className="card shadow-sm mx-auto">
+      <Link to="/temperature" style={{ position: 'absolute', top: '10px', right: '10px' }}></Link>
+
+      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+        <div
+          // className="d-flex justify-content-center align-items-center"
+          className={classNames(
+            'box',
+            'd-flex',
+            'justify-content-center',
+            'align-items-center',
+            'd-flex justify-content-center align-items-center',
+          )}
+        >
+          <MdDashboard
+            className="icon"
+            style={{
+              width: '30px',
+              height: '30px',
+              fill: 'white',
+              marginTop: '1px',
+              marginLeft: '3px',
+            }}
+          />
+        </div>
+
+        <NavLink to="/CBMForm">
+          <IoIosAddCircleOutline
+            className="mb-2"
+            style={{
+              marginBottom: '1.5rem',
+              backgroundColor: 'white',
+              marginLeft: '2rem',
+              borderRadius: '2rem',
+              width: '2rem',
+              height: '2rem',
+              color: 'black',
+              alignContent: 'end',
+              position: '',
+            }}
+          ></IoIosAddCircleOutline>
+        </NavLink>
+        <label htmlFor="searchTask" style={{ marginLeft: 'rem' }}>
+          <span role="img" aria-label="search-icon"></span>
+        </label>
+        <input
+          placeholder="Search"
+          style={{
+            display: 'flex',
+            marginBottom: '10px',
+            padding: '6px',
+            border: '1px solid ',
+            borderRadius: '6px',
+            width: '8rem',
+            transition: 'border-color 0.3s ease-in-out, background-color 0.3s ease-in-out',
+          }}
+          value={searchQuery}
+          onChange={handleSearchChange}
+        />
+        <h5 style={{ marginLeft: '20px' }}></h5>
+      </div>
+
       <div className="table-container">
         <Table className="custom-table">
           <Thead>

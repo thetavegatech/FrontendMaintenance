@@ -1,14 +1,24 @@
-import { createStore, applyMiddleware, combineReducers } from 'redux'
-import thunk from 'redux-thunk'
-import assetsReducer from './reducers/assets'
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import userReducer from './user/userSlice.js';
+import { persistReducer, persistStore } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
-// Combine reducers if you have multiple reducers
-const rootReducer = combineReducers({
-  assets: assetsReducer,
-  // Add other reducers here if needed
-})
+const rootReducer = combineReducers({ user: userReducer });
 
-// Create Redux store with combined reducers and apply middleware
-const store = createStore(rootReducer, applyMiddleware(thunk))
+const persistConfig = {
+  key: 'root',
+  version: 1,
+  storage,
+};
 
-export default store
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+export const store = configureStore({
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
+});
+
+export const persistor = persistStore(store);

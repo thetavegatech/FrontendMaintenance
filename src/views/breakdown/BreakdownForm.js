@@ -2,6 +2,11 @@ import React, { useState, useEffect } from 'react'
 // import './Breakdown.css'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { MdDashboard } from 'react-icons/md'
+import { Link } from 'react-router-dom'
+import classNames from 'classnames'
+// import '../assetForm/AssetForm'
+import '../assetTable/asset.css'
 import { CTimePicker } from '@coreui/react'
 import TimePicker from 'react-time-picker'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -283,7 +288,6 @@ export default function BreakDown() {
   }
 
   const apiKey = 'NDE1MDY2NGM2Mzc3NTI0ZjQzNmE1YTM5NDY0YzZlNzU='
-  // const apiKey = 'df718014b227a2f55bd47853be91a49d-87106218-0fee-456b-9c44-204f2adf13d5'
   const numbers = '7020804148' // Replace with the phone numbers
   const data1 = 'test'
   const data2 = { username }
@@ -311,7 +315,6 @@ export default function BreakDown() {
 
     // Create the API URL
     const url = `https://api.textlocal.in/send/?apikey=${apiKey}&sender=${sender}&numbers=${selectedno}&message=${message}`
-    // const url = 'https://vv2n1p.api.infobip.com/sms/2/text/advanced?apikey=${apiKey}&sender=${sender}&numbers=${selectedno}&message=${message}'
 
     // Use fetch to send the SMS
     fetch(url)
@@ -343,30 +346,46 @@ export default function BreakDown() {
   }
 
   return (
-    <>
-      <div
-        className="container"
-        style={{
-          border: '2px solid #ccc',
-          // backgroundColor: '',
-          padding: '20px',
-          borderRadius: '10px',
-          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-          width: '100%',
-        }}
-      >
-        {/* Display success message if it exists */}
-        {successMessage && (
-          <div className="alert alert-success" role="alert" style={{ marginTop: '10px' }}>
-            {successMessage}
-          </div>
-        )}
-        <form action="" method="post" onSubmit={handleSubmit}>
-          <div className="row g-2">
-            <div className="col-md-3">
-              <label htmlFor="machineName" style={{ marginBottom: '10px', fontSize: '16px' }}>
-                Machine Number:
-              </label>
+    <div className="card shadow-sm mx-auto">
+      <Link to="/temperature" style={{ position: 'absolute', top: '15px', right: '10px' }}></Link>
+      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+        <div
+          // className="d-flex justify-content-center align-items-center"
+          className={classNames(
+            'box',
+            'd-flex',
+            'justify-content-center',
+            'align-items-center',
+            'd-flex justify-content-center align-items-center',
+          )}
+        >
+          <MdDashboard
+            className="icon"
+            style={{
+              width: '30px',
+              height: '30px',
+              fill: 'white',
+              marginTop: '1px',
+              marginLeft: '3px',
+            }}
+          />
+        </div>
+        <h5 style={{ marginLeft: '20px' }}>BreakDown</h5>
+      </div>
+
+      <form onSubmit={handleSubmit} style={{ marginBottom: '5rem', marginTop: '0px' }}>
+        <div className="form-row1" style={{ marginLeft: '15px' }}>
+          <div
+            className="form-row"
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              gap: 'px',
+              marginBottom: '20px',
+            }}
+          >
+            <div className="form-group" style={{ width: '30%' }}>
+              <label htmlFor="machineNumber">Machine Number</label>
               <Select
                 className="form-control"
                 required
@@ -377,72 +396,68 @@ export default function BreakDown() {
                 placeholder="Select a machine"
               />
             </div>
-
-            <div className="col-md-3">
-              <label htmlFor="breakdownDate" style={{ marginBottom: '10px' }}>
-                Breakdown Start Date:
-              </label>
-              <input
-                type="date"
-                disabled
-                className="form-control col-sm-6"
-                name="BreakdownStartDate"
-                value={formData.BreakdownStartDate}
-                onChange={handleChange}
-                placeholder=""
-              />
-            </div>
-
-            <div className="col-md-3">
-              <label htmlFor="breakdownStartTime" style={{ marginBottom: '10px' }}>
-                Breakdown Start Time:
-              </label>
-              <input
-                type="time"
-                disabled
-                id="breakdownStartTime"
-                className="form-control col-sm-6"
-                name="BreakdownStartTime"
-                value={formData.BreakdownStartTime}
-                onChange={handleChange}
-              ></input>
-            </div>
-            <div className="col-md-3">
-              <label htmlFor="shift" style={{ marginBottom: '10px' }}>
-                Shift:
-              </label>
-              <input
-                type="text"
-                required
-                className="form-control col-sm-6"
-                name="Shift"
-                value={formData.Shift}
-                onChange={handleChange}
-                placeholder=""
-              />
-            </div>
-            <div className="col-md-3">
-              <label
-                htmlFor="assetLocation"
-                className="form-label"
-                style={{ marginBottom: '10px' }}
-              >
-                Location:
-              </label>
+            <div className="form-group" style={{ width: '30%' }}>
+              <label htmlFor="location">Location</label>
               <input
                 type="text"
                 className="form-control col-sm-6"
                 required
+                readOnly
                 id="Location"
                 name="Location"
                 value={formData.Location}
                 onChange={(e) => setFormData({ ...formData, Location: e.target.value })}
               />
             </div>
-            <div className="col-md-3">
-              <label htmlFor="LineName" style={{ marginBottom: '10px' }}>
-                Line Name:
-              </label>
+            <div className="form-group" style={{ width: '30%' }}>
+              <label htmlFor="breakdownStartDate">Breakdown Start Date</label>
+              <input
+                type="Date"
+                name="BreakdownStartDate"
+                className="form-control"
+                value={formData.BreakdownStartDate}
+                onChange={handleChange}
+                required
+                style={{ height: '40px' }}
+              />
+            </div>
+          </div>
+
+          <div
+            className="form-row"
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              gap: '10px',
+              marginBottom: '20px',
+            }}
+          >
+            <div className="form-group" style={{ width: '30%' }}>
+              <label htmlFor="breakdownShiftTime">Breakdown start Time</label>
+              <input
+                type="time"
+                name="breakdownShiftTime"
+                className="form-control"
+                value={formData.BreakdownStartTime}
+                onChange={handleChange}
+                required
+                style={{ height: '40px' }}
+              />
+            </div>
+            <div className="form-group" style={{ width: '30%' }}>
+              <label htmlFor="shift">Shift</label>
+              <input
+                type="text"
+                name="Shift"
+                className="form-control"
+                value={formData.machineType}
+                onChange={handleChange}
+                required
+                style={{ height: '40px' }}
+              />
+            </div>
+            <div className="form-group" style={{ width: '30%' }}>
+              <label htmlFor="lineName">Line Name</label>
               <select
                 className="form-control col-sm-6"
                 required
@@ -469,93 +484,72 @@ export default function BreakDown() {
                 <option value="CAM SHAFT SOFT">CAM SHAFT SOFT</option>
               </select>
             </div>
-            <div className="col-md-3">
+          </div>
+
+          <div
+            className="form-row"
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              gap: '10px',
+              marginBottom: '20px',
+            }}
+          >
+            <div className="form-group" style={{ width: '30%' }}>
               <label htmlFor="operations" style={{ marginBottom: '10px' }}>
                 Operations:
               </label>
               <input
                 type="text"
                 required
-                className="form-control col-sm-6"
+                className="form-control"
                 name="Operations"
                 value={formData.Operations}
                 onChange={handleChange}
                 placeholder=""
               />
             </div>
-            <div className="col-md-3">
-              <label htmlFor="breakdownPhenomen" style={{ marginBottom: '10px' }}>
-                Breakdown Phenomenon:
-              </label>
+            <div className="form-group" style={{ width: '30%' }}>
+              <label htmlFor="breakdownPhenomenon">Breakdown Phenomenon</label>
               <input
                 type="text"
-                required
                 name="BreakdownPhenomenons"
-                className="form-control col-sm-6"
+                className="form-control col-sm-6l"
                 value={formData.BreakdownPhenomenons}
                 onChange={handleChange}
                 placeholder=""
+                required
+                style={{ height: '40px' }}
               />
             </div>
-            <div className="col-md-3">
-              <label style={{ marginBottom: '10px' }}>Select users:</label>
-              <div className="row">
-                {usernos.map((user, index) => (
-                  <React.Fragment key={user.phoneNumber}>
-                    <div className="col-md-6">
-                      <div className="form-check">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          id={`checkbox-${user.phoneNumber}`}
-                          checked={selectedUserNumbers.includes(user.phoneNumber)}
-                          onChange={() => handleUserSelect(user.phoneNumber)}
-                        />
-                        <label
-                          className="form-check-label"
-                          htmlFor={`checkbox-${user.phoneNumber}`}
-                        >
-                          {user.name}
-                        </label>
-                      </div>
-                    </div>
-                    {/* Insert a new row after every two users */}
-                    {index % 2 !== 0 && <div className="w-100"></div>}
-                  </React.Fragment>
-                ))}
-              </div>
-            </div>
-            <div className="col-md-3">
-              <label>Selected Users:</label>
-              <ul>
-                {usernos
-                  .filter((user) => selectedUserNumbers.includes(user.phoneNumber))
-                  .map((user) => (
-                    <li key={user.phoneNumber}>
-                      {user.name} - {user.phoneNumber}
-                    </li>
-                  ))}
-              </ul>
-            </div>
-            <div className="col-xs-12">
-              <button
-                type="submit"
-                className="btn btn-primary"
-                style={{
-                  marginTop: '20px',
-                  fontSize: '16px',
-                  backgroundColor: '#3448db',
-                  marginBottom: '10px',
-                }}
-              >
-                Submit
-              </button>
-            </div>
+            {/* <div className="form-group" style={{ width: '30%' }}>
+              <label htmlFor="breakdownPhenomenon">Breakdown Phenomenon</label>
+              <input
+                type="text"
+                name="breakdownPhenomenon"
+                className="form-control col-sm-6l"
+                value={formData.BreakdownPhenomenons}
+                onChange={handleChange}
+                required
+                style={{ height: '40px' }}
+              />
+            </div> */}
           </div>
-        </form>
-      </div>
 
-      {/* </div> */}
-    </>
+          <button
+            type="submit"
+            className="btn btn-primary"
+            style={{
+              float: 'left',
+              backgroundColor: '#CA226B',
+              marginTop: '10px',
+              alignItems: 'end',
+            }}
+          >
+            Submit
+          </button>
+        </div>
+      </form>
+    </div>
   )
 }

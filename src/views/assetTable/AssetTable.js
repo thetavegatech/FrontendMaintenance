@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { NavLink, useNavigate } from 'react-router-dom'
-import { CButton } from '@coreui/react'
+// import { CButton } from '@coreui/react'
 import { MdDelete } from 'react-icons/md'
 import { FaEdit } from 'react-icons/fa'
 import './asset.css'
+import classNames from 'classnames'
+import { MdDashboard } from 'react-icons/md'
+import { IoIosAddCircleOutline } from 'react-icons/io'
+
+import { Link } from 'react-router-dom'
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table'
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css'
-import { FaPlusCircle, FaChevronUp, FaChevronDown } from 'react-icons/fa'
+import { FaChevronUp, FaChevronDown } from 'react-icons/fa'
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 // import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 
@@ -90,27 +95,70 @@ const AssetTable = () => {
       setExpandedItems([...expandedItems, index])
     }
   }
-
   return (
-    <div className="container">
-      <NavLink to="/assetForm">
-        <FaPlusCircle className="add-asset-icon" />
-      </NavLink>
-      <label htmlFor="searchTask" style={{ marginLeft: '0%' }}>
-        <span role="img" aria-label="search-icon"></span>
-      </label>
-      <input
-        placeholder="Search"
-        style={{
-          marginBottom: '10px',
-          padding: '6px',
-          border: '1px solid ',
-          borderRadius: '6px',
-          transition: 'border-color 0.3s ease-in-out, background-color 0.3s ease-in-out',
-        }}
-        value={searchQuery}
-        onChange={handleSearchChange}
-      />
+    <div className="card shadow-sm mx-auto" style={{ marginTop: '0.5rem' }}>
+      <Link
+        to="/temperature"
+        style={{ position: 'absolute', top: '10px', right: '10px', overflow: 'hidden' }}
+      ></Link>
+
+      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+        <div
+          // className="d-flex justify-content-center align-items-center"
+          className={classNames(
+            'box',
+            'd-flex',
+            'justify-content-center',
+            'align-items-center',
+            'd-flex justify-content-center align-items-center',
+          )}
+        >
+          <MdDashboard
+            className="icon"
+            style={{
+              width: '30px',
+              height: '30px',
+              fill: 'white',
+              marginTop: '1px',
+              marginLeft: '3px',
+            }}
+          />
+        </div>
+        <NavLink to="/assetForm">
+          <IoIosAddCircleOutline
+            className="mb-2"
+            style={{
+              marginBottom: '1.5rem',
+              backgroundColor: 'white',
+              marginLeft: '2rem',
+              borderRadius: '2rem',
+              width: '2rem',
+              height: '2rem',
+              color: 'black',
+              alignContent: 'end',
+              position: '',
+            }}
+          ></IoIosAddCircleOutline>
+        </NavLink>
+        <label htmlFor="searchTask" style={{ marginLeft: 'rem' }}>
+          <span role="img" aria-label="search-icon"></span>
+        </label>
+        <input
+          placeholder="Search"
+          style={{
+            display: 'flex',
+            marginBottom: '10px',
+            padding: '6px',
+            border: '1px solid ',
+            borderRadius: '6px',
+            width: '8rem',
+            transition: 'border-color 0.3s ease-in-out, background-color 0.3s ease-in-out',
+          }}
+          value={searchQuery}
+          onChange={handleSearchChange}
+        />
+      </div>
+
       <div className="table-container">
         <Table className="custom-table">
           <Thead>
@@ -251,8 +299,23 @@ const AssetTable = () => {
           )}
         </div>
       </div>
+      {/* <NavLink to="/assetForm">
+        <IoIosAddCircle
+          className="mb-2"
+          style={{
+            marginBottom: '1.5rem',
+            backgroundColor: 'black',
+            marginLeft: '18rem',
+            borderRadius: '2rem',
+            width: '2rem',
+            height: '2rem',
+            color: 'white',
+            alignContent: 'end',
+            position: '',
+          }}
+        ></IoIosAddCircle>
+      </NavLink> */}
     </div>
   )
 }
-
 export default AssetTable

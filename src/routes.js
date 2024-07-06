@@ -13,6 +13,7 @@ const Breakdown = React.lazy(() => import('./views/breakdown/Breakdown'))
 const breakdownForm = React.lazy(() => import('./views/breakdown/BreakdownForm'))
 const BreakdownHistory = React.lazy(() => import('./views/breakdown/BreakdownHistory'))
 // const editasset = React.lazy(() => import('./views/assetTable/EditAsset'))
+const QrScanner = React.lazy(() => import('./views/QrScanner'))
 const EditAsset = React.lazy(() => import('./views/editasset/EditAsset'))
 const ProductionBD = React.lazy(() => import('./views/production/ProductionBD'))
 const Production = React.lazy(() => import('./views/production/Production'))
@@ -32,7 +33,6 @@ const TBMEdit = React.lazy(() => import('./views/TBMEdit'))
 const CBM = React.lazy(() => import('./views/CBM'))
 const CBMEdit = React.lazy(() => import('./views/CBMEdit'))
 const PM = React.lazy(() => import('./views/PM'))
-const QrScanner = React.lazy(() => import('./views/QrScanner'))
 const CBMForm = React.lazy(() => import('./views/CBMForm'))
 const TBMForm = React.lazy(() => import('./views/TBMForm'))
 const editregisteruser = React.lazy(() => import('./views/pages/register/editregisteruser'))
@@ -54,7 +54,7 @@ const routes = [
 
   { path: '/', exact: true, name: 'Home' },
   { path: '/assetRecord/:id', exact: true, name: 'assetRecord', element: AssetRecord },
-
+  { path: '/qrscanner', name: 'QrScanner', element: QrScanner },
   {
     path: '/dashboard',
     name: 'Dashboard',
@@ -106,7 +106,6 @@ const routes = [
   { path: '/editcbm/:id', name: 'editcbm', element: CBMEdit },
   { path: '/cbmForm', name: 'CBMForm', element: CBMForm },
   { path: '/tbmForm', name: 'TBMForm', element: TBMForm },
-  { path: '/qrscanner', name: 'QrScanner', element: QrScanner },
   { path: '/registeruser', name: 'registerUser', element: registerUser },
   { path: '/editRegisterUser/:id', name: 'editregisteruser', element: editregisteruser },
   { path: '/adminproduction', name: 'AdminProduction', element: AdminProduction },

@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { MdDashboard } from 'react-icons/md'
+import { Link } from 'react-router-dom'
+import '../tasks/Taskform.css'
+import classNames from 'classnames'
 
 const MyFormComponent = () => {
   // Define state variables for form inputs
@@ -136,7 +140,7 @@ const MyFormComponent = () => {
     const formData = new FormData()
     formData.append('file', file)
 
-    fetch('http://192.168.1.17:3000/upload', {
+    fetch('http://192.168.1.17:5000/upload', {
       method: 'POST',
       body: formData,
       headers: {
@@ -187,7 +191,7 @@ const MyFormComponent = () => {
         skipSundays()
         break
       case 'fifteen days':
-        addWeekdays(13)
+        addWeekdays(15)
         break
       case 'monthly':
         newDate.setMonth(newDate.getMonth() + 1)
@@ -212,7 +216,7 @@ const MyFormComponent = () => {
         newDate.setFullYear(newDate.getFullYear() + 1)
         // newDate.setMonth(0)
         // newDate.setDate(1)
-        addWeekdays(32)
+        addWeekdays(52)
         skipSundays()
         break
       default:
@@ -292,138 +296,204 @@ const MyFormComponent = () => {
   }
 
   return (
-    <div
-      className="container"
-      style={{
-        border: '2px solid #ccc',
-        // backgroundColor: 'white',
-        padding: '20px',
-        borderRadius: '10px',
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-        width: '100%',
-      }}
-    >
-      {/* Display success message if it exists */}
-      {successMessage && (
-        <div className="alert alert-success" role="alert" style={{ marginTop: '10px' }}>
-          {successMessage}
+    <div className="card shadow-sm mx-auto">
+      <Link to="/temperature" style={{ position: 'absolute', top: '15px', right: '10px' }}></Link>
+
+      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+        <div
+          // className="d-flex justify-content-center align-items-center"
+          className={classNames(
+            'box',
+            'd-flex',
+            'justify-content-center',
+            'align-items-center',
+            'd-flex justify-content-center align-items-center',
+          )}
+        >
+          <MdDashboard
+            className="icon"
+            style={{
+              width: '30px',
+              height: '30px',
+              fill: 'white',
+              marginTop: '1px',
+              marginLeft: '3px',
+            }}
+          />
         </div>
-      )}
-      {/* <div className="container1" style={{ border: '2px' }}> */}
-      {/* <div className="container"> */}
-      <form onSubmit={handleSubmit} style={{ marginLeft: '%' }}>
-        <div className="row g-3">
-          <div className="col-md-3">
-            <label>Asset Name:</label>
-            <select
-              name="assetName"
-              className="form-control col-sm-6"
-              value={formData.AssetName}
-              onChange={handleAssetNameChange}
-              required
-            >
-              <option value="">Select Asset</option>
-              {assetNames.map((name) => (
-                <option key={name} value={name}>
-                  {name}
-                </option>
-              ))}
-            </select>
+        <h5 style={{ marginLeft: '20px' }}>PM Schedule</h5>
+      </div>
+
+      <form onSubmit={handleSubmit} style={{ marginBottom: '5rem', marginTop: '0px' }}>
+        <div className="form-row1" style={{ marginLeft: '15px' }}>
+          <div
+            className="form-row"
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              gap: 'px',
+              marginBottom: '20px',
+            }}
+          >
+            <div className="form-group" style={{ width: '30%' }}>
+              <label htmlFor="assetName">Asset Name</label>
+              <select
+                name="assetName"
+                className="form-control col-sm-6"
+                value={formData.AssetName}
+                onChange={handleAssetNameChange}
+                required
+              >
+                <option value="">Select Asset</option>
+                {assetNames.map((name) => (
+                  <option key={name} value={name}>
+                    {name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="form-group" style={{ width: '30%' }}>
+              <label htmlFor="Location">Location</label>
+              <input
+                type="text"
+                id="Location"
+                name="Location"
+                className="form-control"
+                value={formData.Location}
+                onChange={handleChange}
+                required
+                style={{ height: '40px' }}
+              />
+            </div>
+            <div className="form-group" style={{ width: '30%' }}>
+              <label htmlFor="Task Name">Task Name</label>
+              <input
+                type="text"
+                name="Task Name"
+                className="form-control"
+                value={formData.TaskName}
+                onChange={handleChange}
+                required
+                style={{ height: '40px' }}
+              />
+            </div>
           </div>
-          <div className="col-md-3">
-            <label htmlFor="Location">Location:</label>
-            <input
-              type="text"
-              name="location"
-              className="form-control"
-              value={formData.Location}
-              onChange={(e) => setFormData({ ...formData, Location: e.target.value })}
-              readOnly
-              required
-            />
+
+          <div
+            className="form-row"
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              gap: '10px',
+              marginBottom: '20px',
+            }}
+          >
+            <div className="form-group" style={{ width: '30%' }}>
+              <label htmlFor="description">Task Description</label>
+              <input
+                type="text"
+                name="description"
+                className="form-control"
+                value={formData.description}
+                onChange={handleChange}
+                required
+                style={{ height: '40px' }}
+              />
+            </div>
+            <div className="form-group" style={{ width: '30%' }}>
+              <label htmlFor="pmScheduleDate">Start From</label>
+              <input
+                type="text"
+                name="pmScheduleDate"
+                className="form-control"
+                value={formData.pmScheduleDate}
+                onChange={handleChange}
+                required
+                style={{ height: '40px' }}
+              />
+            </div>
+            <div className="form-group" style={{ width: '30%' }}>
+              <label htmlFor="NextDateofMaintenance">Next Date of Maintenance </label>
+              <input
+                type="text"
+                name="NextDateofMaintenance"
+                className="form-control"
+                value={formData.NextDateofMaintenance}
+                onChange={handleChange}
+                required
+                style={{ height: '40px' }}
+              />
+            </div>
           </div>
-          <div className="col-md-3">
-            <label htmlFor="taskName">Task Name:</label>
-            <input
-              type="text"
-              required
-              className="form-control col-sm-6"
-              id="TaskName"
-              onChange={(e) => setFormData({ ...formData, TaskName: e.target.value })}
-            />
+
+          <div
+            className="form-row"
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              gap: '10px',
+              marginBottom: '20px',
+            }}
+          >
+            <div className="form-group" style={{ width: '30%' }}>
+              <label htmlFor="scheduledMaintenance">Scheduled Maintenance Dates & Intervals:</label>
+              <select
+                className="form-control col-sm-6"
+                required
+                id="scheduledMaintenance"
+                name="ScheduledMaintenanceDatesandIntervals"
+                onChange={handleFrequencyChange}
+              >
+                <option value="">Select an option</option>
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+                <option value="fifteen Days">Fifteen Days</option>
+                <option value="monthly">Monthly</option>
+                <option value="quarterly">Quarterly</option>
+                <option value="half Year">Half Year</option>
+                <option value="yearly">Yearly</option>
+              </select>
+            </div>
+            <div className="form-group" style={{ width: '30%' }}>
+              <label htmlFor="attachment">Attachment</label>
+              <input
+                type="file"
+                name="attachment"
+                className="form-control"
+                value={formData.attachment}
+                onChange={handleChange}
+                required
+                style={{ height: '40px' }}
+              />
+            </div>
+            <div className="form-group" style={{ width: '30%' }}>
+              <label htmlFor="NextDateofMaintenance"> </label>
+              {/* <input
+                type="text"
+                name="NextDateofMaintenance"
+                className="form-control"
+                value={formData.NextDateofMaintenance}
+                onChange={handleChange}
+                required
+                style={{ height: '40px' }}
+              /> */}
+            </div>
           </div>
-          <div className="col-md-3">
-            <label htmlFor="description" className="form-label">
-              Task Description:
-            </label>
-            <input
-              className="form-control col-sm-6"
-              required
-              id="taskDescription"
-              defaultValue={''}
-              onChange={(e) => setFormData({ ...formData, TaskDescription: e.target.value })}
-            />
-          </div>
-          <div className="col-md-3">
-            <label htmlFor="pmScheduleDate">Start From :</label>
-            <input
-              type="date"
-              required
-              className="form-control col-sm-6"
-              id="pmScheduleDate"
-              onChange={(e) => setFormData({ ...formData, pmScheduleDate: e.target.value })}
-            />
-          </div>
-          <div className="col-md-3">
-            <label htmlFor="scheduledMaintenance">Scheduled Maintenance Dates and Intervals:</label>
-            <select
-              className="form-control col-sm-6"
-              required
-              id="scheduledMaintenance"
-              name="ScheduledMaintenanceDatesandIntervals"
-              onChange={handleFrequencyChange}
-            >
-              <option value="">Select an option</option>
-              <option value="daily">Daily</option>
-              <option value="weekly">Weekly</option>
-              <option value="fifteen Days">Fifteen Days</option>
-              <option value="monthly">Monthly</option>
-              <option value="quarterly">Quarterly</option>
-              <option value="half Year">Half Year</option>
-              <option value="yearly">Yearly</option>
-            </select>
-          </div>
-          <div className="col-md-3">
-            <label htmlFor="NextDateofMaintenance">Next Date of Maintenance :</label>
-            <input
-              type="date"
-              required
-              className="form-control col-sm-6"
-              id="nextScheduleDate"
-              value={formData.nextScheduleDate}
-              readOnly // to make it non-editable
-              onChange={(e) => setFormData({ ...formData, nextScheduleDate: e.target.value })}
-            />
-          </div>
-          <div className="col-md-3">
-            <label htmlFor="attachment">Attachment:</label>
-            <input
-              type="file"
-              id="Image"
-              name="Image"
-              className="form-control col-sm-6"
-              onChange={convertToBse64}
-            ></input>
-          </div>
-          <div className="col-xs-12">
-            <button type="submit" className="btn btn-primary">
-              Submit
-            </button>
-          </div>
+
+          <button
+            type="submit"
+            className="btn btn-primary"
+            style={{
+              float: 'left',
+              backgroundColor: '#CA226B',
+              marginTop: '10px',
+              alignItems: 'end',
+            }}
+          >
+            Submit
+          </button>
         </div>
       </form>
-      {/* </div> */}
-      {/* </div> */}
     </div>
   )
 }

@@ -38,7 +38,7 @@ const Register = () => {
     e.preventDefault()
 
     try {
-      const response = await axios.post('http://localhost:4000/api/users', {
+      const response = await axios.post('https://backendmaintenx.onrender.com/api/users', {
         name: formData.username,
         email: formData.email,
         password: formData.password,

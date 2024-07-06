@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { NavLink } from 'react-router-dom'
-import dlt from '../assetTable/delete.png'
+// import dlt from '../assetTable/delete.png'
 import { CTable, CButton, CTableHead } from '@coreui/react'
 import { FaEdit } from 'react-icons/fa'
 import { MdDelete } from 'react-icons/md'

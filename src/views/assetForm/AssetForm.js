@@ -2,9 +2,14 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { useParams } from 'react-router-dom'
+import { MdDashboard } from 'react-icons/md'
+import { Link } from 'react-router-dom'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import '../assetForm/Assetform.css'
+import classNames from 'classnames'
 
 const MyFormComponent = () => {
-  // Define state variables for form inputs
   const [formData, setFormData] = useState({
     AssetName: '',
     MachineNo: '',
@@ -42,39 +47,20 @@ const MyFormComponent = () => {
     e.preventDefault()
     axios
       .put(`https://backendmaintenx.onrender.com/api/assets/${id}`, {
-        // AssetName,
-        // MachineNo,
-        // SrNo,
-        // MachineType,
-        // Make,
-        // Controller,
-        // PowerRatting,
-        // CapecitySpindle,
-        // AxisTravels,
-        // Ranking,
-        // Location,
-        // InstallationDate,
-        // ManufacturingYear,
         Image,
       })
       .then((result) => {
         console.log(result)
-        // setAssetName('')
         setImage('')
-
-        // Assuming you have a navigate function or useHistory from react-router-dom
-        // Navigate back to the previous page
         navigate(-1)
       })
       .catch((err) => console.log(err))
   }
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault()
 
     try {
-      // Destructure form data from the state
       const {
         AssetName,
         MachineNo,
@@ -87,27 +73,13 @@ const MyFormComponent = () => {
         AxisTravels,
         Ranking,
         Location,
-        // InstallationDate,
         InstallationDate,
         ManufacturingYear,
         Image,
-        // Image,
       } = formData
-      // setImage('')
-      console.log('Asset Name:', AssetName)
-      console.log('MachineNo:', MachineNo)
-      console.log('SrNo:', SrNo)
-      console.log('Location:', Location)
-      console.log('MachineType:', MachineType)
-      console.log('Make:', Make)
-      console.log('Controller:', Controller)
-      console.log('PowerRatting:', PowerRatting)
-      console.log('Image:', Image)
-      console.log('InstallationDate:', InstallationDate)
-      // ... continue with other fields
+
       setSuccessMessage('Form submitted successfully!')
 
-      // Your fetch logic here
       const response = await fetch('https://backendmaintenx.onrender.com/api/assets', {
         method: 'POST',
         headers: {
@@ -117,164 +89,309 @@ const MyFormComponent = () => {
         },
         body: JSON.stringify(formData),
       })
-      navigate(-1)
 
       const data = await response.json()
       console.log('Response from server:', data)
       uploadImage(e, data._id)
-      // navigate(-1)
+      toast.success('Asset created successfully!', { autoClose: 15000 })
 
       setTimeout(() => {
         setSuccessMessage('')
       }, 5000)
     } catch (error) {
       console.error('Error:', error)
-      // navigate(-1)
     }
   }
 
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setFormData({
+      ...formData,
+      [name]: value,
+    })
+  }
+
   return (
-    <div
-      className="container"
-      style={{
-        border: '1px solid #ccc',
-        padding: '20px',
-        // backgroundColor: '#f9f9f9',
-        borderRadius: '10px',
-        boxShadow: '2px 4px 4px rgba(0, 0, 0, 0.1)',
-        width: '100%',
-      }}
-    >
-      {/* Display success message if it exists */}
+    <div className="card shadow-sm mx-auto">
+      <Link to="/temperature" style={{ position: 'absolute', top: '15px', right: '10px' }}></Link>
+
+      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+        <div
+          className={classNames(
+            'box',
+            'd-flex',
+            'justify-content-center',
+            'align-items-center',
+            'd-flex justify-content-center align-items-center',
+          )}
+        >
+          <MdDashboard
+            className="icon"
+            style={{
+              width: '30px',
+              height: '30px',
+              fill: 'white',
+              marginTop: '1px',
+              marginLeft: '3px',
+            }}
+          />
+        </div>
+        <h5 style={{ marginLeft: '25px' }}>Create Assets Record</h5>
+      </div>
       {successMessage && (
         <div className="alert alert-success" role="alert" style={{ marginTop: '10px' }}>
           {successMessage}
         </div>
       )}
-      <form onSubmit={handleSubmit} style={{ margin: '3%' }}>
-        <div className="row g-3">
-          {[
-            { label: 'Machine Name', id: 'assetName', type: 'text', valueKey: 'AssetName' },
-            { label: 'Machine No', id: 'MachineNo', type: 'number', valueKey: 'MachineNo' },
-            { label: 'Sr No', id: 'srno', type: 'number', valueKey: 'SrNo' },
-            { label: 'Machine Type', id: 'MachineType', type: 'text', valueKey: 'MachineType' },
-            { label: 'Model', id: 'Model', type: 'text', valueKey: 'Model' },
-            { label: 'Controller', id: 'controller', type: 'text', valueKey: 'Controller' },
-            { label: 'Power Rating', id: 'powerRatting', type: 'text', valueKey: 'PowerRatting' },
-            {
-              label: 'Capacity Spindle',
-              id: 'capecitySpindle',
-              type: 'text',
-              valueKey: 'CapecitySpindle',
-            },
-            { label: 'Axis Travels', id: 'axistravels', type: 'text', valueKey: 'AxisTravels' },
-          ].map(({ label, id, type, valueKey }) => (
-            <div className="col-md-3" key={id} style={{ marginBottom: '15px' }}>
-              <label htmlFor={id} style={{ marginBottom: '5px', display: 'block' }}>
-                {label}:
-              </label>
+      <form onSubmit={handleSubmit} style={{ marginBottom: '5rem', marginTop: '0px' }}>
+        <div className="form-row1" style={{ marginLeft: '15px' }}>
+          <div
+            className="form-row"
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              gap: 'px',
+              marginBottom: '20px',
+            }}
+          >
+            <div className="form-group" style={{ width: '30%' }}>
+              <label htmlFor="machineName">Machine Name</label>
               <input
-                required
-                type={type}
+                type="text"
+                name="machineName"
                 className="form-control"
-                id={id}
-                onChange={(e) => setFormData({ ...formData, [valueKey]: e.target.value })}
+                value={formData.AssetName}
+                onChange={(e) => setFormData({ ...formData, AssetName: e.target.value })}
+                required
+                style={{ height: '40px' }}
               />
             </div>
-          ))}
-          <div className="col-md-3" style={{ marginBottom: '15px' }}>
-            <label htmlFor="assetLocation" className="form-label">
-              Location:
-            </label>
-            <select
-              className="form-control"
-              required
-              id="assetLocation"
-              name="assetLocation"
-              onChange={(e) => setFormData({ ...formData, Location: e.target.value })}
-            >
-              <option value="">Select an option</option>
-              <option value="Plant 1">Plant 1</option>
-              <option value="Plant 2">Plant 2</option>
-              <option value="Plant 3">Plant 3</option>
-              <option value="Plant 4">Plant 4</option>
-            </select>
+            <div className="form-group" style={{ width: '30%' }}>
+              <label htmlFor="machineNo">Machine No</label>
+              <input
+                type="text"
+                name="machineNo"
+                className="form-control"
+                value={formData.MachineNo}
+                onChange={(e) => setFormData({ ...formData, MachineNo: e.target.value })}
+                required
+                style={{ height: '40px' }}
+              />
+            </div>
+            <div className="form-group" style={{ width: '30%' }}>
+              <label htmlFor="srNo">Sr No</label>
+              <input
+                type="text"
+                name="srNo"
+                className="form-control"
+                value={formData.SrNo}
+                onChange={(e) => setFormData({ ...formData, SrNo: e.target.value })}
+                required
+                style={{ height: '40px' }}
+              />
+            </div>
           </div>
-          <div className="col-md-3" style={{ marginBottom: '15px' }}>
-            <label htmlFor="ranking" className="form-label">
-              Ranking:
-            </label>
-            <select
-              className="form-control"
-              required
-              id="ranking"
-              name="ranking"
-              onChange={(e) => setFormData({ ...formData, Ranking: e.target.value })}
-            >
-              <option value="">Select an option</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-            </select>
+
+          <div
+            className="form-row"
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              gap: '10px',
+              marginBottom: '20px',
+            }}
+          >
+            <div className="form-group" style={{ width: '30%' }}>
+              <label htmlFor="machineType">Machine Type</label>
+              <input
+                type="text"
+                name="machineType"
+                className="form-control"
+                value={formData.MachineType}
+                onChange={(e) => setFormData({ ...formData, MachineType: e.target.value })}
+                required
+                style={{ height: '40px' }}
+              />
+            </div>
+            <div className="form-group" style={{ width: '30%' }}>
+              <label htmlFor="model">Model</label>
+              <input
+                type="text"
+                name="model"
+                className="form-control"
+                value={formData.Model}
+                onChange={(e) => setFormData({ ...formData, Model: e.target.value })}
+                required
+                style={{ height: '40px' }}
+              />
+            </div>
+            <div className="form-group" style={{ width: '30%' }}>
+              <label htmlFor="controller">Controller</label>
+              <input
+                type="text"
+                name="controller"
+                className="form-control"
+                value={formData.Controller}
+                onChange={(e) => setFormData({ ...formData, Controller: e.target.value })}
+                required
+                style={{ height: '40px' }}
+              />
+            </div>
           </div>
-          <div className="col-md-3" style={{ marginBottom: '15px' }}>
-            <label htmlFor="installationDate" style={{ marginBottom: '5px', display: 'block' }}>
-              Installation Date:
-            </label>
-            <input
-              type="date"
-              className="form-control"
-              id="InstallationDate"
-              name="InstallationDate"
-              onChange={(e) => setFormData({ ...formData, InstallationDate: e.target.value })}
-            />
+
+          <div
+            className="form-row"
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              gap: '10px',
+              marginBottom: '20px',
+            }}
+          >
+            <div className="form-group" style={{ width: '30%' }}>
+              <label htmlFor="powerRatting">Power Rating</label>
+              <input
+                type="text"
+                name="powerRatting"
+                className="form-control"
+                value={formData.PowerRatting}
+                onChange={(e) => setFormData({ ...formData, PowerRatting: e.target.value })}
+                required
+                style={{ height: '40px' }}
+              />
+            </div>
+            <div className="form-group" style={{ width: '30%' }}>
+              <label htmlFor="capacitySpindle">Capacity Spindle</label>
+              <input
+                type="text"
+                name="capacitySpindle"
+                className="form-control"
+                value={formData.CapecitySpindle}
+                onChange={(e) => setFormData({ ...formData, CapecitySpindle: e.target.value })}
+                required
+                style={{ height: '40px' }}
+              />
+            </div>
+            <div className="form-group" style={{ width: '30%' }}>
+              <label htmlFor="axisTravels">Axis Travels</label>
+              <input
+                type="text"
+                name="axisTravels"
+                className="form-control"
+                value={formData.AxisTravels}
+                onChange={(e) => setFormData({ ...formData, AxisTravels: e.target.value })}
+                required
+                style={{ height: '40px' }}
+              />
+            </div>
           </div>
-          <div className="col-md-3" style={{ marginBottom: '15px' }}>
-            <label htmlFor="manufacturingyear" style={{ marginBottom: '5px', display: 'block' }}>
-              Manufacturing Year:
-            </label>
-            <input
-              required
-              type="number"
-              className="form-control"
-              id="manufacturingyear"
-              onChange={(e) => setFormData({ ...formData, ManufacturingYear: e.target.value })}
-            />
+
+          <div
+            className="form-row"
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              gap: '10px',
+              marginBottom: '20px',
+            }}
+          >
+            <div className="form-group" style={{ width: '30%' }}>
+              <label htmlFor="location">Location</label>
+              <select
+                className="form-control"
+                required
+                id="assetLocation"
+                name="assetLocation"
+                onChange={(e) => setFormData({ ...formData, Location: e.target.value })}
+              >
+                <option value="">Select an option</option>
+                <option value="Plant 1">Plant 1</option>
+                <option value="Plant 2">Plant 2</option>
+                <option value="Plant 3">Plant 3</option>
+                <option value="Plant 4">Plant 4</option>
+              </select>
+            </div>
+            <div className="form-group" style={{ width: '30%' }}>
+              <label htmlFor="ranking">Ranking</label>
+              <select
+                className="form-control"
+                required
+                id="ranking"
+                name="ranking"
+                onChange={(e) => setFormData({ ...formData, Ranking: e.target.value })}
+              >
+                <option value="">Select an option</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+              </select>
+            </div>
+            <div className="form-group" style={{ width: '30%' }}>
+              <label htmlFor="installationDate">Installation Date</label>
+              <input
+                type="date"
+                name="installationDate"
+                className="form-control"
+                value={formData.InstallationDate}
+                onChange={(e) => setFormData({ ...formData, InstallationDate: e.target.value })}
+                style={{ height: '40px' }}
+              />
+            </div>
           </div>
-          <div className="col-md-3" style={{ marginBottom: '15px' }}>
-            <label htmlFor="attachment">Attachment:</label>
-            <input
-              type="file"
-              id="Image"
-              name="Image"
-              className="form-control"
-              onChange={convertToBse64}
-            />
+
+          <div
+            className="form-row"
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              gap: '10px',
+              marginBottom: '20px',
+            }}
+          >
+            <div className="form-group" style={{ width: '30%' }}>
+              <label htmlFor="manufacturingYear">Manufacturing Year</label>
+              <input
+                type="text"
+                name="manufacturingYear"
+                className="form-control"
+                value={formData.ManufacturingYear}
+                onChange={(e) => setFormData({ ...formData, ManufacturingYear: e.target.value })}
+                required
+                style={{ height: '40px' }}
+              />
+            </div>
+            <div className="form-group" style={{ width: '30%' }}>
+              <label htmlFor="attachment">Attachment</label>
+              <input
+                type="file"
+                name="attachment"
+                className="form-control"
+                value={formData.attachment}
+                onChange={(e) => setFormData({ ...formData, attachment: e.target.value })}
+                // required
+                style={{ height: '40px' }}
+              />
+            </div>
           </div>
-          <div className="col-12">
-            <button
-              type="submit"
-              className="btn btn-primary"
-              style={{
-                marginTop: '10px',
-                fontSize: '16px',
-                backgroundColor: '#000026',
-                // transition: 'background-color 0.3s',
-                cursor: 'pointer',
-              }}
-              // onMouseOver={(e) => (e.target.style.backgroundColor = '#009bff')}
-              // onMouseOut={(e) => (e.target.style.backgroundColor = '#007bff')}
-            >
-              Submit
-            </button>
-          </div>
+
+          <button
+            type="submit"
+            className="btn btn-primary"
+            style={{
+              float: 'left',
+              backgroundColor: '#CA226B',
+              marginTop: '10px',
+              alignItems: 'end',
+            }}
+          >
+            Submit
+          </button>
         </div>
       </form>
+      <ToastContainer />
     </div>
-
-    // </div>
   )
 }
 

@@ -2,17 +2,25 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { NavLink } from 'react-router-dom'
-import { FaEdit, FaPlusCircle, FaChevronUp, FaChevronDown } from 'react-icons/fa'
+// import dlt from './delete.png'
+import { MdDashboard } from 'react-icons/md'
+import { Link } from 'react-router-dom'
+import { IoIosAddCircle } from 'react-icons/io'
+import { CButton } from '@coreui/react'
+import classNames from 'classnames'
+import { FaEdit } from 'react-icons/fa'
 import { MdDelete } from 'react-icons/md'
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table'
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css'
-import './asset.css'
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+// import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
+// import '../asset.css'
+import { FaChevronUp, FaChevronDown } from 'react-icons/fa'
 
 export default function Users() {
   const [usernos, setUsers] = useState([])
   const [message, setMessage] = useState('')
   const [loading, setLoading] = useState(true)
-  const [expandedItems, setExpandedItems] = useState([])
 
   const navigate = useNavigate()
 
@@ -22,7 +30,6 @@ export default function Users() {
       .get('https://backendmaintenx.onrender.com/getuser')
       .then((response) => {
         setUsers(response.data)
-        setLoading(false)
         console.log(response.data)
       })
       .catch((error) => {
@@ -47,6 +54,8 @@ export default function Users() {
     }
   }
 
+  const [expandedItems, setExpandedItems] = useState([])
+
   const toggleExpand = (index) => {
     if (expandedItems.includes(index)) {
       setExpandedItems(expandedItems.filter((item) => item !== index))
@@ -56,19 +65,61 @@ export default function Users() {
   }
 
   return (
-    <div className="container">
-      <NavLink to="/register">
-        <FaPlusCircle className="add-asset-icon" />
-      </NavLink>
+    <div className="card shadow-sm mx-auto">
+      <Link to="/temperature" style={{ position: 'absolute', top: '15px', right: '10px' }}></Link>
+
+      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+        <div
+          // className="d-flex justify-content-center align-items-center"
+          className={classNames(
+            'box',
+            'd-flex',
+            'justify-content-center',
+            'align-items-center',
+            'd-flex justify-content-center align-items-center',
+          )}
+        >
+          <MdDashboard
+            className="icon"
+            style={{
+              width: '30px',
+              height: '30px',
+              fill: 'white',
+              marginTop: '1px',
+              marginLeft: '3px',
+            }}
+          />
+        </div>
+        <NavLink to="/register">
+          <IoIosAddCircle
+            className="mb-2"
+            style={{
+              marginBottom: '1.5rem',
+              backgroundColor: 'black',
+              marginLeft: '1rem',
+              borderRadius: '2rem',
+              width: '2rem',
+              height: '2rem',
+              color: 'white',
+              alignContent: 'end',
+              position: '',
+            }}
+          ></IoIosAddCircle>
+        </NavLink>
+        {/* <h5 style={{ marginLeft: '20px' }}>Create TBM Record</h5> */}
+      </div>
+      {/* <div className="container"> */}
       <div className="table-container">
         <Table className="custom-table">
           <Thead color="dark">
             <Tr>
               <Th>Name</Th>
               <Th style={{ textAlign: 'center' }}>Role</Th>
+              {/* <th style={{ textAlign: 'center' }}>Role</th> */}
               <Th style={{ textAlign: 'center' }}>Email</Th>
               <Th style={{ textAlign: 'center' }}>Phone No</Th>
               <Th style={{ textAlign: 'center' }}>Plant</Th>
+              {/* <th style={{ textAlign: 'center' }}>Validation</th> */}
               <Th style={{ textAlign: 'center' }}>Edit</Th>
               <Th style={{ textAlign: 'center' }}>Delete</Th>
             </Tr>
@@ -81,6 +132,7 @@ export default function Users() {
                 <Td style={{ textAlign: 'center' }}>{user.email}</Td>
                 <Td style={{ textAlign: 'center' }}>{user.mobileNO}</Td>
                 <Td style={{ textAlign: 'center' }}>{user.plant}</Td>
+                {/* <td style={{ textAlign: 'center' }}>{user.Validation}</td> */}
                 <Td style={{ textAlign: 'center' }}>
                   <NavLink to={`/editRegisterUser/${user._id}`} style={{ color: '#000080' }}>
                     <FaEdit />
@@ -93,6 +145,7 @@ export default function Users() {
                     style={{ color: 'red' }}
                   >
                     <MdDelete />
+                    {/* <img src={dlt} alt="" width={30} height={25} /> */}
                   </button>
                 </Td>
               </Tr>
@@ -130,28 +183,32 @@ export default function Users() {
                     <div className="table-like">
                       <div className="table-row">
                         <div className="table-cell">
-                          <strong>email:</strong>
+                          <strong>tbmScheduleDate:</strong>
                         </div>
-                        <div className="table-cell">{user.email}</div>
+                        <div className="table-cell">
+                          {new Date(user.tbmScheduleDate).toLocaleDateString()}
+                        </div>
                       </div>
                       <div className="table-row">
                         <div className="table-cell">
-                          <strong>mobileNO:</strong>
+                          <strong>tbmFrequency:</strong>
                         </div>
-                        <div className="table-cell">{user.mobileNO}</div>
+                        <div className="table-cell">{user.tbmFrequency}</div>
                       </div>
                       <div className="table-row">
                         <div className="table-cell">
-                          <strong>plant:</strong>
+                          <strong>nextTbmDate:</strong>
                         </div>
-                        <div className="table-cell">{user.plant}</div>
+                        <div className="table-cell">
+                          {new Date(user.nextTbmDate).toLocaleDateString()}
+                        </div>
                       </div>
-                      {/* <div className="table-row">
+                      <div className="table-row">
                         <div className="table-cell">
                           <strong>status:</strong>
                         </div>
                         <div className="table-cell">{user.status}</div>
-                      </div> */}
+                      </div>
                     </div>
                   </div>
                   <div className="actions">
@@ -172,6 +229,7 @@ export default function Users() {
           )}
         </div>
       </div>
+      {/* </div> */}
     </div>
   )
 }

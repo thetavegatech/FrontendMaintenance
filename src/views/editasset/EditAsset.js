@@ -3,7 +3,13 @@ import React, { useEffect, useState } from 'react'
 // import { Form, FormGroup, Label, Input, Button, Container, Col } from 'reactstrap';
 import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import { NavLink } from 'react-router-dom'
+import '../form.css'
+// import { NavLink } from 'react-router-dom'
+import { MdDashboard } from 'react-icons/md'
+// import { IoIosAddCircleOutline } from 'react-icons/io'
+
+// import { Link } from 'react-router-dom'
+import classNames from 'classnames'
 
 export default function EditForm() {
   const { id } = useParams()
@@ -139,239 +145,284 @@ export default function EditForm() {
   }
 
   return (
-    <>
-      <div
-        className="container"
-        style={{
-          border: '1px solid #ccc',
-          padding: '20px',
-          // backgroundColor: '#f9f9f9',
-          borderRadius: '10px',
-          boxShadow: '2px 4px 4px rgba(0, 0, 0, 0.1)',
-          width: '100%',
-        }}
-      >
-        <div>
-          <form onSubmit={Update}>
-            <div className="row g-2">
-              <div className="col-md-3">
-                <label htmlFor="assetName" style={{ marginBottom: '10px' }}>
-                  Asset Name:
-                </label>
+    <div className="container-fluid card shadow-sm mx-auto" style={{ marginTop: '0.5rem' }}>
+      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+        <div
+          // className="d-flex justify-content-center align-items-center"
+          className={classNames(
+            'box',
+            'd-flex',
+            'justify-content-center',
+            'align-items-center',
+            'd-flex justify-content-center align-items-center',
+          )}
+        >
+          <MdDashboard
+            className="icon"
+            style={{
+              width: '30px',
+              height: '30px',
+              fill: 'white',
+              marginTop: '1px',
+              marginLeft: '3px',
+            }}
+          />
+        </div>
+        {/* <NavLink to="/assetForm">
+          <IoIosAddCircleOutline
+            className="mb-2"
+            style={{
+              marginBottom: '1.5rem',
+              backgroundColor: 'white',
+              marginLeft: '2rem',
+              borderRadius: '2rem',
+              width: '2rem',
+              height: '2rem',
+              color: 'black',
+              alignContent: 'end',
+              position: '',
+            }}
+          ></IoIosAddCircleOutline>
+        </NavLink> */}
+      </div>
+
+      <div className="table-container">
+        <form onSubmit={Update} style={{ marginBottom: '5rem', marginTop: '0px' }}>
+          <div className="form-row1" style={{ marginLeft: '30px' }}>
+            <div
+              className="form-row"
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                gap: '10px',
+                marginBottom: '20px',
+              }}
+            >
+              <div className="form-group" style={{ width: '30%' }}>
+                <label htmlFor="assetName">Asset Name:</label>
                 <input
                   type="text"
                   required
-                  className="form-control col-sm-6"
+                  className="form-control"
                   name="AssetName"
                   id="assetName"
-                  style={{ marginBottom: '10px' }}
-                  // style={{ width: '80%' }}
                   value={AssetName}
                   onChange={(e) => setAssetName(e.target.value)}
+                  style={{ height: '40px' }}
                 />
               </div>
-              <div className="col-md-3">
-                <label htmlFor="MachineNo" style={{ marginBottom: '10px' }}>
-                  MachineNo:
-                </label>
+              <div className="form-group" style={{ width: '30%' }}>
+                <label htmlFor="MachineNo">Machine No:</label>
                 <input
                   type="text"
                   required
-                  style={{ marginBottom: '10px' }}
-                  className="form-control col-sm-5"
+                  className="form-control"
                   id="MachineNo"
                   name="MachineNo"
                   value={MachineNo}
                   onChange={(e) => setMachineNo(e.target.value)}
+                  style={{ height: '40px' }}
                 />
               </div>
-              {/* </div> */}
-              {/* </form> */}
-              {/* </div> */}
-              {/* <form onSubmit={Update}> */}
-              {/* <div className="row g-2"> */}
-              <div className="col-md-3">
-                <label htmlFor="SrNo" style={{ marginBottom: '10px' }}>
-                  SrNo:
-                </label>
+              <div className="form-group" style={{ width: '30%' }}>
+                <label htmlFor="SrNo">Sr No:</label>
                 <input
-                  className="form-control col-sm-4"
+                  type="text"
                   required
-                  style={{ marginBottom: '10px' }}
+                  className="form-control"
                   id="SrNo"
                   name="SrNo"
                   value={SrNo}
                   onChange={(e) => setSrNo(e.target.value)}
+                  style={{ height: '40px' }}
                 />
-                {/* </input> */}
               </div>
-              <div className="col-md-3">
-                <label htmlFor="MachineType" style={{ marginBottom: '10px' }}>
-                  MachineType:
-                </label>
+            </div>
+
+            <div
+              className="form-row"
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                gap: '10px',
+                marginBottom: '20px',
+              }}
+            >
+              <div className="form-group" style={{ width: '30%' }}>
+                <label htmlFor="MachineType">Machine Type:</label>
                 <input
                   type="text"
                   required
-                  style={{ marginBottom: '10px' }}
-                  className="form-control col-sm-4"
+                  className="form-control"
                   id="MachineType"
                   name="MachineType"
                   value={MachineType}
                   onChange={(e) => setMachineType(e.target.value)}
+                  style={{ height: '40px' }}
                 />
               </div>
-              <div className="col-md-3">
-                <label htmlFor="assetLocation" className="form-label">
-                  Location:
-                </label>
+              <div className="form-group" style={{ width: '30%' }}>
+                <label htmlFor="Controller">Controller:</label>
                 <input
-                  className="form-control col-sm-6"
+                  type="text"
                   required
-                  id="assetLocation"
-                  name="Location"
-                  value={Location}
-                  style={{ marginBottom: '10px' }}
-                  onChange={(e) => setLocation(e.target.value)}
-                />
-              </div>
-              <div className="col-md-3">
-                <label htmlFor="Controller" style={{ marginBottom: '10px' }}>
-                  Controller:
-                </label>
-                <textarea
-                  className="form-control col-sm-4"
-                  required
+                  className="form-control"
                   id="Controller"
-                  style={{ marginBottom: '10px' }}
-                  defaultValue={''}
                   name="Controller"
                   value={Controller}
                   onChange={(e) => setController(e.target.value)}
+                  style={{ height: '40px' }}
                 />
               </div>
-              <div className="col-md-3">
-                <label htmlFor="PowerRatting" style={{ marginBottom: '10px' }}>
-                  PowerRatting:
-                </label>
-                <textarea
-                  className="form-control col-sm-4"
+              <div className="form-group" style={{ width: '30%' }}>
+                <label htmlFor="PowerRatting">Power Rating:</label>
+                <input
+                  type="text"
                   required
-                  style={{ marginBottom: '10px' }}
+                  className="form-control"
                   id="PowerRatting"
-                  defaultValue={''}
                   name="PowerRatting"
                   value={PowerRatting}
                   onChange={(e) => setPowerRatting(e.target.value)}
+                  style={{ height: '40px' }}
                 />
               </div>
-              <div className="col-md-3">
-                <label htmlFor="CapecitySpindle" style={{ marginBottom: '10px' }}>
-                  CapecitySpindle:
-                </label>
-                <textarea
-                  className="form-control col-sm-4"
+            </div>
+
+            <div
+              className="form-row"
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                gap: '10px',
+                marginBottom: '20px',
+              }}
+            >
+              <div className="form-group" style={{ width: '30%' }}>
+                <label htmlFor="CapecitySpindle">Capacity Spindle:</label>
+                <input
+                  type="text"
                   required
-                  style={{ marginBottom: '10px' }}
+                  className="form-control"
                   id="CapecitySpindle"
-                  defaultValue={''}
                   name="CapecitySpindle"
                   value={CapecitySpindle}
                   onChange={(e) => setCapecitySpindle(e.target.value)}
+                  style={{ height: '40px' }}
                 />
               </div>
-              <div className="col-md-3">
-                <label htmlFor="AxisTravels" style={{ marginBottom: '10px' }}>
-                  AxisTravels:
-                </label>
-                <textarea
-                  className="form-control col-sm-4"
+              <div className="form-group" style={{ width: '30%' }}>
+                <label htmlFor="AxisTravels">Axis Travels:</label>
+                <input
+                  type="text"
                   required
-                  style={{ marginBottom: '10px' }}
+                  className="form-control"
                   id="AxisTravels"
-                  defaultValue={''}
                   name="AxisTravels"
                   value={AxisTravels}
                   onChange={(e) => setAxisTravels(e.target.value)}
+                  style={{ height: '40px' }}
                 />
               </div>
-              <div className="col-md-3">
-                <label htmlFor="Ranking" style={{ marginBottom: '10px' }}>
-                  Ranking:
-                </label>
-                <textarea
-                  className="form-control col-sm-4"
+              <div className="form-group" style={{ width: '30%' }}>
+                <label htmlFor="Ranking">Ranking:</label>
+                <input
+                  type="text"
                   required
-                  style={{ marginBottom: '10px' }}
+                  className="form-control"
                   id="Ranking"
-                  defaultValue={''}
                   name="Ranking"
                   value={Ranking}
                   onChange={(e) => setRanking(e.target.value)}
+                  style={{ height: '40px' }}
                 />
               </div>
-              <div className="col-md-3">
-                <label htmlFor="InstallationDate" style={{ marginBottom: '10px' }}>
-                  InstallationDate:
-                </label>
+            </div>
+
+            <div
+              className="form-row"
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                gap: '10px',
+                marginBottom: '20px',
+              }}
+            >
+              <div className="form-group" style={{ width: '30%' }}>
+                <label htmlFor="assetLocation">Location:</label>
                 <input
-                  className="form-control col-sm-4"
+                  type="text"
+                  required
+                  className="form-control"
+                  id="assetLocation"
+                  name="Location"
+                  value={Location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  style={{ height: '40px' }}
+                />
+              </div>
+              <div className="form-group" style={{ width: '30%' }}>
+                <label htmlFor="InstallationDate">Installation Date:</label>
+                <input
                   type="date"
-                  // required
-                  style={{ marginBottom: '10px' }}
+                  className="form-control"
                   id="InstallationDate"
-                  defaultValue={''}
                   name="InstallationDate"
                   value={InstallationDate}
                   onChange={(e) => setInstallationDate(e.target.value)}
+                  style={{ height: '40px' }}
                 />
               </div>
-              <div className="col-md-3">
-                <label htmlFor="manufacturingyear" style={{ marginBottom: '10px' }}>
-                  Manufacturing Year:
-                </label>
+              <div className="form-group" style={{ width: '30%' }}>
+                <label htmlFor="ManufacturingYear">Manufacturing Year:</label>
                 <input
+                  type="text"
                   required
-                  type="year"
-                  className="form-control col-sm-4"
+                  className="form-control"
                   id="ManufacturingYear"
-                  defaultValue={''}
                   name="ManufacturingYear"
                   value={ManufacturingYear}
                   onChange={(e) => setManufacturingYear(e.target.value)}
+                  style={{ height: '40px' }}
                 />
               </div>
-              <div className="col-md-3">
+            </div>
+
+            <div
+              className="form-row"
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                gap: '10px',
+                marginBottom: '20px',
+              }}
+            >
+              <div className="form-group" style={{ width: '30%' }}>
                 <label htmlFor="attachment">Attachment:</label>
                 <input
                   type="file"
-                  className="form-control col-sm-4"
+                  className="form-control"
                   onChange={convertToBse64}
-                ></input>
+                  style={{ height: '40px' }}
+                />
               </div>
             </div>
-            <div className="col-12">
-              <button
-                type="submit"
-                className="btn btn-primary"
-                style={{
-                  marginTop: '10px',
-                  fontSize: '16px',
-                  backgroundColor: '#000026',
-                  // transition: 'background-color 0.3s',
-                  cursor: 'pointer',
-                }}
-                // onMouseOver={(e) => (e.target.style.backgroundColor = '#009bff')}
-                // onMouseOut={(e) => (e.target.style.backgroundColor = '#007bff')}
-              >
-                Submit
-              </button>
-            </div>
-            {/* </div> */}
-          </form>
-          {/* </div> */}
-        </div>
+
+            <button
+              type="submit"
+              className="btn btn-primary"
+              style={{
+                float: 'left',
+                backgroundColor: '#CA226B',
+                marginTop: '10px',
+                alignItems: 'end',
+              }}
+            >
+              Save
+            </button>
+          </div>
+        </form>
       </div>
-      {/* </div> */}
-    </>
+    </div>
   )
 }

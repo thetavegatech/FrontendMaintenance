@@ -822,6 +822,64 @@ const Breakdown = ({ assetName }) => {
                     placeholder=""
                   />
                 </div>
+                {/* <div className="row lg-2">
+                  <div className="col-md-6" style={{ marginTop: '2vh', overflowY: 'auto' }}>
+                    <label style={{ marginBottom: '10px' }}>Select users:</label>
+                    <div className="row">
+                      {usernos.map((user, index) => (
+                        <React.Fragment key={user.phoneNumber}>
+                          <div className="col-md-6">
+                            <div className="form-check">
+                              <input
+                                className="form-check-input"
+                                type="checkbox"
+                                id={`checkbox-${user.phoneNumber}`}
+                                // checked={selectedUserNumbers.includes(user.phoneNumber)}
+                                // onChange={() => handleUserSelect(user.phoneNumber)}
+                              />
+                              <label
+                                className="form-check-label"
+                                htmlFor={`checkbox-${user.phoneNumber}`}
+                              >
+                                {user.name}
+                              </label>
+                            </div>
+                          </div>
+                          {index % 2 !== 0 && <div className="w-100"></div>}
+                        </React.Fragment>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="col-md-6" style={{ marginTop: '2vh' }}>
+                    <label>Selected Users:</label>
+                    <ul>
+                       {usernos
+                        .filter((user) => selectedUserNumbers.includes(user.phoneNumber))
+                        .map((user) => (
+                          <li key={user.phoneNumber}>
+                            {user.name} - {user.phoneNumber}
+                          </li>
+                        ))} 
+                    </ul>
+                  </div>
+
+                  <div className="col-xs-12">
+                    <button
+                      type="submit"
+                      onClick={handleButtonClick}
+                      className="btn btn-primary"
+                      style={{
+                        marginTop: '20px',
+                        fontSize: '16px',
+                        backgroundColor: '#3448db',
+                        marginBottom: '10px',
+                      }}
+                    >
+                      Submit
+                    </button>
+                  </div>
+                </div> */}
                 {/* </div> */}
                 <div className="col-xs-12">
                   <button

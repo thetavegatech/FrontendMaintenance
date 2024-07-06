@@ -3,9 +3,14 @@ import axios from 'axios'
 import { addDays, addWeeks, addMonths } from 'date-fns'
 import { useParams, useNavigate } from 'react-router-dom'
 import './form.css'
+import { MdDashboard } from 'react-icons/md'
+
+import { Link } from 'react-router-dom'
+import classNames from 'classnames'
 
 const CBMEdit = () => {
   const [formData, setFormData] = useState({
+    assets: '',
     assetName: '',
     location: '',
     assetType: '',
@@ -117,114 +122,146 @@ const CBMEdit = () => {
   }
 
   return (
-    <div
-      className="container"
-      style={{
-        border: '1px solid #ccc',
-        padding: '20px',
-        backgroundColor: '#f9f9f9',
-        borderRadius: '10px',
-        boxShadow: '2px 4px 4px rgba(0, 0, 0, 0.1)',
-        width: '100%',
-      }}
-    >
-      <h4>Edit CBM Record</h4>
-      <form onSubmit={handleSubmit}>
-        <div className="row g-3">
-          <div className="col-md-3">
-            <label>Asset Name:</label>
-            <input
-              name="assetName"
-              className="form-control col-sm-6"
-              value={formData.assetName}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="col-md-3">
-            <label>Location:</label>
-            <input
-              type="text"
-              name="location"
-              className="form-control col-sm-4"
-              value={formData.location}
-              onChange={handleChange}
-              readOnly
-              required
-            />
-          </div>
-          <div className="col-md-3">
-            <label>CBM Schedule Date:</label>
-            <input
-              type="date"
-              name="cbmScheduleDate"
-              className="form-control col-sm-6"
-              value={formData.cbmScheduleDate}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="col-md-3">
-            <label>CBM Frequency:</label>
-            <select
-              type="text"
-              name="cbmFrequency"
-              className="form-control col-sm-6"
-              value={formData.cbmFrequency}
-              onChange={handleChange}
-            >
-              <option value="daily">Daily</option>
-              <option value="weekly">Weekly</option>
-              <option value="fifteen days">Fifteen Days</option>
-              <option value="monthly">Monthly</option>
-              <option value="quarterly">Quarterly</option>
-              <option value="half year">Half Year</option>
-              <option value="yearly">Yearly</option>
-            </select>
-          </div>
-          <div className="col-md-3">
-            <label>Next CBM Date:</label>
-            <input
-              type="date"
-              name="nextCbmDate"
-              className="form-control col-sm-6"
-              value={formData.nextCbmDate}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="col-md-3">
-            <label htmlFor="status">Status</label>
-            <select
-              className="form-control col-sm-6"
-              required
-              id="status"
-              name="status"
-              value={formData.status}
-              onChange={handleChange}
-            >
-              <option value="Pending">Pending</option>
-              <option value="Completed">Completed</option>
-            </select>
-          </div>
+    <div className="card shadow-sm mx-auto">
+      <Link to="/temperature" style={{ position: 'absolute', top: '15px', right: '10px' }}></Link>
+
+      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+        <div
+          className={classNames(
+            'box',
+            'd-flex',
+            'justify-content-center',
+            'align-items-center',
+            'd-flex justify-content-center align-items-center',
+          )}
+        >
+          <MdDashboard
+            className="icon"
+            style={{
+              width: '30px',
+              height: '30px',
+              fill: 'white',
+              marginTop: '1px',
+              marginLeft: '3px',
+            }}
+          />
         </div>
-        <div className="col-12">
+        <h5 style={{ marginLeft: '25px' }}>CBM Edit</h5>
+      </div>
+
+      <form onSubmit={handleSubmit} style={{ marginBottom: '5rem', marginTop: '0px' }}>
+        <div className="form-row1" style={{ marginLeft: '30px' }}>
+          <div className="form-row">
+            <div className="form-group" style={{ width: '25%' }}>
+              <label>Asset Name:</label>
+              <input
+                name="assetName"
+                className="form-control col-sm-6"
+                value={formData.assetName}
+                onChange={handleChange}
+                required
+              />
+              {/* </select> */}
+            </div>
+
+            <div className="form-group" style={{ width: '25%' }}>
+              <label htmlFor="location">Location</label>
+              <input
+                type="text"
+                name="location"
+                className="form-control"
+                value={formData.location}
+                readOnly
+                required
+                style={{ height: '40px' }}
+              />
+            </div>
+
+            <div className="form-group" style={{ width: '25%' }}>
+              <label htmlFor="cbmScheduleDate">CBM Schedule Date</label>
+              <input
+                type="date"
+                name="cbmScheduleDate"
+                className="form-control"
+                value={formData.cbmScheduleDate}
+                onChange={handleChange}
+                required
+                style={{ height: '40px' }}
+              />
+            </div>
+          </div>
+
+          <div
+            className="form-row"
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              gap: '10px',
+              marginTop: '20px',
+            }}
+          >
+            <div className="form-group" style={{ width: '25%' }}>
+              <label htmlFor="cbmFrequency">CBM Frequency</label>
+              <select
+                name="cbmFrequency"
+                className="form-control"
+                value={formData.cbmFrequency}
+                onChange={handleChange}
+                required
+                style={{ height: '40px' }}
+              >
+                <option value="">Select Frequency</option>
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+                <option value="fifteen days">Fifteen Days</option>
+                <option value="monthly">Monthly</option>
+                <option value="quarterly">Quarterly</option>
+                <option value="half year">Half Year</option>
+                <option value="yearly">Yearly</option>
+              </select>
+            </div>
+
+            <div className="form-group" style={{ width: '25%' }}>
+              <label htmlFor="nextCbmDate">Next CBM Date</label>
+              <input
+                type="date"
+                name="nextCbmDate"
+                className="form-control"
+                value={formData.nextCbmDate}
+                onChange={handleChange}
+                required
+                style={{ height: '40px' }}
+              />
+            </div>
+
+            <div className="form-group" style={{ width: '25%' }}>
+              <label htmlFor="status">Status</label>
+              <input
+                type="text"
+                name="status"
+                className="form-control"
+                value={formData.status}
+                onChange={handleChange}
+                required
+                style={{ height: '40px' }}
+              />
+            </div>
+          </div>
+
           <button
             type="submit"
             className="btn btn-primary"
             style={{
-              marginTop: '20px',
-              fontSize: '16px',
-              backgroundColor: '#000026',
-              // transition: 'background-color 0.3s',
-              cursor: 'pointer',
+              float: 'left',
+              backgroundColor: '#CA226B',
+              marginTop: '15px',
+              alignItems: 'end',
             }}
-            onMouseOver={(e) => (e.target.style.backgroundColor = '#009bff')}
-            onMouseOut={(e) => (e.target.style.backgroundColor = '#007bff')}
           >
-            Submit
+            Save
           </button>
         </div>
       </form>
-      {message && <p>{message}</p>}
     </div>
   )
 }
