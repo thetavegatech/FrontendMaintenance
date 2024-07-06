@@ -32,7 +32,7 @@
 }
 
 .custom-table tr:nth-child(even) {
-  background-color: #fcf0f5;
+  background-color: #D7DDFE;
 }
 
 /* List View Styles */
@@ -102,7 +102,7 @@
 .box {
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
   width: 10%;
-  background-color: #CA226B;
+  background-color: #1237F7;
   border-radius: 7px;
   height: 5rem;
   margin-left: 20px;

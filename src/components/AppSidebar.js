@@ -51,8 +51,14 @@ const AppSidebar = () => {
   }
 
   const sidebarStyles = {
-    backgroundColor: '#000000',
-    color: '#ffffff',
+    backgroundImage:
+      'url(https://getwallpapers.com/wallpaper/full/b/6/4/1242469-dark-phone-wallpaper-1080x1920-for-android.jpg)', // replace with your image path
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center',
+    opacity: '0.9',
+    transition: 'all 0.9s ease', // Adding transition for smooth effect
+    // width: sidebarShow ? '250px' : '50px', // Adjust width based on sidebarShow
   }
 
   const sidebarNavStyles = {
@@ -69,7 +75,7 @@ const AppSidebar = () => {
   }
 
   const activeNavItemStyles = {
-    backgroundColor: '#CA226B',
+    backgroundColor: '#1237F7',
     color: '#ffffff',
     borderRadius: '1rem', // Adjust the value as needed
   }
@@ -95,19 +101,12 @@ const AppSidebar = () => {
       style={sidebarStyles}
     >
       <CSidebarBrand className="d-md-none">
-        {/* <img src={logo} className="logo1" alt="Before Logo" style={{ height: '45px' }} /> */}
-        <h4 style={brandTextStyles}>Thetavega Tech</h4>
+        <h4 style={{ color: '#fff', margin: '0' }}>Thetavega Tech</h4>
       </CSidebarBrand>
       <CSidebarBrand className="d-none d-md-flex">
-        {/* <img
-          src={logo}
-          className="logo1"
-          alt="Before Logo"
-          style={{ marginRight: '20px', height: '45px', marginLeft: '-10%' }}
-        /> */}
-        <h4 style={brandTextStyles}>Thetavega Tech</h4>
+        <h4 style={{ color: '#fff', margin: '0' }}>Thetavega Tech</h4>
       </CSidebarBrand>
-      <CSidebarNav style={sidebarNavStyles}>
+      <CSidebarNav>
         {(() => {
           if (userrole === 'admin') {
             return (
@@ -136,7 +135,6 @@ const AppSidebar = () => {
                   <CIcon customClassName="nav-icon" icon={cilCalculator} />
                   AssetTable
                 </CNavItem>
-
                 <CNavItem
                   component={NavLink}
                   to="/cbm"
@@ -286,18 +284,10 @@ const AppSidebar = () => {
           }
         })()}
       </CSidebarNav>
-      {/* <button
-        type="button"
-        className="btn btn-info"
-        onClick={logoutHandler}
-        style={logoutButtonStyles}
-        onMouseOver={(e) => (e.target.style.backgroundColor = '#138496')}
-        onMouseOut={(e) => (e.target.style.backgroundColor = '#17a2b8')}
-      >
-        Logout
-      </button> */}
     </CSidebar>
   )
 }
+//   )
+// }
 
 export default React.memo(AppSidebar)

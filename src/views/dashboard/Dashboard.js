@@ -292,7 +292,7 @@ const Dashboard = () => {
                   datasets: [
                     {
                       data: formattedChartData.map((item) => item.value),
-                      backgroundColor: ['#ff7d98', '#4cacee', '#ffff00'],
+                      backgroundColor: ['#00ACC1', '#4cacee', '#ffff00'],
                       hoverBackgroundColor: ['#ff315b', '#137bc1', '#fff04d'],
                       label: 'My dataset', // for legend
                     },
@@ -312,7 +312,7 @@ const Dashboard = () => {
                   labels: lineChartData.map((item) => item.lineName || 'Under Breakdown'),
                   datasets: [
                     {
-                      backgroundColor: ['#ff7d98', '#4cacee', '#ffff00'],
+                      backgroundColor: ['#00ACC1', '#4cacee', '#ffff00'],
                       hoverBackgroundColor: ['#ff315b', '#137bc1', '#FFCE56'],
                       data: formattedChartData.map((item) => item.value),
                     },
