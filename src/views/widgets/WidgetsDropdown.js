@@ -267,7 +267,9 @@ const WidgetsDropdown = () => {
             </div>
             <hr className="divider" />
             <div className="button-container">
-              <button className="more-button">Get more</button>
+              <NavLink to="/adminbdhistory" className="nav-link">
+                <button className="more-button">Get more</button>
+              </NavLink>
             </div>
           </div>
 
@@ -296,7 +298,9 @@ const WidgetsDropdown = () => {
             </div>
             <hr className="divider" />
             <div className="button-container">
-              <button className="more-button">Get more</button>
+              <NavLink to="/assettable" className="nav-link">
+                <button className="more-button">Get more</button>
+              </NavLink>
             </div>
           </div>
 
@@ -325,7 +329,9 @@ const WidgetsDropdown = () => {
             </div>
             <hr className="divider" />
             <div className="button-container">
-              <button className="more-button">Get more</button>
+              <NavLink to="/pmschedule" className="nav-link">
+                <button className="more-button">Get more</button>
+              </NavLink>
             </div>
           </div>
 
@@ -357,7 +363,9 @@ const WidgetsDropdown = () => {
             </div>
             <hr className="divider" />
             <div className="button-container">
-              <button className="more-button">Get more</button>
+              <NavLink to="/pmschedule" className="nav-link">
+                <button className="more-button">Get more</button>
+              </NavLink>
             </div>
           </div>
         </div>

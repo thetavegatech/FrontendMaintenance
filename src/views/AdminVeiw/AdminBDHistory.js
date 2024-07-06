@@ -17,6 +17,7 @@ import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css'
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 // import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import { FaChevronUp, FaChevronDown } from 'react-icons/fa'
+import { CModal, CModalHeader, CModalBody, CModalFooter } from '@coreui/react'
 
 class BreakdownHistory extends React.Component {
   state = {
@@ -32,6 +33,9 @@ class BreakdownHistory extends React.Component {
     loading: true,
     expandedItems: [],
     filteredAssets: [], // Initialize filteredAssets
+    modalVisible: false,
+    selectedMonth: '',
+    selectedYear: '',
   }
 
   handleMouseEnter = () => {
@@ -150,25 +154,26 @@ class BreakdownHistory extends React.Component {
   }
 
   calculateMTTR = () => {
-    const { breakdowns, selectedMachine } = this.state
+    const filteredBreakdowns = this.filterBreakdownsByMonthYear()
+    const { selectedMachine } = this.state
 
     if (!selectedMachine) {
-      this.setState({ mttr: 'Please select a machine.' })
+      this.setState({ mttr: null })
       return
     }
 
-    const filteredBreakdowns = breakdowns.filter(
+    const machineBreakdowns = filteredBreakdowns.filter(
       (breakdown) => breakdown.MachineName === selectedMachine,
     )
 
-    if (filteredBreakdowns.length === 0) {
-      this.setState({ mttr: 'No breakdowns found for selected machine.' })
+    if (machineBreakdowns.length === 0) {
+      this.setState({ mttr: null })
       return
     }
 
     let totalRepairTimeMs = 0
 
-    filteredBreakdowns.forEach((breakdown) => {
+    machineBreakdowns.forEach((breakdown) => {
       const startDate = new Date(breakdown.BreakdownStartDate)
       const endDate = new Date(breakdown.BreakdownEndDate)
       const repairTimeMs = endDate - startDate
@@ -176,34 +181,34 @@ class BreakdownHistory extends React.Component {
     })
 
     const totalRepairTimeHours = totalRepairTimeMs / (1000 * 3600) // Convert milliseconds to hours
-
-    const mttr = totalRepairTimeHours / filteredBreakdowns.length
-
+    const mttr = totalRepairTimeHours / machineBreakdowns.length
+    console.log(machineBreakdowns.length, totalRepairTimeHours)
     this.setState({ mttr })
   }
 
   calculateMTBF = () => {
-    const { breakdowns, selectedMachine } = this.state
+    const filteredBreakdowns = this.filterBreakdownsByMonthYear()
+    const { selectedMachine } = this.state
 
     if (!selectedMachine) {
-      this.setState({ mtbf: 'Please select a machine.' })
+      this.setState({ mtbf: null })
       return
     }
 
-    const filteredBreakdowns = breakdowns.filter(
+    const machineBreakdowns = filteredBreakdowns.filter(
       (breakdown) => breakdown.MachineName === selectedMachine,
     )
 
-    if (filteredBreakdowns.length === 0) {
-      this.setState({ mtbf: 'No breakdowns found for selected machine.' })
+    if (machineBreakdowns.length === 0) {
+      this.setState({ mtbf: null })
       return
     }
 
     const fixedOperatingTime = 208 * 3600 * 1000 // 8 hours in milliseconds
-    const numberOfFailures = filteredBreakdowns.length
+    const numberOfFailures = machineBreakdowns.length
 
     const mtbf = fixedOperatingTime / (numberOfFailures * 1000 * 3600) // Convert milliseconds to hours
-
+    console.log(numberOfFailures, mtbf)
     this.setState({ mtbf })
   }
 
@@ -271,6 +276,22 @@ class BreakdownHistory extends React.Component {
     XLSX.writeFile(wb, 'reportdata.xlsx')
   }
 
+  filterBreakdownsByMonthYear = () => {
+    const { breakdowns, selectedMonth, selectedYear } = this.state
+
+    if (!selectedMonth || !selectedYear) {
+      return []
+    }
+
+    return breakdowns.filter((breakdown) => {
+      const breakdownDate = new Date(breakdown.BreakdownStartDate)
+      return (
+        breakdownDate.getMonth() + 1 === parseInt(selectedMonth, 10) &&
+        breakdownDate.getFullYear() === parseInt(selectedYear, 10)
+      )
+    })
+  }
+
   toggleExpand = (index) => {
     this.setState((prevState) => {
       const expandedItems = prevState.expandedItems.includes(index)
@@ -278,6 +299,10 @@ class BreakdownHistory extends React.Component {
         : [...prevState.expandedItems, index]
       return { expandedItems }
     })
+  }
+
+  toggleModal = () => {
+    this.setState((prevState) => ({ modalVisible: !prevState.modalVisible }))
   }
 
   render() {
@@ -291,7 +316,10 @@ class BreakdownHistory extends React.Component {
       searchLocation,
       loading,
       fromDate,
+      selectedMonth,
+      selectedYear,
       toDate,
+      modalVisible,
     } = this.state
     const openBreakdowns = breakdowns.filter((breakdown) => breakdown.Status === 'close')
     const filteredBreakdowns = openBreakdowns.filter((breakdown) => {
@@ -375,6 +403,9 @@ class BreakdownHistory extends React.Component {
             <option value="Plant 2">Plant 2</option>
             <option value="Plant 3">Plant 3</option>
           </select>
+          <CButton onClick={this.toggleModal} style={{ backgroundColor: 'grey' }}>
+            Calculate MTBF & MTTR
+          </CButton>
         </div>
         <div className="table-container">
           <Table className="custom-table">
@@ -532,6 +563,84 @@ class BreakdownHistory extends React.Component {
           </div>
         </div>
         {/* </div> */}
+        <CModal visible={modalVisible} onClose={this.toggleModal}>
+          <CModalHeader className="cmodal-header">MTBF & MTTR Calculation</CModalHeader>
+          <CModalBody className="cmodal-body">
+            <div>
+              <label htmlFor="machineSelect">Select Machine:</label>
+              <select
+                id="machineSelect"
+                value={selectedMachine}
+                onChange={(e) => this.setState({ selectedMachine: e.target.value })}
+                className="cmodal-body select"
+              >
+                <option value="">Select Machine</option>
+                {Array.from(new Set(breakdowns.map((breakdown) => breakdown.MachineName))).map(
+                  (machineName, index) => (
+                    <option key={index} value={machineName}>
+                      {machineName}
+                    </option>
+                  ),
+                )}
+              </select>
+            </div>
+            <div>
+              <label htmlFor="monthSelect">Select Month:</label>
+              <select
+                id="monthSelect"
+                value={selectedMonth}
+                onChange={(e) => this.setState({ selectedMonth: e.target.value })}
+                className="cmodal-body select"
+              >
+                <option value="">Select Month</option>
+                {Array.from({ length: 12 }, (_, i) => (
+                  <option key={i} value={i + 1}>
+                    {new Date(0, i).toLocaleString('default', { month: 'long' })}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label htmlFor="yearSelect">Select Year:</label>
+              <select
+                id="yearSelect"
+                value={selectedYear}
+                onChange={(e) => this.setState({ selectedYear: e.target.value })}
+                className="cmodal-body select"
+              >
+                <option value="">Select Year</option>
+                {Array.from(
+                  new Set(
+                    breakdowns.map((breakdown) =>
+                      new Date(breakdown.BreakdownStartDate).getFullYear(),
+                    ),
+                  ),
+                ).map((year, index) => (
+                  <option key={index} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <button className="cbutton mt-2" onClick={this.calculateMTTR}>
+              Calculate MTTR
+            </button>
+            <button className="cbutton mt-2" onClick={this.calculateMTBF}>
+              Calculate MTBF
+            </button>
+            <div>
+              <strong>MTTR:</strong> {mttr !== null ? mttr : 'N/A'} hours
+            </div>
+            <div>
+              <strong>MTBF:</strong> {mtbf !== null ? mtbf : 'N/A'} hours
+            </div>
+          </CModalBody>
+          {/* <CModalFooter>
+            <button className="cbutton" onClick={this.toggleModal}>
+              Close
+            </button>
+          </CModalFooter> */}
+        </CModal>
       </div>
     )
   }

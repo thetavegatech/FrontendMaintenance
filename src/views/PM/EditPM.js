@@ -13,9 +13,9 @@ export default function EditForm() {
   const [formData, setFormData] = useState({
     taskName: '',
     description: '',
-    startFrom: '',
+    startDate: '',
     nextDate: '',
-    scheduledMaintenance: '',
+    ScheduledMaintenanceDatesandIntervals: '',
     status: '',
     attachment: null, // File handling example
   })
@@ -35,9 +35,9 @@ export default function EditForm() {
       setFormData({
         taskName: data.TaskName,
         description: data.TaskDescription,
-        startFrom: formatDate(data.startDate),
+        startDate: formatDate(data.startDate),
         nextDate: formatDate(data.nextDate),
-        scheduledMaintenance: data.ScheduledMaintenanceDatesandIntervals,
+        ScheduledMaintenanceDatesandIntervals: data.ScheduledMaintenanceDatesandIntervals,
         status: data.status,
         // Update other fields as needed
       })
@@ -58,9 +58,9 @@ export default function EditForm() {
       setFormData({
         taskName: '',
         description: '',
-        startFrom: '',
+        startDate: '',
         nextDate: '',
-        scheduledMaintenance: '',
+        ScheduledMaintenanceDatesandIntervals: '',
         status: '',
         attachment: null,
       })
@@ -148,12 +148,12 @@ export default function EditForm() {
             </div>
 
             <div className="form-group" style={{ width: '25%' }}>
-              <label htmlFor="startFrom">Start From</label>
+              <label htmlFor="startDate">Start Date</label>
               <input
-                type="date"
-                name="startFrom"
+                // type="date"
+                name="startDate"
                 className="form-control"
-                value={formData.startFrom}
+                value={formData.startDate}
                 onChange={handleChange}
                 required
                 style={{ height: '40px' }}
@@ -186,28 +186,39 @@ export default function EditForm() {
               <label htmlFor="scheduledMaintenance">
                 Scheduled Maintenance Date and Intervals:
               </label>
-              <input
-                type="date"
-                name="scheduledMaintenance"
-                className="form-control"
-                value={formData.scheduledMaintenance}
-                onChange={handleChange}
+              <select
+                className="form-control col-sm-6"
                 required
-                style={{ height: '40px' }}
-              />
+                id="scheduledMaintenance"
+                name="ScheduledMaintenanceDatesandIntervals"
+                onChange={handleChange}
+                value={formData.ScheduledMaintenanceDatesandIntervals}
+              >
+                <option value="">Select an option</option>
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+                <option value="fifteen Days">Fifteen Days</option>
+                <option value="monthly">Monthly</option>
+                <option value="quarterly">Quarterly</option>
+                <option value="half Year">Half Year</option>
+                <option value="yearly">Yearly</option>
+              </select>
             </div>
 
             <div className="form-group" style={{ width: '25%' }}>
               <label htmlFor="status">Status:</label>
-              <input
-                type="text"
+              <select
                 name="status"
                 className="form-control"
                 value={formData.status}
                 onChange={handleChange}
                 required
                 style={{ height: '40px' }}
-              />
+              >
+                <option value="">Select Status</option>
+                <option value="Pending">Pending</option>
+                <option value="Complete">Complete</option>
+              </select>
             </div>
           </div>
 

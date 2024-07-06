@@ -236,15 +236,18 @@ const CBMEdit = () => {
 
             <div className="form-group" style={{ width: '25%' }}>
               <label htmlFor="status">Status</label>
-              <input
-                type="text"
+              <select
                 name="status"
                 className="form-control"
                 value={formData.status}
                 onChange={handleChange}
                 required
                 style={{ height: '40px' }}
-              />
+              >
+                <option value="">Select Status</option>
+                <option value="Pending">Pending</option>
+                <option value="Complete">Complete</option>
+              </select>
             </div>
           </div>
 
