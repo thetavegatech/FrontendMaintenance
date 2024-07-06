@@ -13,7 +13,7 @@ const QRScanner = ({ onScan, onError }) => {
       setScannedData(data)
       alert(`Scanned Data: ${data}`)
       window.open(data, '_blank') // Open the scanned URL in a new tab
-      navigate(-1) // Navigate back to the previous page after a successful scan
+      // navigate(-1) // Navigate back to the previous page after a successful scan
     }
   }
 
