@@ -32,7 +32,7 @@ export default function BreakDown() {
   useEffect(() => {
     // Fetch all users initially
     axios
-      .get('https://backendmaintenx.onrender.com/UserInfo')
+      .get('http://localhost:4000/UserInfo')
       .then((response) => {
         setAllUsers(response.data)
       })
@@ -87,9 +87,7 @@ export default function BreakDown() {
   // Function to fetch location by asset name
   const fetchLocationByAssetName = async (assetName) => {
     try {
-      const response = await axios.get(
-        `https://backendmaintenx.onrender.com/api/assetmaster/${assetName}`,
-      )
+      const response = await axios.get(`http://localhost:4000/api/assetmaster/${assetName}`)
       return response.data.Location
     } catch (error) {
       console.error('Error fetching location:', error)
@@ -100,9 +98,7 @@ export default function BreakDown() {
   // Function to fetch users by location
   const fetchUsersByLocation = async (location) => {
     try {
-      const response = await axios.get(
-        `https://backendmaintenx.onrender.com/UserInfoByLocation/${location}/Yes`,
-      )
+      const response = await axios.get(`http://localhost:4000/UserInfoByLocation/${location}/Yes`)
       setUsers(response.data)
     } catch (error) {
       console.error('Error fetching users by location:', error)
@@ -124,7 +120,7 @@ export default function BreakDown() {
   useEffect(() => {
     // Fetch asset names
     axios
-      .get('https://backendmaintenx.onrender.com/api/assets')
+      .get('http://localhost:4000/api/assets')
       .then((res) => {
         // Extract unique asset names from the response
         const uniqueAssetNames = [...new Set(res.data.map((item) => item.AssetName))]
@@ -140,7 +136,7 @@ export default function BreakDown() {
     if (formData.MachineName) {
       // Fetch breakdown status for the selected machine
       axios
-        .get(`https://backendmaintenx.onrender.com/api/getBreakdownStatus/${formData.MachineName}`)
+        .get(`http://localhost:4000/api/getBreakdownStatus/${formData.MachineName}`)
         .then((response) => {
           setBreakdownStatus(response.data.status)
           console.log(response.data.status)
@@ -188,7 +184,7 @@ export default function BreakDown() {
     }
 
     // Proceed with form submission
-    fetch('https://backendmaintenx.onrender.com/api/breakdown', {
+    fetch('http://localhost:4000/api/breakdown', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
@@ -231,9 +227,10 @@ export default function BreakDown() {
         setFormData({
           MachineName: '',
           Location: '',
-          BreakdownStartDate: new Date().toISOString().split('T')[0],
+          // BreakdownStartDate: new Date().toLocaleDateString('en-GB'),
+          BreakdownStartDate: '',
           BreakdownEndDate: '',
-          BreakdownStartTime: new Date().toLocaleTimeString('en-US', { hour12: false }),
+          BreakdownStartTime: new Date().toLocaleTimeString('en-US', { hour12: false }).slice(0, 5),
           BreakdownEndTime: '',
           Shift: '',
           LineName: '',
@@ -288,7 +285,7 @@ export default function BreakDown() {
   }
 
   const apiKey = 'NDE1MDY2NGM2Mzc3NTI0ZjQzNmE1YTM5NDY0YzZlNzU='
-  const numbers = '7020804148' // Replace with the phone numbers
+  const numbers = '' // Replace with the phone numbers
   const data1 = 'test'
   const data2 = { username }
   const sender = 'AAABRD'
@@ -340,10 +337,10 @@ export default function BreakDown() {
     }
   }, [formData.MachineName])
 
-  const handleButtonClick = () => {
-    // Call the SMS sending function
-    sendSMS(formData, selectedUsers, username)
-  }
+  // const handleButtonClick = () => {
+  //   // Call the SMS sending function
+  //   sendSMS(formData, selectedUsers, username)
+  // }
 
   return (
     <div className="card shadow-sm mx-auto">
@@ -380,13 +377,14 @@ export default function BreakDown() {
             style={{
               display: 'flex',
               justifyContent: 'space-between',
-              gap: 'px',
+              gap: '10px',
               marginBottom: '20px',
             }}
           >
             <div className="form-group" style={{ width: '30%' }}>
               <label htmlFor="machineNumber">Machine Number</label>
               <Select
+                type="text"
                 className="form-control"
                 required
                 name="MachineName"
@@ -400,9 +398,9 @@ export default function BreakDown() {
               <label htmlFor="location">Location</label>
               <input
                 type="text"
-                className="form-control col-sm-6"
+                className="form-control"
                 required
-                readOnly
+                disabled
                 id="Location"
                 name="Location"
                 value={formData.Location}
@@ -413,9 +411,23 @@ export default function BreakDown() {
               <label htmlFor="breakdownStartDate">Breakdown Start Date</label>
               <input
                 type="Date"
+                disabled
                 name="BreakdownStartDate"
                 className="form-control"
                 value={formData.BreakdownStartDate}
+                onChange={handleChange}
+                required
+                style={{ height: '40px' }}
+              />
+            </div>
+            <div className="form-group" style={{ width: '30%' }}>
+              <label htmlFor="breakdownShiftTime">Breakdown start Time</label>
+              <input
+                type="time"
+                disabled
+                name="breakdownShiftTime"
+                className="form-control"
+                value={formData.BreakdownStartTime}
                 onChange={handleChange}
                 required
                 style={{ height: '40px' }}
@@ -432,7 +444,7 @@ export default function BreakDown() {
               marginBottom: '20px',
             }}
           >
-            <div className="form-group" style={{ width: '30%' }}>
+            {/* <div className="form-group" style={{ width: '30%' }}>
               <label htmlFor="breakdownShiftTime">Breakdown start Time</label>
               <input
                 type="time"
@@ -443,7 +455,7 @@ export default function BreakDown() {
                 required
                 style={{ height: '40px' }}
               />
-            </div>
+            </div> */}
             <div className="form-group" style={{ width: '30%' }}>
               <label htmlFor="shift">Shift</label>
               <input
@@ -459,7 +471,7 @@ export default function BreakDown() {
             <div className="form-group" style={{ width: '30%' }}>
               <label htmlFor="lineName">Line Name</label>
               <select
-                className="form-control col-sm-6"
+                className="form-control"
                 required
                 name="LineName"
                 value={formData.LineName}
@@ -484,21 +496,8 @@ export default function BreakDown() {
                 <option value="CAM SHAFT SOFT">CAM SHAFT SOFT</option>
               </select>
             </div>
-          </div>
-
-          <div
-            className="form-row"
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              gap: '10px',
-              marginBottom: '20px',
-            }}
-          >
             <div className="form-group" style={{ width: '30%' }}>
-              <label htmlFor="operations" style={{ marginBottom: '10px' }}>
-                Operations:
-              </label>
+              <label htmlFor="operations">Operations:</label>
               <input
                 type="text"
                 required
@@ -510,11 +509,11 @@ export default function BreakDown() {
               />
             </div>
             <div className="form-group" style={{ width: '30%' }}>
-              <label htmlFor="breakdownPhenomenon">Breakdown Phenomenon</label>
+              <label htmlFor="breakdownPhenomenons">Breakdown Phenomenon</label>
               <input
                 type="text"
                 name="BreakdownPhenomenons"
-                className="form-control col-sm-6l"
+                className="form-control"
                 value={formData.BreakdownPhenomenons}
                 onChange={handleChange}
                 placeholder=""
@@ -536,18 +535,77 @@ export default function BreakDown() {
             </div> */}
           </div>
 
-          <button
+          <div className="row lg-2">
+            <div className="col-md-6" style={{ marginTop: '2vh', overflowY: 'auto' }}>
+              <label style={{ marginBottom: '10px' }}>Select users:</label>
+              <div className="row">
+                {usernos.map((user, index) => (
+                  <React.Fragment key={user.phoneNumber}>
+                    <div className="col-md-6">
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          id={`checkbox-${user.phoneNumber}`}
+                          checked={selectedUserNumbers.includes(user.phoneNumber)}
+                          onChange={() => handleUserSelect(user.phoneNumber)}
+                        />
+                        <label
+                          className="form-check-label"
+                          htmlFor={`checkbox-${user.phoneNumber}`}
+                        >
+                          {user.name}
+                        </label>
+                      </div>
+                    </div>
+                    {/* Insert a new row after every two users */}
+                    {index % 2 !== 0 && <div className="w-100"></div>}
+                  </React.Fragment>
+                ))}
+              </div>
+            </div>
+
+            <div className="col-md-6" style={{ marginTop: '2vh' }}>
+              <label>Selected Users:</label>
+              <ul>
+                {usernos
+                  .filter((user) => selectedUserNumbers.includes(user.phoneNumber))
+                  .map((user) => (
+                    <li key={user.phoneNumber}>
+                      {user.name} - {user.phoneNumber}
+                    </li>
+                  ))}
+              </ul>
+            </div>
+
+            <div className="col-xs-12">
+              <button
+                type="submit"
+                // onClick={handleButtonClick}
+                className="btn btn-primary"
+                style={{
+                  marginTop: '20px',
+                  fontSize: '16px',
+                  backgroundColor: '#3448db',
+                  marginBottom: '10px',
+                }}
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+          {/* <button
             type="submit"
             className="btn btn-primary"
             style={{
               float: 'left',
-              backgroundColor: '#CA226B',
+              backgroundColor: '#1237F7',
               marginTop: '10px',
               alignItems: 'end',
             }}
           >
             Submit
-          </button>
+          </button> */}
         </div>
       </form>
     </div>

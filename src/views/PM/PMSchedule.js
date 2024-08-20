@@ -57,7 +57,7 @@ class AssetTable extends React.Component {
     }, delay)
 
     axios
-      .get('https://backendmaintenx.onrender.com/api/pm')
+      .get('http://localhost:4000/api/pm')
       .then((response) => {
         let fetchedAssets = Array.isArray(response.data) ? response.data : [response.data]
 
@@ -109,7 +109,7 @@ class AssetTable extends React.Component {
     const isConfirmed = window.confirm('Are you sure you want to delete this data?')
     if (isConfirmed) {
       axios
-        .delete(`https://backendmaintenx.onrender.com/api/pm/${id}`)
+        .delete(`http://localhost:4000/api/pm/${id}`)
         .then((response) => {
           console.log('Data deleted:', response.data)
 
@@ -148,7 +148,7 @@ class AssetTable extends React.Component {
 
   getAssetLocations = async () => {
     try {
-      const response = await fetch('https://backendmaintenx.onrender.com/locations')
+      const response = await fetch('http://localhost:4000/locations')
       if (!response.ok) {
         throw new Error(`Error: ${response.status} - ${response.statusText}`)
       }
@@ -165,43 +165,43 @@ class AssetTable extends React.Component {
     }
   }
 
-  sendSMS = async (userInfo, phoneNumbers, nextDate, scheduledMaintenance) => {
-    const sender = 'AAABRD'
-    const apiKey = 'NDE1MDY2NGM2Mzc3NTI0ZjQzNmE1YTM5NDY0YzZlNzU='
-    const Data1 = 'PM SChedule'
-    const Data2 = 'Check PM Schedule for more.'
-    // Loop through each user and send SMS
-    for (const user of userInfo) {
-      // const { nextDate, ScheduledMaintenanceDatesandIntervals } = this.state.formData
-      // const nextDate = this.state.formData.nextDate
-      // const scheduledMaintenance = this.state.formData.ScheduledMaintenanceDatesandIntervals
-      // Formulate a simple message
-      // const message = encodeURIComponent(
-      //   'Breakdown For ' +
-      //     nextDate +
-      //     ' please visit concerned department Details are ' +
-      //     scheduledMaintenance +
-      //     ' - Aurangabad Auto Ancillary',
-      // )
+  // sendSMS = async (userInfo, phoneNumbers, nextDate, scheduledMaintenance) => {
+  //   const sender = 'AAABRD'
+  //   const apiKey = 'NDE1MDY2NGM2Mzc3NTI0ZjQzNmE1YTM5NDY0YzZlNzU='
+  //   const Data1 = 'PM SChedule'
+  //   const Data2 = 'Check PM Schedule for more.'
+  //   // Loop through each user and send SMS
+  //   for (const user of userInfo) {
+  //     // const { nextDate, ScheduledMaintenanceDatesandIntervals } = this.state.formData
+  //     // const nextDate = this.state.formData.nextDate
+  //     // const scheduledMaintenance = this.state.formData.ScheduledMaintenanceDatesandIntervals
+  //     // Formulate a simple message
+  //     // const message = encodeURIComponent(
+  //     //   'Breakdown For ' +
+  //     //     nextDate +
+  //     //     ' please visit concerned department Details are ' +
+  //     //     scheduledMaintenance +
+  //     //     ' - Aurangabad Auto Ancillary',
+  //     // )
 
-      const message = encodeURIComponent(
-        `Breakdown For ${Data1} please visit concerned department Details are ${Data2} - Aurangabad Auto Ancillary`,
-      )
+  //     const message = encodeURIComponent(
+  //       `Breakdown For ${Data1} please visit concerned department Details are ${Data2} - Aurangabad Auto Ancillary`,
+  //     )
 
-      // Create the API URL with the current user's phone number
-      const url = `https://api.textlocal.in/send/?apikey=${apiKey}&sender=${sender}&numbers=${user.phoneNumber}&message=${message}`
+  //     // Create the API URL with the current user's phone number
+  //     const url = `https://api.textlocal.in/send/?apikey=${apiKey}&sender=${sender}&numbers=${user.phoneNumber}&message=${message}`
 
-      // Use fetch to send the SMS
-      try {
-        const response = await fetch(url)
-        const data = await response.json()
+  //     // Use fetch to send the SMS
+  //     try {
+  //       const response = await fetch(url)
+  //       const data = await response.json()
 
-        console.log(`SMS sent successfully to ${user.name} (${user.phoneNumber}):`, data)
-      } catch (error) {
-        console.error(`Error sending SMS to ${user.name} (${user.phoneNumber}):`, error)
-      }
-    }
-  }
+  //       console.log(`SMS sent successfully to ${user.name} (${user.phoneNumber}):`, data)
+  //     } catch (error) {
+  //       console.error(`Error sending SMS to ${user.name} (${user.phoneNumber}):`, error)
+  //     }
+  //   }
+  // }
 
   updateNextDate = async () => {
     const today = new Date()
@@ -290,7 +290,7 @@ class AssetTable extends React.Component {
     // Make a separate API request to get details of updated assets by ID
     try {
       if (updatedIds.length > 0) {
-        const idDetailsResponse = await axios.get('https://backendmaintenx.onrender.com/api/pm', {
+        const idDetailsResponse = await axios.get('http://localhost:4000/api/pm', {
           params: { ids: updatedIds },
         })
 
@@ -307,7 +307,7 @@ class AssetTable extends React.Component {
     // Update the state and get the updated IDs
     this.setState({ assets: updatedAssetsArray }, async () => {
       try {
-        const response = await axios.put('https://backendmaintenx.onrender.com/api/updateRecords', {
+        const response = await axios.put('http://localhost:4000/api/updateRecords', {
           pms: updatedAssetsArray,
         })
 
@@ -360,14 +360,16 @@ class AssetTable extends React.Component {
 
     // Filter assets based on the search query
     const filteredAssets = this.state.assets.filter((asset) => {
-      const taskNameLower = (asset.TaskName || '').toLowerCase()
+      const taskNameLower = (asset.AssetName || '').toLowerCase()
       // const taskDescriptionLower = (asset.TaskDescription || '').toLowerCase()
-      // const statusLower = (asset.status || '').toLowerCase()
+      const statusLower = (asset.status || '').toLowerCase()
 
-      return taskNameLower.includes(query)
-      // taskDescriptionLower.includes(query) ||
-      // scheduledMaintenanceLower.includes(query) ||
-      // statusLower.includes(query)
+      return (
+        taskNameLower.includes(query) ||
+        // taskDescriptionLower.includes(query) ||
+        // scheduledMaintenanceLower.includes(query) ||
+        statusLower.includes(query)
+      )
     })
 
     this.setState({
@@ -438,7 +440,7 @@ class AssetTable extends React.Component {
               style={{
                 marginBottom: '1.5rem',
                 backgroundColor: 'black',
-                marginLeft: '2.5rem',
+                marginLeft: '1rem',
                 borderRadius: '2rem',
                 width: '2rem',
                 height: '2rem',
@@ -449,19 +451,19 @@ class AssetTable extends React.Component {
             ></IoIosAddCircle>
           </NavLink>
           {/* <h5 style={{ marginLeft: '20px' }}>Create TBM Record</h5> */}
-          <label htmlFor="searchTask" style={{ marginLeft: '0%' }}>
+          <label htmlFor="searchTask">
             <span role="img" aria-label="search-icon"></span>
           </label>
           <input
             type="text"
             id="searchTask"
-            placeholder="Search Task"
+            placeholder="Search Asset/Status"
             style={{
               marginBottom: '10px',
               padding: '8px',
               border: '1px solid ',
               borderRadius: '4px',
-              width: '8rem',
+              width: '10rem',
               transition: 'border-color 0.3s ease-in-out, background-color 0.3s ease-in-out',
               backgroundColor: isClicked ? '#ccc' : 'transparent',
             }}
@@ -474,7 +476,7 @@ class AssetTable extends React.Component {
         {/* <div> */}
         {/* </div> */}
 
-        <div className="table-container">
+        <div className="table-container mobile-wide">
           <Table className="custom-table">
             <Thead>
               <Tr>

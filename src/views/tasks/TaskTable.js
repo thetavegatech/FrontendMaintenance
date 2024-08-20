@@ -57,7 +57,7 @@ class AssetTable extends React.Component {
     }, delay)
 
     axios
-      .get('https://backendmaintenx.onrender.com/api/pm')
+      .get('http://localhost:4000/api/pm')
       .then((response) => {
         let fetchedAssets = Array.isArray(response.data) ? response.data : [response.data]
 
@@ -109,7 +109,7 @@ class AssetTable extends React.Component {
     const isConfirmed = window.confirm('Are you sure you want to delete this data?')
     if (isConfirmed) {
       axios
-        .delete(`https://backendmaintenx.onrender.com/api/pm/${id}`)
+        .delete(`http://localhost:4000/api/pm/${id}`)
         .then((response) => {
           console.log('Data deleted:', response.data)
 
@@ -148,7 +148,7 @@ class AssetTable extends React.Component {
 
   getAssetLocations = async () => {
     try {
-      const response = await fetch('https://backendmaintenx.onrender.com/locations')
+      const response = await fetch('http://localhost:4000/locations')
       if (!response.ok) {
         throw new Error(`Error: ${response.status} - ${response.statusText}`)
       }
@@ -290,7 +290,7 @@ class AssetTable extends React.Component {
     // Make a separate API request to get details of updated assets by ID
     try {
       if (updatedIds.length > 0) {
-        const idDetailsResponse = await axios.get('https://backendmaintenx.onrender.com/api/pm', {
+        const idDetailsResponse = await axios.get('http://localhost:4000/api/pm', {
           params: { ids: updatedIds },
         })
 
@@ -307,7 +307,7 @@ class AssetTable extends React.Component {
     // Update the state and get the updated IDs
     this.setState({ assets: updatedAssetsArray }, async () => {
       try {
-        const response = await axios.put('https://backendmaintenx.onrender.com/api/updateRecords', {
+        const response = await axios.put('http://localhost:4000/api/updateRecords', {
           pms: updatedAssetsArray,
         })
 
@@ -474,7 +474,7 @@ class AssetTable extends React.Component {
         {/* <div> */}
         {/* </div> */}
 
-        <div className="table-container">
+        <div className="table-container  mobile-wide">
           <Table className="custom-table">
             <Thead>
               <Tr>

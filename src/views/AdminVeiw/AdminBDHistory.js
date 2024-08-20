@@ -23,7 +23,8 @@ class BreakdownHistory extends React.Component {
   state = {
     breakdowns: [],
     selectedMachine: '',
-    // mtbf: '',
+    fromDate: '',
+    toDate: '',
     mttr: '',
     selectedLocation: '',
     searchLocation: '', // New state for the search term
@@ -80,8 +81,8 @@ class BreakdownHistory extends React.Component {
     const { selectedLocation } = this.state
 
     const apiUrl = selectedLocation
-      ? `https://backendmaintenx.onrender.com/api/breakdown?location=${selectedLocation}`
-      : 'https://backendmaintenx.onrender.com/api/breakdown'
+      ? `http://localhost:4000/api/breakdown?location=${selectedLocation}`
+      : 'http://localhost:4000/api/breakdown'
 
     axios
       .get(apiUrl)
@@ -226,23 +227,18 @@ class BreakdownHistory extends React.Component {
         breakdown.Status === 'close'
       )
     })
+
     // Check if a search plant is selected
     if (!searchLocation) {
       alert('Please select a search plant before exporting to Excel.')
       return
     }
 
-    // Filter data based on the selected plant
-    // const filteredData = breakdowns.filter((breakdown) => breakdown.Location === searchLocation)
-
     if (filteredData.length === 0) {
       alert('No data found for the selected plant. Please refine your search.')
       return
     }
 
-    // const dataToExport = searchQuery ? filteredBreakdowns : breakdowns
-    const dataToExport = breakdowns
-    // const exportData = dataToExport.map((item) => ({
     const exportData = filteredData.map((item) => ({
       Date: format(new Date(item.BreakdownStartDate), 'dd-MM-yyyy HH:mm:ss'),
       MachineName: item.MachineName,
@@ -261,7 +257,7 @@ class BreakdownHistory extends React.Component {
       CorrectiveAction: item.CorrectiveAction,
       TargetDate: item.TargetDate,
       Responsibility: item.Responsibility,
-      HD: item.HD,
+      // HD: item.HD,
       Status: item.Status,
       SpareParts: item.SpareParts,
       Cost: item.Cost,
@@ -273,6 +269,36 @@ class BreakdownHistory extends React.Component {
     const ws = XLSX.utils.json_to_sheet(exportData)
     const wb = XLSX.utils.book_new()
     XLSX.utils.book_append_sheet(wb, ws, 'ReportData')
+
+    // Set column widths
+    const columnWidths = [
+      { wpx: 150 }, // Date
+      { wpx: 200 }, // MachineName
+      { wpx: 150 }, // BreakdownStartDate
+      { wpx: 150 }, // BreakdownEndDate
+      { wpx: 100 }, // TotalBDTime
+      { wpx: 150 }, // BreakdownType
+      { wpx: 100 }, // Shift
+      { wpx: 200 }, // Operations
+      { wpx: 200 }, // BreakdownPhenomenons
+      { wpx: 250 }, // WhyWhyAnalysis
+      { wpx: 150 }, // Attended_By
+      { wpx: 150 }, // BD_Raised_By
+      { wpx: 250 }, // RootCause
+      { wpx: 250 }, // PreventiveAction
+      { wpx: 250 }, // CorrectiveAction
+      { wpx: 150 }, // TargetDate
+      { wpx: 150 }, // Responsibility
+      { wpx: 100 }, // HD
+      { wpx: 100 }, // Status
+      { wpx: 150 }, // SpareParts
+      { wpx: 100 }, // Cost
+      { wpx: 150 }, // Location
+      { wpx: 150 }, // LineName
+      { wpx: 250 }, // Remark
+    ]
+    ws['!cols'] = columnWidths
+
     XLSX.writeFile(wb, 'reportdata.xlsx')
   }
 
@@ -303,6 +329,10 @@ class BreakdownHistory extends React.Component {
 
   toggleModal = () => {
     this.setState((prevState) => ({ modalVisible: !prevState.modalVisible }))
+  }
+
+  handleDateChange = (event) => {
+    this.setState({ [event.target.id]: event.target.value })
   }
 
   render() {
@@ -338,7 +368,7 @@ class BreakdownHistory extends React.Component {
       <div className="card shadow-sm mx-auto">
         <Link to="/temperature" style={{ position: 'absolute', top: '15px', right: '10px' }}></Link>
 
-        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '0px' }}>
           <div
             // className="d-flex justify-content-center align-items-center"
             className={classNames(
@@ -376,48 +406,200 @@ class BreakdownHistory extends React.Component {
           >
             Export to Excel
           </TfiExport>
+
+          {/* <div className="container" style={{ marginTop: '0px' }}> */}
+          {/* <div>
+            <label htmlFor="searchTask" style={{ marginRight: '0%', marginTop: '10px' }}>
+              <span role="img" aria-label="search-icon"></span>
+            </label>
+            <div className="date-filter-container">
+              <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+                <label htmlFor="fromDate" style={{ marginRight: '10px' }}>
+                  From Date:
+                </label>
+                <input
+                  type="date"
+                  id="fromDate"
+                  value={fromDate}
+                  onChange={this.handleDateChange}
+                  style={{ marginRight: '20px', padding: '5px', borderRadius: '4px' }}
+                />
+
+                <label htmlFor="toDate" style={{ marginRight: '10px' }}>
+                  To Date:
+                </label>
+                <input
+                  type="date"
+                  id="toDate"
+                  value={toDate}
+                  onChange={this.handleDateChange}
+                  style={{ marginRight: '20px', padding: '5px', borderRadius: '4px' }}
+                />
+              </div>
+
+              <select
+                value={this.searchQuery}
+                onChange={this.handleSearchChange}
+                style={{
+                  // display: 'flex',
+                  marginBottom: '0px',
+                  padding: '8px',
+                  margin: '8px',
+                  border: '1px solid',
+                  borderRadius: '4px',
+                  transition: 'border-color 0.3s ease-in-out',
+                  backgroundColor: isHovered ? '#f0f0f0' : 'transparent',
+                }}
+                onMouseEnter={this.handleMouseEnter}
+                onMouseLeave={this.handleMouseLeave}
+              >
+                <option>Search by Location</option>
+                <option value="Plant 1">Plant 1</option>
+                <option value="Plant 2">Plant 2</option>
+                <option value="Plant 3">Plant 3</option>
+                <option value="Plant 4">Plant 4</option>
+              </select>
+            </div>
+          </div> */}
         </div>
-        {/* <div className="container" style={{ marginTop: '0px' }}> */}
         <div>
           <label htmlFor="searchTask" style={{ marginRight: '0%', marginTop: '10px' }}>
             <span role="img" aria-label="search-icon"></span>
           </label>
-          <select
-            value={this.searchQuery}
-            onChange={this.handleSearchChange}
-            style={{
-              // display: 'flex',
-              marginBottom: '0px',
-              padding: '8px',
-              margin: '8px',
-              border: '1px solid',
-              borderRadius: '4px',
-              transition: 'border-color 0.3s ease-in-out',
-              backgroundColor: isHovered ? '#f0f0f0' : 'transparent',
-            }}
-            onMouseEnter={this.handleMouseEnter}
-            onMouseLeave={this.handleMouseLeave}
-          >
-            <option>Search by Location</option>
-            <option value="Plant 1">Plant 1</option>
-            <option value="Plant 2">Plant 2</option>
-            <option value="Plant 3">Plant 3</option>
-          </select>
-          <CButton onClick={this.toggleModal} style={{ backgroundColor: 'grey' }}>
-            Calculate MTBF & MTTR
-          </CButton>
+          {/* <div> */}
+          <div>
+            <label
+              htmlFor="fromDate"
+              style={{
+                // marginLeft: '20rem',
+                margin: '10px',
+                fontSize: '16px',
+                fontWeight: 'bold',
+                // marginLeft: '1rem',
+                whiteSpace: 'nowrap',
+                '@media (max-width: 750px)': {
+                  // marginRight: '0.8rem',
+                  fontSize: '14px',
+                },
+              }}
+            >
+              From :
+            </label>
+            <input
+              type="date"
+              id="fromDate"
+              value={fromDate}
+              onChange={this.handleDateChange}
+              style={{
+                padding: '6px',
+                borderRadius: '5px',
+                border: '1px solid #ccc',
+                marginRight: '10px',
+                marginLeft: '10px',
+                fontSize: '14px',
+              }}
+            />
+
+            <label
+              htmlFor="toDate"
+              style={{
+                marginRight: '10px',
+                fontSize: '16px',
+                fontWeight: 'bold',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              To :
+            </label>
+            <input
+              type="date"
+              id="toDate"
+              value={toDate}
+              onChange={this.handleDateChange}
+              style={{
+                padding: '6px',
+                borderRadius: '5px',
+                border: '1px solid #ccc',
+                marginRight: '10px',
+                fontSize: '14px',
+                marginBottom: '0.5rem',
+              }}
+            />
+            <select
+              value={this.searchQuery}
+              onChange={this.handleSearchChange}
+              style={{
+                // display: 'flex',
+                marginBottom: '0px',
+                padding: '8px',
+                margin: '8px',
+                border: '1px solid',
+                borderRadius: '4px',
+                transition: 'border-color 0.3s ease-in-out',
+                backgroundColor: isHovered ? '#f0f0f0' : 'transparent',
+              }}
+              onMouseEnter={this.handleMouseEnter}
+              onMouseLeave={this.handleMouseLeave}
+            >
+              <option value="" disabled selected hidden>
+                Search by Plant
+              </option>
+              <option value="Plant 1">Plant 1</option>
+              <option value="Plant 2">Plant 2</option>
+              <option value="Plant 3">Plant 3</option>
+              <option value="Plant 4">Plant 4</option>
+            </select>
+            {/* </div> */}
+
+            {/* <select
+              value={this.searchQuery}
+              onChange={this.handleSearchChange}
+              style={{
+                // display: 'flex',
+                marginBottom: '0px',
+                padding: '8px',
+                margin: '8px',
+                border: '1px solid',
+                borderRadius: '4px',
+                transition: 'border-color 0.3s ease-in-out',
+                backgroundColor: isHovered ? '#f0f0f0' : 'transparent',
+              }}
+              onMouseEnter={this.handleMouseEnter}
+              onMouseLeave={this.handleMouseLeave}
+            >
+              <option>Search by Location</option>
+              <option value="Plant 1">Plant 1</option>
+              <option value="Plant 2">Plant 2</option>
+              <option value="Plant 3">Plant 3</option>
+              <option value="Plant 4">Plant 4</option>
+            </select> */}
+          </div>
         </div>
-        <div className="table-container">
+        <CButton
+          onClick={this.toggleModal}
+          style={{
+            backgroundColor: 'grey',
+            width: '15rem',
+            marginBottom: '1rem',
+            marginLeft: '1.5rem',
+          }}
+        >
+          Calculate MTBF & MTTR
+        </CButton>
+        <div className="table-container  mobile-wide">
           <Table className="custom-table">
             <Thead>
               <Tr>
                 <Th style={{ textAlign: 'center', height: '40px' }}>Machine Name</Th>
-                <Th style={{ textAlign: 'center' }}>BreakDown Start Date</Th>
+
                 {/* <Td></Td> */}
                 <Th style={{ textAlign: 'center' }}>Shift</Th>
                 <Th style={{ textAlign: 'center' }}>Line Name</Th>
                 <Th style={{ textAlign: 'center' }}>Location</Th>
+                <Th style={{ textAlign: 'center' }}>BreakDown Start Date</Th>
                 <Th style={{ textAlign: 'center' }}>End Date</Th>
+                <Th style={{ textAlign: 'center' }}>Attend BY</Th>
+                {/* <Th style={{ textAlign: 'center' }}>Raised By</Th> */}
                 <th style={{ textAlign: 'center' }}>TotalRepairtime</th>
                 <Th style={{ textAlign: 'center' }}>Status</Th>
                 <Th style={{ textAlign: 'center' }}>Edit</Th>
@@ -445,16 +627,19 @@ class BreakdownHistory extends React.Component {
                   {filteredBreakdowns.map((breakdown) => (
                     <Tr key={breakdown._id}>
                       <Td style={{ textAlign: 'center' }}>{breakdown.MachineName}</Td>
-                      <Td style={{ textAlign: 'center' }}>
-                        {new Date(breakdown.BreakdownStartDate).toLocaleDateString()}
-                      </Td>
+
                       {/* <Td></Td> */}
                       <Td style={{ textAlign: 'center' }}>{breakdown.Shift}</Td>
                       <Td style={{ textAlign: 'center' }}>{breakdown.LineName}</Td>
                       <Td style={{ textAlign: 'center' }}>{breakdown.Location}</Td>
                       <Td style={{ textAlign: 'center' }}>
+                        {new Date(breakdown.BreakdownStartDate).toLocaleDateString()}
+                      </Td>
+                      <Td style={{ textAlign: 'center' }}>
                         {new Date(breakdown.BreakdownEndDate).toLocaleDateString()}
                       </Td>
+                      <Td style={{ textAlign: 'center' }}>{breakdown.AttendedBy}</Td>
+                      {/* <Td style={{ textAlign: 'center' }}>{breakdown.Raised_By}</Td> */}
                       <Td style={{ textAlign: 'center' }}>
                         {breakdown.TotalBDTime != null ? breakdown.TotalBDTime.toFixed(2) : 'N/A'}
                       </Td>
@@ -492,15 +677,17 @@ class BreakdownHistory extends React.Component {
                       this.state.expandedItems.includes(index) ? 'expanded' : ''
                     }`}
                   >
-                    <div className="expand">
-                      {this.state.expandedItems.includes(index) ? (
-                        <FaChevronUp onClick={() => this.toggleExpand(index)} />
-                      ) : (
-                        <FaChevronDown onClick={() => this.toggleExpand(index)} />
-                      )}
-                    </div>
-                    <div>
-                      <span>{breakDown.MachineName}</span> - <span>{breakDown.Location}</span>
+                    <div className="expand d-flex">
+                      <div>
+                        <span>{breakDown.MachineName}</span> - <span>{breakDown.Location}</span>
+                      </div>
+                      <div className="Expand1">
+                        {this.state.expandedItems.includes(index) ? (
+                          <FaChevronUp onClick={() => this.toggleExpand(index)} />
+                        ) : (
+                          <FaChevronDown onClick={() => this.toggleExpand(index)} />
+                        )}
+                      </div>
                     </div>
                     <div
                       className={`expanded-content ${

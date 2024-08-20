@@ -53,9 +53,9 @@ const WidgetsDropdown = () => {
   const [breakdowns, setBreakdown] = useState([])
   const [totalBreakdown, setTotalBreakdown] = useState(0)
   const [pendingTaskCount, setPendingTaskCount] = useState(0)
-  const [completdTasksCount, setcompletdTasksCount] = useState(0)
+  const [completdTasksCount, setCompletedTasksCount] = useState(0)
   const [todaysTaskCount, setTodaysTaskCount] = useState(0)
-  const [completedTasksCount, setCompletedTasksCount] = useState(0)
+  // const [completedTasksCount, setCompletedTasksCount] = useState(0)
   const today = new Date()
   const formattedToday = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(
     2,
@@ -88,7 +88,7 @@ const WidgetsDropdown = () => {
   }
 
   useEffect(() => {
-    fetch('https://backendmaintenx.onrender.com/api/breakdown')
+    fetch('http://localhost:4000/api/breakdown')
       .then((response) => response.json())
       .then((fetchedBreakdowns) => {
         const aggregated = aggregateData(fetchedBreakdowns)
@@ -101,7 +101,7 @@ const WidgetsDropdown = () => {
   useEffect(() => {
     const breakdownType = []
     const getbreakdownRecord = async () => {
-      const dataReq = await fetch('https://backendmaintenx.onrender.com/api/breakdown')
+      const dataReq = await fetch('http://localhost:4000/api/breakdown')
       const dataRes = await dataReq.json()
       console.log(dataRes)
 
@@ -115,7 +115,7 @@ const WidgetsDropdown = () => {
   }, [])
 
   useEffect(() => {
-    fetch('https://backendmaintenx.onrender.com/api/breakdown')
+    fetch('http://localhost:4000/api/breakdown')
       .then((response) => response.json())
       .then((fetchedBreakdowns) => {
         setBreakdown(fetchedBreakdowns, breakdowns)
@@ -127,7 +127,7 @@ const WidgetsDropdown = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://backendmaintenx.onrender.com/api/pm')
+        const response = await fetch('http://localhost:4000/api/pm')
         const fetchedTasks = await response.json()
 
         setAssets(fetchedTasks)
@@ -220,7 +220,7 @@ const WidgetsDropdown = () => {
   }
 
   useEffect(() => {
-    fetch(`https://backendmaintenx.onrender.com/api/pm?nextDate=${formattedToday}`)
+    fetch(`http://localhost:4000/api/pm?nextDate=${formattedToday}`)
       .then((response) => response.json())
       .then((fetchedTasks) => {
         setTodaysTaskCount(fetchedTasks.length)
@@ -230,7 +230,7 @@ const WidgetsDropdown = () => {
   }, [])
 
   useEffect(() => {
-    fetch('https://backendmaintenx.onrender.com/api/assets')
+    fetch('http://localhost:4000/api/assets')
       .then((response) => response.json())
       .then((fetchedTasks) => {
         setAssets(fetchedTasks)
@@ -243,16 +243,25 @@ const WidgetsDropdown = () => {
       <div className="container-fluid w-100">
         <div className="row mx-auto flex-column flex-sm-row justify-content-center w-100 dashboard-row">
           {/* Total Breakdown */}
-          <div className="card shadow-sm mx-auto dashboard-card">
+          <div
+            className="card shadow-sm mx-auto dashboard-card"
+            style={{
+              backgroundColor: '#16aaf6',
+              borderTopLeftRadius: '20px',
+              borderBottomRightRadius: '20px',
+              borderTopRightRadius: '0px',
+              borderBottomLeftRadius: '0px',
+            }}
+          >
             <Link to="/temperature" className="card-link"></Link>
-            <div className="card-content" style={{ marginTop: '5px', width: '16rem' }}>
-              <div className="icon-container" style={{ backgroundColor: '#FF8C00' }}>
+            <div className="card-content" style={{ marginTop: '5px', width: '14rem' }}>
+              <div className="icon-container" style={{ backgroundColor: '#ffffff' }}>
                 <MdDashboard
                   className="icon"
                   style={{
                     width: '30px',
                     height: '30px',
-                    fill: 'white',
+                    fill: '#16aaf6',
                     marginTop: '1px',
                     marginLeft: '3px',
                   }}
@@ -260,30 +269,41 @@ const WidgetsDropdown = () => {
               </div>
               <div className="text-container">
                 <div className="label">
-                  <span>Total Breakdown</span>
+                  <span>TotalBreakdown</span>
                 </div>
                 <h3 className="count">{totalBreakdown}</h3>
               </div>
             </div>
-            <hr className="divider" />
+            {/* <hr className="divider" /> */}
             <div className="button-container">
-              <NavLink to="/adminbdhistory" className="nav-link">
-                <button className="more-button">Get more</button>
-              </NavLink>
+              <button className="more-button" style={{ Color: 'white' }}>
+                <NavLink to="/adminbreakdown" className="nav-link">
+                  View more
+                </NavLink>
+              </button>
             </div>
           </div>
 
           {/* All Assets */}
-          <div className="card shadow-sm mx-auto dashboard-card">
+          <div
+            className="card shadow-sm mx-auto dashboard-card"
+            style={{
+              backgroundColor: '#ab1dfd',
+              borderTopLeftRadius: '20px',
+              borderBottomRightRadius: '20px',
+              borderTopRightRadius: '0px',
+              borderBottomLeftRadius: '0px',
+            }}
+          >
             <Link to="/temperature" className="card-link"></Link>
-            <div className="card-content" style={{ marginTop: '5px', width: '16rem' }}>
-              <div className="icon-container" style={{ backgroundColor: '#1AA260' }}>
+            <div className="card-content" style={{ marginTop: '5px', width: '15rem' }}>
+              <div className="icon-container" style={{ backgroundColor: '#ffffff' }}>
                 <BsFillCassetteFill
                   className="icon"
                   style={{
                     width: '30px',
                     height: '35px',
-                    fill: 'white',
+                    fill: '#ab1dfd',
                     marginTop: '1px',
                     marginLeft: '3px',
                   }}
@@ -296,25 +316,36 @@ const WidgetsDropdown = () => {
                 <h3 className="count">{totalTasks}</h3>
               </div>
             </div>
-            <hr className="divider" />
+            {/* <hr className="divider" /> */}
             <div className="button-container">
-              <NavLink to="/assettable" className="nav-link">
-                <button className="more-button">Get more</button>
-              </NavLink>
+              <button className="more-button" style={{ Color: 'white' }}>
+                <NavLink to="/assetTable" className="nav-link">
+                  View more
+                </NavLink>
+              </button>
             </div>
           </div>
 
           {/* Pending Task */}
-          <div className="card shadow-sm mx-auto dashboard-card">
+          <div
+            className="card shadow-sm mx-auto dashboard-card"
+            style={{
+              backgroundColor: '#fd6608',
+              borderTopLeftRadius: '20px',
+              borderBottomRightRadius: '20px',
+              borderTopRightRadius: '0px',
+              borderBottomLeftRadius: '0px',
+            }}
+          >
             <Link to="/currentvfd" className="card-link"></Link>
-            <div className="card-content" style={{ marginTop: '5px', width: '16rem' }}>
-              <div className="icon-container" style={{ backgroundColor: '#E41B17' }}>
+            <div className="card-content" style={{ marginTop: '5px', width: '15rem' }}>
+              <div className="icon-container" style={{ backgroundColor: '#ffffff' }}>
                 <MdOutlinePendingActions
                   className="icon"
                   style={{
                     width: '30px',
                     height: '30px',
-                    fill: 'white',
+                    fill: '#fd6608',
                     marginTop: '1px',
                     marginLeft: '3px',
                   }}
@@ -324,31 +355,42 @@ const WidgetsDropdown = () => {
                 <div className="label">
                   <span>Pending Task</span>
                 </div>
-                <h3 className="count">{todaysTaskCount}</h3>
+                <h3 className="count">{pendingTaskCount}</h3>
               </div>
             </div>
-            <hr className="divider" />
+            {/* <hr className="divider" /> */}
             <div className="button-container">
-              <NavLink to="/pmschedule" className="nav-link">
-                <button className="more-button">Get more</button>
-              </NavLink>
+              <button className="more-button">
+                <NavLink to="/pmSchedule" className="nav-link">
+                  View more
+                </NavLink>
+              </button>
             </div>
           </div>
 
           {/* Completed Task */}
-          <div className="card shadow-sm mx-auto dashboard-card">
+          <div
+            className="card shadow-sm mx-auto dashboard-card"
+            style={{
+              borderTopLeftRadius: '20px',
+              borderBottomRightRadius: '20px',
+              borderTopRightRadius: '0px',
+              borderBottomLeftRadius: '0px',
+              backgroundColor: 'rgb(8, 185, 99)',
+            }}
+          >
             <Link to="/voltagevfd" className="card-link"></Link>
-            <div className="card-content" style={{ marginTop: '5px', width: '16rem' }}>
+            <div className="card-content" style={{ marginTop: '5px', width: '15rem' }}>
               <div
                 className="icon-container"
-                style={{ backgroundColor: '#14A3C7', marginTop: '2px' }}
+                style={{ backgroundColor: '#ffffff', marginTop: '2px' }}
               >
                 <BsFillCheckCircleFill
                   className="icon"
                   style={{
                     width: '30px',
                     height: '30px',
-                    fill: 'white',
+                    fill: 'rgb(8, 185, 99)',
                     marginTop: '1px',
                     marginLeft: '3px',
                   }}
@@ -361,11 +403,13 @@ const WidgetsDropdown = () => {
                 <h3 className="count">{completdTasksCount}</h3>
               </div>
             </div>
-            <hr className="divider" />
+            {/* <hr className="divider" /> */}
             <div className="button-container">
-              <NavLink to="/pmschedule" className="nav-link">
-                <button className="more-button">Get more</button>
-              </NavLink>
+              <button className="more-button" style={{ color: 'white' }}>
+                <NavLink to="/pmSchedule" className="nav-link">
+                  View more
+                </NavLink>
+              </button>
             </div>
           </div>
         </div>
@@ -378,8 +422,8 @@ const WidgetsDropdown = () => {
         .dashboard-card {
           border-radius: 8px;
           padding: 10px;
-          width: 235px;
-          background-color: #ffffff;
+          width: 250px;
+          background-color: #16aaf6;
           margin: 10px;
           display: flex;
           flex-direction: column;
@@ -404,7 +448,7 @@ const WidgetsDropdown = () => {
           width: 40%;
           border-radius: 7px;
           height: 5rem;
-          margin-bottom: 30px;
+          margin-bottom: 40px;
           margin-left: 10px;
           display: flex;
           justify-content: center;
@@ -424,13 +468,13 @@ const WidgetsDropdown = () => {
           display: flex;
         }
         .label span {
-          color: #d8d8d8;
+          color: white;
           margin-top: 2rem;
           margin-left: 2px;
           font-size: 0.9rem;
         }
         .count {
-          color: #5b5c5c;
+          color: #ffffff;
           margin-top: 0;
           margin-bottom: 5.5rem;
           margin-left: 80px;
@@ -446,7 +490,7 @@ const WidgetsDropdown = () => {
         .more-button {
           background: none;
           border: none;
-          color: #d8d8d8;
+          color: #ffffff;
           cursor: pointer;
           padding: 0;
           margin: 0;

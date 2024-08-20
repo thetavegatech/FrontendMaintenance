@@ -46,7 +46,7 @@ const MyFormComponent = () => {
   const uploadImage = (e, id) => {
     e.preventDefault()
     axios
-      .put(`https://backendmaintenx.onrender.com/api/assets/${id}`, {
+      .put(`http://localhost:4000/api/assets/${id}`, {
         Image,
       })
       .then((result) => {
@@ -80,7 +80,7 @@ const MyFormComponent = () => {
 
       setSuccessMessage('Form submitted successfully!')
 
-      const response = await fetch('https://backendmaintenx.onrender.com/api/assets', {
+      const response = await fetch('http://localhost:4000/api/assets', {
         method: 'POST',
         headers: {
           'Content-type': 'application/json',
@@ -113,7 +113,7 @@ const MyFormComponent = () => {
 
   return (
     <div className="card shadow-sm mx-auto">
-      <Link to="/temperature" style={{ position: 'absolute', top: '15px', right: '10px' }}></Link>
+      {/* <Link to="/temperature" style={{ position: 'absolute', top: '15px', right: '10px' }}></Link> */}
 
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
         <div
@@ -350,19 +350,19 @@ const MyFormComponent = () => {
               marginBottom: '20px',
             }}
           >
-            <div className="form-group" style={{ width: '30%' }}>
+            {/* <div className="form-group" style={{ width: '10%' }}>
               <label htmlFor="manufacturingYear">Manufacturing Year</label>
               <input
                 type="text"
                 name="manufacturingYear"
-                className="form-control"
+                className="form-control col-sm-3"
                 value={formData.ManufacturingYear}
                 onChange={(e) => setFormData({ ...formData, ManufacturingYear: e.target.value })}
                 required
                 style={{ height: '40px' }}
               />
-            </div>
-            <div className="form-group" style={{ width: '30%' }}>
+            </div> */}
+            {/* <div className="form-group" style={{ width: '30%' }}>
               <label htmlFor="attachment">Attachment</label>
               <input
                 type="file"
@@ -370,10 +370,9 @@ const MyFormComponent = () => {
                 className="form-control"
                 value={formData.attachment}
                 onChange={(e) => setFormData({ ...formData, attachment: e.target.value })}
-                // required
                 style={{ height: '40px' }}
               />
-            </div>
+            </div> */}
           </div>
 
           <button
@@ -381,7 +380,7 @@ const MyFormComponent = () => {
             className="btn btn-primary"
             style={{
               float: 'left',
-              backgroundColor: '#CA226B',
+              backgroundColor: '#1237F7',
               marginTop: '10px',
               alignItems: 'end',
             }}

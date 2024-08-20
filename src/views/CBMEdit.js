@@ -11,6 +11,7 @@ import classNames from 'classnames'
 const CBMEdit = () => {
   const [formData, setFormData] = useState({
     assets: '',
+    description: '',
     assetName: '',
     location: '',
     assetType: '',
@@ -29,12 +30,13 @@ const CBMEdit = () => {
     // Fetch data by id when the component mounts
     const fetchData = async () => {
       try {
-        const response = await axios.get(`https://backendmaintenx.onrender.com/api/cbm/${id}`)
+        const response = await axios.get(`http://localhost:4000/api/cbm/${id}`)
         const data = response.data
 
         setFormData({
           assetName: data.assetName,
           location: data.location,
+          description: data.description,
           assetType: data.assetType,
           installationDate: data.installationDate,
           cbmScheduleDate: data.cbmScheduleDate ? data.cbmScheduleDate.split('T')[0] : '',
@@ -84,9 +86,7 @@ const CBMEdit = () => {
 
     if (name === 'assetName') {
       try {
-        const response = await axios.get(
-          `https://backendmaintenx.onrender.com/api/locations/${value}`,
-        )
+        const response = await axios.get(`http://localhost:4000/api/locations/${value}`)
         if (response.data && response.data.Location) {
           updatedFormData = {
             ...updatedFormData,
@@ -113,7 +113,7 @@ const CBMEdit = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      await axios.put(`https://backendmaintenx.onrender.com/api/cbm/${id}`, formData)
+      await axios.put(`http://localhost:4000/api/cbm/${id}`, formData)
       navigate(-1) // Navigate back to the previous page
     } catch (error) {
       console.error('Error updating CBM record:', error)
@@ -178,9 +178,9 @@ const CBMEdit = () => {
             </div>
 
             <div className="form-group" style={{ width: '25%' }}>
-              <label htmlFor="cbmScheduleDate">CBM Schedule Date</label>
+              <label htmlFor="cbmScheduleDate">Life/Count</label>
               <input
-                type="date"
+                type="text"
                 name="cbmScheduleDate"
                 className="form-control"
                 value={formData.cbmScheduleDate}
@@ -200,7 +200,7 @@ const CBMEdit = () => {
               marginTop: '20px',
             }}
           >
-            <div className="form-group" style={{ width: '25%' }}>
+            {/* <div className="form-group" style={{ width: '25%' }}>
               <label htmlFor="cbmFrequency">CBM Frequency</label>
               <select
                 name="cbmFrequency"
@@ -219,12 +219,24 @@ const CBMEdit = () => {
                 <option value="half year">Half Year</option>
                 <option value="yearly">Yearly</option>
               </select>
+            </div> */}
+            <div className="form-group" style={{ width: '25%' }}>
+              <label htmlFor="description">Part</label>
+              <input
+                type="text"
+                name="description"
+                className="form-control"
+                value={formData.description}
+                onChange={handleChange}
+                required
+                style={{ height: '40px' }}
+              />
             </div>
 
             <div className="form-group" style={{ width: '25%' }}>
-              <label htmlFor="nextCbmDate">Next CBM Date</label>
+              <label htmlFor="nextCbmDate">Pre Life/Count</label>
               <input
-                type="date"
+                type="text"
                 name="nextCbmDate"
                 className="form-control"
                 value={formData.nextCbmDate}
@@ -256,7 +268,7 @@ const CBMEdit = () => {
             className="btn btn-primary"
             style={{
               float: 'left',
-              backgroundColor: '#CA226B',
+              backgroundColor: '#1237F7',
               marginTop: '15px',
               alignItems: 'end',
             }}

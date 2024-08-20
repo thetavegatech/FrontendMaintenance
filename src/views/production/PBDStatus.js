@@ -19,7 +19,7 @@ export default function BreakDown() {
     Shift: '',
     LineName: '',
     Operations: '',
-    BreakdownPhenomenon: '',
+    BreakdownPhenomenons: '',
     BreakdownType: '',
     WhyWhyAnalysis: '',
     RootCause: '',
@@ -36,7 +36,7 @@ export default function BreakDown() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`https://backendmaintenx.onrender.com/api/breakdown/${id}`)
+      const response = await axios.get(`http://localhost:4000/api/breakdown/${id}`)
       console.log(response.data) // Ensure response data structure matches your expectations
       setFormData(response.data) // Update entire form data state
     } catch (error) {
@@ -55,7 +55,7 @@ export default function BreakDown() {
   const handleSubmit = (e) => {
     e.preventDefault()
     axios
-      .put(`https://backendmaintenx.onrender.com/api/breakdown/${id}`, formData)
+      .put(`http://localhost:4000/api/breakdown/${id}`, formData)
       .then((result) => {
         console.log(result)
         // Assuming you want to clear the form after successful update
@@ -68,7 +68,7 @@ export default function BreakDown() {
           Shift: '',
           LineName: '',
           Operations: '',
-          BreakdownPhenomenon: '',
+          BreakdownPhenomenons: '',
           BreakdownType: '',
           WhyWhyAnalysis: '',
           RootCause: '',
@@ -127,6 +127,7 @@ export default function BreakDown() {
                 <input
                   type="text"
                   readOnly
+                  disabled
                   className="form-control"
                   id="MachineName"
                   name="MachineName"
@@ -138,8 +139,9 @@ export default function BreakDown() {
               <div className="form-group" style={{ width: '30%' }}>
                 <label htmlFor="BreakdownStartDate">Breakdown Start Date:</label>
                 <input
-                  type="date"
+                  // type="date"
                   readOnly
+                  disabled
                   className="form-control"
                   id="BreakdownStartDate"
                   name="BreakdownStartDate"
@@ -153,10 +155,39 @@ export default function BreakDown() {
                 <input
                   type="text"
                   readOnly
+                  disabled
                   className="form-control"
                   id="Shift"
                   name="Shift"
                   value={formData.Shift}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="form-group" style={{ width: '30%' }}>
+                <label htmlFor="LineName">Line Name:</label>
+                <input
+                  type="text"
+                  disabled
+                  readOnly
+                  className="form-control"
+                  id="LineName"
+                  name="LineName"
+                  value={formData.LineName}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="form-group" style={{ width: '30%' }}>
+                <label htmlFor="Operations">Operations:</label>
+                <input
+                  type="text"
+                  disabled
+                  readOnly
+                  className="form-control"
+                  id="Operations"
+                  name="Operations"
+                  value={formData.Operations}
                   onChange={handleChange}
                   required
                 />
@@ -174,61 +205,25 @@ export default function BreakDown() {
               }}
             >
               <div className="form-group" style={{ width: '30%' }}>
-                <label htmlFor="LineName">Line Name:</label>
+                <label htmlFor="BreakdownPhenomenons">Breakdown Phenomenon:</label>
                 <input
-                  type="text"
+                  // type="text"
                   readOnly
+                  disabled
                   className="form-control"
-                  id="LineName"
-                  name="LineName"
-                  value={formData.LineName}
+                  id="BreakdownPhenomenons"
+                  name="BreakdownPhenomenons"
+                  value={formData.BreakdownPhenomenons}
                   onChange={handleChange}
                   required
                 />
               </div>
-              <div className="form-group" style={{ width: '30%' }}>
-                <label htmlFor="Operations">Operations:</label>
-                <input
-                  type="text"
-                  readOnly
-                  className="form-control"
-                  id="Operations"
-                  name="Operations"
-                  value={formData.Operations}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="form-group" style={{ width: '30%' }}>
-                <label htmlFor="BreakdownPhenomenon">Breakdown Phenomenon:</label>
-                <input
-                  type="text"
-                  readOnly
-                  className="form-control"
-                  id="BreakdownPhenomenon"
-                  name="BreakdownPhenomenon"
-                  value={formData.BreakdownPhenomenon}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-            </div>
-
-            {/* Third Row */}
-            <div
-              className="form-row"
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                gap: '10px',
-                marginBottom: '20px',
-              }}
-            >
               <div className="form-group" style={{ width: '30%' }}>
                 <label htmlFor="BreakdownType">Breakdown Type:</label>
                 <select
                   className="form-control"
                   readOnly
+                  disabled
                   id="BreakdownType"
                   name="BreakdownType"
                   value={formData.BreakdownType}
@@ -245,9 +240,24 @@ export default function BreakDown() {
                 </select>
               </div>
               <div className="form-group" style={{ width: '30%' }}>
+                <label htmlFor="BreakdownStartDate">Breakdown Start Date:</label>
+                <input
+                  type="text"
+                  disabled
+                  className="form-control"
+                  id="BreakdownStartDate"
+                  readOnly
+                  name="BreakdownStartDate"
+                  value={formData.BreakdownStartDate}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="form-group" style={{ width: '30%' }}>
                 <label htmlFor="BreakdownStartTime">Breakdown Start Time:</label>
                 <input
                   type="text"
+                  disabled
                   className="form-control"
                   id="BreakdownStartTime"
                   readOnly
@@ -262,61 +272,11 @@ export default function BreakDown() {
                 <input
                   type="text"
                   readOnly
+                  disabled
                   className="form-control"
                   id="BreakdownEndTime"
                   name="BreakdownEndTime"
                   value={formData.BreakdownEndTime}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-            </div>
-
-            {/* Fourth Row */}
-            <div
-              className="form-row"
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                gap: '10px',
-                marginBottom: '20px',
-              }}
-            >
-              <div className="form-group" style={{ width: '30%' }}>
-                <label htmlFor="BreakdownEndDate">Breakdown End Date:</label>
-                <input
-                  type="date"
-                  readOnly
-                  className="form-control"
-                  id="BreakdownEndDate"
-                  name="BreakdownEndDate"
-                  value={formData.BreakdownEndDate}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="form-group" style={{ width: '30%' }}>
-                <label htmlFor="WhyWhyAnalysis">Why-Why Analysis:</label>
-                <input
-                  type="textarea"
-                  readOnly
-                  className="form-control"
-                  id="WhyWhyAnalysis"
-                  name="WhyWhyAnalysis"
-                  value={formData.WhyWhyAnalysis}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="form-group" style={{ width: '30%' }}>
-                <label htmlFor="RootCause">Root Cause:</label>
-                <input
-                  type="text"
-                  readOnly
-                  className="form-control"
-                  id="RootCause"
-                  name="RootCause"
-                  value={formData.RootCause}
                   onChange={handleChange}
                   required
                 />
@@ -334,6 +294,48 @@ export default function BreakDown() {
               }}
             >
               <div className="form-group" style={{ width: '30%' }}>
+                <label htmlFor="BreakdownEndDate">Breakdown End Date:</label>
+                <input
+                  // type="date"
+                  readOnly
+                  disabled
+                  className="form-control"
+                  id="BreakdownEndDate"
+                  name="BreakdownEndDate"
+                  value={formData.BreakdownEndDate}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="form-group" style={{ width: '30%' }}>
+                <label htmlFor="WhyWhyAnalysis">Why-Why Analysis:</label>
+                <input
+                  type="textarea"
+                  readOnly
+                  disabled
+                  className="form-control"
+                  id="WhyWhyAnalysis"
+                  name="WhyWhyAnalysis"
+                  value={formData.WhyWhyAnalysis}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="form-group" style={{ width: '30%' }}>
+                <label htmlFor="RootCause">Root Cause:</label>
+                <input
+                  type="text"
+                  readOnly
+                  disabled
+                  className="form-control"
+                  id="RootCause"
+                  name="RootCause"
+                  value={formData.RootCause}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              {/* <div className="form-group" style={{ width: '30%' }}>
                 <label htmlFor="TargetDate">Target Date:</label>
                 <input
                   type="date"
@@ -345,12 +347,13 @@ export default function BreakDown() {
                   onChange={handleChange}
                   required
                 />
-              </div>
+              </div> */}
               <div className="form-group" style={{ width: '30%' }}>
                 <label htmlFor="Responsibility">Responsibility:</label>
                 <input
                   type="text"
                   readOnly
+                  disabled
                   className="form-control"
                   id="Responsibility"
                   name="Responsibility"
@@ -360,6 +363,20 @@ export default function BreakDown() {
                 />
               </div>
               <div className="form-group" style={{ width: '30%' }}>
+                <label htmlFor="Remark">Remark:</label>
+                <input
+                  type="text"
+                  disabled
+                  readOnly
+                  className="form-control"
+                  id="Remark"
+                  name="Remark"
+                  value={formData.Remark}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              {/* <div className="form-group" style={{ width: '30%' }}>
                 <label htmlFor="HD">HD:</label>
                 <input
                   type="text"
@@ -371,7 +388,7 @@ export default function BreakDown() {
                   onChange={handleChange}
                   required
                 />
-              </div>
+              </div> */}
             </div>
 
             {/* Sixth Row */}
@@ -386,30 +403,21 @@ export default function BreakDown() {
             >
               <div className="form-group" style={{ width: '30%' }}>
                 <label htmlFor="Status">Status:</label>
-                <input
-                  type="text"
-                  readOnly
+                <select
                   className="form-control"
+                  readOnly
                   id="Status"
                   name="Status"
                   value={formData.Status}
                   onChange={handleChange}
                   required
-                />
+                >
+                  <option value="">Select an option</option>
+                  <option value="open">open</option>
+                  <option value="close">Close</option>
+                </select>
               </div>
-              <div className="form-group" style={{ width: '30%' }}>
-                <label htmlFor="Remark">Remark:</label>
-                <input
-                  type="text"
-                  readOnly
-                  className="form-control"
-                  id="Remark"
-                  name="Remark"
-                  value={formData.Remark}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+
               {/* Submit Button */}
               <div
                 className="form-group d-flex justify-content-center"
@@ -420,10 +428,10 @@ export default function BreakDown() {
                   className="btn btn-primary"
                   style={{
                     float: 'left',
-                    backgroundColor: '#CA226B',
+                    backgroundColor: '#1237F7',
                     marginTop: '40px',
                     alignItems: 'start',
-                    marginRight: '105rem',
+                    marginRight: '95rem',
                   }}
                 >
                   Save
@@ -438,7 +446,7 @@ export default function BreakDown() {
                 className="btn btn-primary"
                 style={{
                   float: 'left',
-                  backgroundColor: '#CA226B',
+                  backgroundColor: '#1237F7',
                   marginTop: '10px',
                   alignItems: 'start',
                   marginRight: '60rem',

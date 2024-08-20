@@ -87,7 +87,7 @@ export default function EditUser() {
             }}
           />
         </div>
-        <h5 style={{ marginLeft: '25px' }}>CBM Edit</h5>
+        <h5 style={{ marginLeft: '25px' }}>User Edit</h5>
       </div>
       {/* <div
         className="tab-content1"
@@ -180,8 +180,8 @@ export default function EditUser() {
                 className="btn btn-primary"
                 style={{
                   float: 'left',
-                  backgroundColor: '#CA226B',
-                  marginTop: '15px',
+                  backgroundColor: '#1237F7',
+                  marginBottom: '10px',
                   alignItems: 'end',
                 }}
               >

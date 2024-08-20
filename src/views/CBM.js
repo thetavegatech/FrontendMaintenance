@@ -26,7 +26,7 @@ const AssetTable = () => {
 
   useEffect(() => {
     axios
-      .get('https://backendmaintenx.onrender.com/api/cbm')
+      .get('http://localhost:4000/api/cbm')
       .then((response) => {
         const cbmData = Array.isArray(response.data) ? response.data : [response.data]
         setCbms(cbmData)
@@ -83,7 +83,7 @@ const AssetTable = () => {
       setCbms(updatedAssets)
       setFilteredCbms(updatedAssets)
       try {
-        await axios.put('https://backendmaintenx.onrender.com/api/cbmupdateRecords', {
+        await axios.put('http://localhost:4000/api/cbmupdateRecords', {
           cbms: updatedAssets,
         })
       } catch (error) {
@@ -123,7 +123,7 @@ const AssetTable = () => {
     const isConfirmed = window.confirm('Are you sure you want to delete this data?')
     if (isConfirmed) {
       axios
-        .delete(`https://backendmaintenx.onrender.com/api/cbm/${id}`)
+        .delete(`http://localhost:4000/api/cbm/${id}`)
         .then((response) => {
           const newCbms = cbms.filter((cbm) => cbm._id !== id)
           setCbms(newCbms)
@@ -176,7 +176,7 @@ const AssetTable = () => {
 
   return (
     <div className="card shadow-sm mx-auto">
-      <Link to="/temperature" style={{ position: 'absolute', top: '10px', right: '10px' }}></Link>
+      {/* <Link to="/temperature" style={{ position: 'absolute', top: '10px', right: '10px' }}></Link> */}
 
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
         <div
@@ -221,14 +221,14 @@ const AssetTable = () => {
           <span role="img" aria-label="search-icon"></span>
         </label>
         <input
-          placeholder="Search"
+          placeholder="Search By Location/AssetName"
           style={{
             display: 'flex',
             marginBottom: '10px',
             padding: '6px',
             border: '1px solid ',
             borderRadius: '6px',
-            width: '8rem',
+            width: '13rem',
             transition: 'border-color 0.3s ease-in-out, background-color 0.3s ease-in-out',
           }}
           value={searchQuery}
@@ -237,7 +237,7 @@ const AssetTable = () => {
         <h5 style={{ marginLeft: '20px' }}></h5>
       </div>
 
-      <div className="table-container">
+      <div className="table-container  mobile-wide" style={{ marginTop: '5px' }}>
         <Table className="custom-table">
           <Thead>
             <Tr>
@@ -245,9 +245,10 @@ const AssetTable = () => {
               <Th>Asset Name</Th>
               <Th>Location</Th>
               {/* <Th style={{ textAlign: 'center' }}>Installation Date</Th> */}
-              <Th>CBM Schedule Date</Th>
-              <Th>CBM Frequency</Th>
-              <Th>Next CBM</Th>
+              <Th>Life/Count</Th>
+
+              <Th>Actual Life/Count</Th>
+              <Th>Part</Th>
               <Th>Status</Th>
               <Th>Edit</Th>
               <Th>Delete</Th>
@@ -280,9 +281,12 @@ const AssetTable = () => {
                     {/* <Td style={{ textAlign: 'center' }}>
                     {new Date(cbm.installationDate).toLocaleDateString()}
                   </Td> */}
-                    <Td>{new Date(cbm.cbmScheduleDate).toLocaleDateString()}</Td>
-                    <Td>{cbm.cbmFrequency}</Td>
-                    <Td>{new Date(cbm.nextCbmDate).toLocaleDateString()}</Td>
+                    <Td>{cbm.cbmScheduleDate}</Td>
+                    {/* <Td>{new Date(cbm.cbmScheduleDate).toLocaleDateString()}</Td> */}
+
+                    <Td>{cbm.nextCbmDate}</Td>
+                    <Td>{cbm.description}</Td>
+                    {/* <Td>{new Date(cbm.nextCbmDate).toLocaleDateString()}</Td> */}
                     <Td>{cbm.status}</Td>
                     <Td>
                       <NavLink to={`/editcbm/${cbm._id}`} style={{ color: '#000080' }}>
@@ -317,16 +321,19 @@ const AssetTable = () => {
                   key={cbm._id}
                   className={`list-item ${expandedItems.includes(index) ? 'expanded' : ''}`}
                 >
-                  <div className="expand">
-                    {expandedItems.includes(index) ? (
-                      <FaChevronUp onClick={() => toggleExpand(index)} />
-                    ) : (
-                      <FaChevronDown onClick={() => toggleExpand(index)} />
-                    )}
+                  <div className="expand d-flex">
+                    <div>
+                      <span>{cbm.assetName}</span> - <span>{cbm.location}</span>
+                    </div>
+                    <div className="Expand1">
+                      {expandedItems.includes(index) ? (
+                        <FaChevronUp onClick={() => toggleExpand(index)} />
+                      ) : (
+                        <FaChevronDown onClick={() => toggleExpand(index)} />
+                      )}
+                    </div>
                   </div>
-                  <div>
-                    <span>{cbm.assetName}</span> - <span>{cbm.location}</span>
-                  </div>
+
                   <div
                     className={`expanded-content ${
                       expandedItems.includes(index) ? 'visible' : 'hidden'

@@ -1,202 +1,231 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import axios from 'axios'
 import { NavLink } from 'react-router-dom'
 import { FaEdit } from 'react-icons/fa'
 import { CContainer, CSpinner } from '@coreui/react'
 import { CAvatar, CButton, CTable, CTableHead } from '@coreui/react'
 import { format } from 'date-fns'
+import { MdDashboard } from 'react-icons/md'
+import { Link } from 'react-router-dom'
+import classNames from 'classnames'
+import { TfiExport } from 'react-icons/tfi'
+import { IoIosAddCircle } from 'react-icons/io'
 import * as XLSX from 'xlsx'
-import { useDispatch, useSelector } from 'react-redux'
-import { Placeholder } from 'reactstrap'
+import '../assetTable/asset.css'
+import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table'
+import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css'
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+// import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
+import { FaChevronUp, FaChevronDown } from 'react-icons/fa'
+import { CModal, CModalHeader, CModalBody, CModalFooter } from '@coreui/react'
 
-function BreakdownHistory() {
-  const [breakdowns, setBreakdowns] = useState([])
-  const [selectedMachine, setSelectedMachine] = useState('')
-  const [mttr, setMttr] = useState('')
-  const [mtbf, setMtbf] = useState('')
-  const [selectedLocation, setSelectedLocation] = useState('')
-  const [searchLocation, setSearchLocation] = useState('')
-  const [Location, setLoction] = useState('')
-  const [message, setMessage] = useState('')
-  const [searchQuery, setSearchQuery] = useState('')
-  const [isHovered, setIsHovered] = useState(false)
-  const [loading, setLoading] = useState(true)
-  const [TotalBDTime, setTotalBDTime] = useState('')
-  const [searchTerm, setSearchTerm] = useState('')
-  // const [loggedInUsername, setLoggedInUsername] = useState('Mayuri ')
-  const [filteredAssets, setFilteredAssets] = useState([])
-
-  const loggedInUsername = useSelector((state) => state.auth.userInfo?.name)
-
-  const loggedInUserLocation = useSelector((state) => state.auth.userInfo?.plant)
-  // const loggedInUserLocation = 'AAAPL-29'
-  const openBreakdowns = breakdowns.filter((breakdown) => breakdown.Status === 'close')
-
-  const validatedAssets = breakdowns.filter(
-    (breakdowns) => breakdowns.Location && breakdowns.Location.trim() !== '',
-  )
-
-  // Plant options for the dropdown
-  const plantOptions = ['AAAPL-27', 'AAAPL- 89', 'AAAPL-29', 'DPAPL - 236', 'DPAPL- GN']
-
-  // const handleFilterChange = (value) => {
-  //   setSearchTerm(value) // Update search term
-
-  //   if (value === 'All Plants') {
-  //     setFilteredAssets(validatedAssets) // If 'All Plants' selected, show all assets
-  //   } else {
-  //     // Filter assets based on selected plant, open breakdowns, and logged-in user
-  //     const filtered = breakdowns.filter(
-  //       (breakdown) =>
-  //         breakdown.Location.toLowerCase().includes(value.toLowerCase()) &&
-  //         openBreakdowns.includes(breakdown) &&
-  //         breakdown.BDRaiseName === loggedInUsername,
-  //     )
-  //     setFilteredAssets(filtered)
-  //   }
-  // }
-
-  const handleSearchChange = (event) => {
-    console.log('Handle search change triggered')
-    const searchTerm = event.target.value.toLowerCase() // Convert search term to lowercase
-    setSearchTerm(searchTerm) // Update search term state
-    setSearchLocation(searchTerm)
-    console.log('Search location:', searchLocation)
-
-    // If 'All Plants' selected, show all validated assets
-    if (searchTerm === 'all plants') {
-      setBreakdowns(breakdowns)
-    } else {
-      // Filter breakdowns based on search term
-      const filtered = breakdowns.filter((breakdown) => {
-        const breakdownValues = Object.values(breakdown).map((value) => String(value).toLowerCase())
-        return breakdownValues.some((value) => value.includes(searchTerm))
-      })
-      setFilteredAssets(filtered)
-    }
+class BreakdownHistory extends React.Component {
+  state = {
+    breakdowns: [],
+    selectedMachine: '',
+    // mtbf: '',
+    mttr: '',
+    selectedLocation: '',
+    searchLocation: '', // New state for the search term
+    message: '',
+    searchQuery: '',
+    isHovered: false,
+    loading: true,
+    expandedItems: [],
+    filteredAssets: [], // Initialize filteredAssets
+    modalVisible: false,
+    selectedMonth: '',
+    selectedYear: '',
   }
 
-  useEffect(() => {
-    const calculateTotalBDTime = () => {
-      if (!breakdowns || breakdowns.length === 0) return
+  handleMouseEnter = () => {
+    this.setState({ isHovered: true })
+  }
 
-      const breakdownsWithTotalBDTime = breakdowns.map((breakdown) => {
-        const startDateTime = new Date(`${breakdown.BreakdownStartDate}`)
-        const endDateTime = new Date(`${breakdown.BreakdownEndDate}`)
+  handleMouseLeave = () => {
+    this.setState({ isHovered: false })
+  }
 
-        const repairTimeMs = endDateTime - startDateTime
-        const repairTimeHours = repairTimeMs / (1000 * 60 * 60) // milliseconds to hours
+  handleSearchChange = (e) => {
+    const query = e.target.value.toLowerCase()
 
-        return {
-          ...breakdown,
-          TotalBDTime: repairTimeHours, // Assign TotalBDTime to the breakdown object
-        }
+    // Filter assets based on the search query
+    const filteredAssets = this.state.breakdowns.filter((breakDown) => {
+      const taskLocationLower = (breakDown.Location || '').toLowerCase()
+      // const taskDescriptionLower = (asset.TaskDescription || '').toLowerCase()
+      // const scheduledMaintenanceLower = (
+      //   asset.ScheduledMaintenanceDatesandIntervals || ''
+      // ).toLowerCase()
+      // const statusLower = (asset.status || '').toLowerCase()
+
+      return taskLocationLower.includes(query)
+      // taskDescriptionLower.includes(query) ||
+      // scheduledMaintenanceLower.includes(query) ||
+      // statusLower.includes(query)
+    })
+
+    this.setState({
+      filteredAssets,
+      searchLocation: e.target.value,
+      searchQuery: query,
+    })
+  }
+
+  componentDidMount() {
+    // Fetch breakdown data and calculate TotalBDTime
+    this.fetchBreakdownData()
+  }
+
+  fetchBreakdownData = () => {
+    const { selectedLocation } = this.state
+
+    const apiUrl = selectedLocation
+      ? `http://localhost:4000/api/breakdown?location=${selectedLocation}`
+      : 'http://localhost:4000/api/breakdown'
+
+    axios
+      .get(apiUrl)
+      .then((response) => {
+        const breakdowns = Array.isArray(response.data) ? response.data : [response.data]
+        const breakdownsWithTotalBDTime = breakdowns.map((breakdown) => {
+          const startDateTime = new Date(`${breakdown.BreakdownStartDate}`)
+          const endDateTime = new Date(`${breakdown.BreakdownEndDate}`)
+          const repairTimeMs = endDateTime - startDateTime
+          const repairTimeHours = repairTimeMs / (1000 * 60 * 60) // milliseconds to hours
+          return {
+            ...breakdown,
+            TotalBDTime: repairTimeHours,
+          }
+        })
+
+        this.setState({
+          breakdowns: breakdownsWithTotalBDTime,
+          loading: false,
+        })
       })
-
-      setBreakdowns(breakdownsWithTotalBDTime)
-    }
-
-    calculateTotalBDTime()
-  }, [breakdowns])
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('https://backendmaintenx.onrender.com/api/breakdown')
-        // Filter breakdowns based on the logged-in user's location and status
-        const filteredBreakdowns = response.data.filter(
-          (breakdown) =>
-            breakdown.Location === loggedInUserLocation && breakdown.Status === 'close',
-        )
-        setBreakdowns(filteredBreakdowns)
-        setLoading(false)
-      } catch (error) {
+      .catch((error) => {
         console.error('Error fetching data:', error)
         alert('Error fetching data')
-      }
+      })
+  }
+
+  handleLocationChange = (event) => {
+    this.setState({ selectedLocation: event.target.value })
+  }
+
+  fetchBreakdownsData = () => {
+    const { selectedLocation, fromDate, toDate } = this.state
+
+    let apiUrl = 'http://localhost:5000/getBreakdownData'
+
+    if (selectedLocation || fromDate || toDate) {
+      const params = new URLSearchParams()
+      if (selectedLocation) params.append('location', selectedLocation)
+      if (fromDate) params.append('fromDate', fromDate)
+      if (toDate) params.append('toDate', toDate)
+
+      apiUrl = `${apiUrl}?${params.toString()}`
     }
 
-    fetchData()
-  }, [loggedInUserLocation])
+    axios
+      .get(apiUrl)
+      .then((response) => {
+        const breakdowns = Array.isArray(response.data) ? response.data : [response.data]
+        const breakdownsWithTotalBDTime = breakdowns.map((breakdown) => {
+          const startDateTime = new Date(`${breakdown.BreakdownStartDate}`)
+          const endDateTime = new Date(`${breakdown.BreakdownEndDate}`)
+          const repairTimeMs = endDateTime - startDateTime
+          const repairTimeHours = repairTimeMs / (1000 * 60 * 60) // milliseconds to hours
+          return {
+            ...breakdown,
+            TotalBDTime: repairTimeHours,
+          }
+        })
 
-  // useEffect(() => {
-  //   const apiUrl = selectedLocation
-  //     ? `http://localhost:5000/getBreakdownData?location=${selectedLocation}`
-  //     : 'http://localhost:5000/getBreakdownData'
+        this.setState({
+          breakdowns: breakdownsWithTotalBDTime,
+          loading: false,
+        })
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error)
+        alert('Error fetching data')
+      })
+  }
 
-  //   axios
-  //     .get(apiUrl)
-  //     .then((response) => {
-  //       setBreakdowns(Array.isArray(response.data) ? response.data : [response.data])
-  //       setLoading(false)
-  //       console.log('TotalBDTime saved to backend:', response.data, TotalBDTime)
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error fetching data:', error)
-  //       alert('Error fetching data')
-  //     })
-  // }, [selectedLocation])
-
-  const calculateMTTR = () => {
-    // const { breakdowns, selectedMachine } = this.state
+  calculateMTTR = () => {
+    const filteredBreakdowns = this.filterBreakdownsByMonthYear()
+    const { selectedMachine } = this.state
 
     if (!selectedMachine) {
-      setSelectedMachine({ mttr: 'Please select a machine.' })
+      this.setState({ mttr: null })
       return
     }
 
-    const filteredBreakdowns = breakdowns.filter(
+    const machineBreakdowns = filteredBreakdowns.filter(
       (breakdown) => breakdown.MachineName === selectedMachine,
     )
 
-    if (filteredBreakdowns.length === 0) {
-      setSelectedMachine({ mttr: 'No breakdowns found for selected machine.' })
+    if (machineBreakdowns.length === 0) {
+      this.setState({ mttr: null })
       return
     }
 
     let totalRepairTimeMs = 0
 
-    filteredBreakdowns.forEach((breakdown) => {
+    machineBreakdowns.forEach((breakdown) => {
       const startDate = new Date(breakdown.BreakdownStartDate)
       const endDate = new Date(breakdown.BreakdownEndDate)
       const repairTimeMs = endDate - startDate
-      totalRepairTimeMs = repairTimeMs
+      totalRepairTimeMs += repairTimeMs
     })
 
     const totalRepairTimeHours = totalRepairTimeMs / (1000 * 3600) // Convert milliseconds to hours
-    console.log(totalRepairTimeHours, totalRepairTimeMs)
-    const mttr = totalRepairTimeHours / filteredBreakdowns.length
-
-    setMttr({ mttr })
+    const mttr = totalRepairTimeHours / machineBreakdowns.length
+    console.log(machineBreakdowns.length, totalRepairTimeHours)
+    this.setState({ mttr })
   }
 
-  const calculateMTBF = () => {
-    // const { breakdowns, selectedMachine } = this.state
+  calculateMTBF = () => {
+    const filteredBreakdowns = this.filterBreakdownsByMonthYear()
+    const { selectedMachine } = this.state
 
     if (!selectedMachine) {
-      setSelectedMachine({ mtbf: 'Please select a machine.' })
+      this.setState({ mtbf: null })
       return
     }
 
-    const filteredBreakdowns = breakdowns.filter(
+    const machineBreakdowns = filteredBreakdowns.filter(
       (breakdown) => breakdown.MachineName === selectedMachine,
     )
 
-    if (filteredBreakdowns.length === 0) {
-      setMtbf('No breakdowns found for selected machine.')
+    if (machineBreakdowns.length === 0) {
+      this.setState({ mtbf: null })
       return
     }
 
     const fixedOperatingTime = 208 * 3600 * 1000 // 8 hours in milliseconds
-    const numberOfFailures = filteredBreakdowns.length
+    const numberOfFailures = machineBreakdowns.length
 
     const mtbf = fixedOperatingTime / (numberOfFailures * 1000 * 3600) // Convert milliseconds to hours
-
-    setMtbf(mtbf)
+    console.log(numberOfFailures, mtbf)
+    this.setState({ mtbf })
   }
 
-  const exportToExcel = () => {
-    // const { breakdowns, searchLocation } = this.state
+  exportToExcel = () => {
+    const { breakdowns, searchLocation, fromDate, toDate } = this.state
+
+    const filteredData = breakdowns.filter((breakdown) => {
+      const breakdownDate = new Date(breakdown.BreakdownStartDate)
+      const isWithinDateRange =
+        (!fromDate || breakdownDate >= new Date(fromDate)) &&
+        (!toDate || breakdownDate <= new Date(toDate))
+      return (
+        isWithinDateRange &&
+        (!searchLocation || breakdown.Location === searchLocation) &&
+        breakdown.Status === 'close'
+      )
+    })
 
     // Check if a search plant is selected
     if (!searchLocation) {
@@ -204,19 +233,11 @@ function BreakdownHistory() {
       return
     }
 
-    // Filter data based on the selected plant
-    const filteredData = breakdowns.filter((breakdown) =>
-      breakdown.Location.toLowerCase().includes(searchTerm.toLowerCase()),
-    )
-
     if (filteredData.length === 0) {
       alert('No data found for the selected plant. Please refine your search.')
       return
     }
 
-    // const dataToExport = searchQuery ? filteredBreakdowns : breakdowns
-    const dataToExport = breakdowns
-    // const exportData = dataToExport.map((item) => ({
     const exportData = filteredData.map((item) => ({
       Date: format(new Date(item.BreakdownStartDate), 'dd-MM-yyyy HH:mm:ss'),
       MachineName: item.MachineName,
@@ -235,226 +256,436 @@ function BreakdownHistory() {
       CorrectiveAction: item.CorrectiveAction,
       TargetDate: item.TargetDate,
       Responsibility: item.Responsibility,
-      HD: item.HD,
+      // HD: item.HD,
       Status: item.Status,
       SpareParts: item.SpareParts,
       Cost: item.Cost,
       Location: item.Location,
       LineName: item.LineName,
       Remark: item.Remark,
-      // Status: item.Status,
     }))
 
     const ws = XLSX.utils.json_to_sheet(exportData)
     const wb = XLSX.utils.book_new()
     XLSX.utils.book_append_sheet(wb, ws, 'ReportData')
+
+    // Set column widths
+    const columnWidths = [
+      { wpx: 150 }, // Date
+      { wpx: 200 }, // MachineName
+      { wpx: 150 }, // BreakdownStartDate
+      { wpx: 150 }, // BreakdownEndDate
+      { wpx: 100 }, // TotalBDTime
+      { wpx: 150 }, // BreakdownType
+      { wpx: 100 }, // Shift
+      { wpx: 200 }, // Operations
+      { wpx: 200 }, // BreakdownPhenomenons
+      { wpx: 250 }, // WhyWhyAnalysis
+      { wpx: 150 }, // Attended_By
+      { wpx: 150 }, // BD_Raised_By
+      { wpx: 250 }, // RootCause
+      { wpx: 250 }, // PreventiveAction
+      { wpx: 250 }, // CorrectiveAction
+      { wpx: 150 }, // TargetDate
+      { wpx: 150 }, // Responsibility
+      { wpx: 100 }, // HD
+      { wpx: 100 }, // Status
+      { wpx: 150 }, // SpareParts
+      { wpx: 100 }, // Cost
+      { wpx: 150 }, // Location
+      { wpx: 150 }, // LineName
+      { wpx: 250 }, // Remark
+    ]
+    ws['!cols'] = columnWidths
+
     XLSX.writeFile(wb, 'reportdata.xlsx')
   }
 
-  return (
-    <>
-      <div className="container" style={{ marginTop: '0px' }}>
-        <div>
-          <CButton
-            color="info"
+  filterBreakdownsByMonthYear = () => {
+    const { breakdowns, selectedMonth, selectedYear } = this.state
+
+    if (!selectedMonth || !selectedYear) {
+      return []
+    }
+
+    return breakdowns.filter((breakdown) => {
+      const breakdownDate = new Date(breakdown.BreakdownStartDate)
+      return (
+        breakdownDate.getMonth() + 1 === parseInt(selectedMonth, 10) &&
+        breakdownDate.getFullYear() === parseInt(selectedYear, 10)
+      )
+    })
+  }
+
+  toggleExpand = (index) => {
+    this.setState((prevState) => {
+      const expandedItems = prevState.expandedItems.includes(index)
+        ? prevState.expandedItems.filter((item) => item !== index)
+        : [...prevState.expandedItems, index]
+      return { expandedItems }
+    })
+  }
+
+  toggleModal = () => {
+    this.setState((prevState) => ({ modalVisible: !prevState.modalVisible }))
+  }
+
+  render() {
+    // const { breakdowns, selectedMachine, mttr } = this.state;
+    const {
+      breakdowns,
+      selectedMachine,
+      mtbf,
+      mttr,
+      filteredAssets,
+      searchLocation,
+      loading,
+      fromDate,
+      selectedMonth,
+      selectedYear,
+      toDate,
+      modalVisible,
+    } = this.state
+    const openBreakdowns = breakdowns.filter((breakdown) => breakdown.Status === 'close')
+    const filteredBreakdowns = openBreakdowns.filter((breakdown) => {
+      const breakdownDate = new Date(breakdown.BreakdownStartDate)
+      const isWithinDateRange =
+        (!fromDate || breakdownDate >= new Date(fromDate)) &&
+        (!toDate || breakdownDate <= new Date(toDate))
+      return isWithinDateRange && (!searchLocation || breakdown.Location === searchLocation)
+    })
+    const validatedAssets = breakdowns.filter(
+      (breakdowns) => breakdowns.Location && breakdowns.Location.trim() !== '',
+    )
+    const { isHovered } = this.state
+
+    return (
+      <div className="card shadow-sm mx-auto">
+        <Link to="/temperature" style={{ position: 'absolute', top: '15px', right: '10px' }}></Link>
+
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+          <div
+            // className="d-flex justify-content-center align-items-center"
+            className={classNames(
+              'box',
+              'd-flex',
+              'justify-content-center',
+              'align-items-center',
+              'd-flex justify-content-center align-items-center',
+            )}
+          >
+            <MdDashboard
+              className="icon"
+              style={{
+                width: '30px',
+                height: '30px',
+                fill: 'white',
+                marginTop: '1px',
+                marginLeft: '3px',
+              }}
+            />
+          </div>
+          {/* <h5 style={{ marginLeft: '20px' }}>Create TBM Record</h5> */}
+          <TfiExport
             type="button"
-            style={{ margin: '1rem', marginRight: 'rem' }}
-            onClick={exportToExcel}
+            style={{
+              margin: 'rem',
+              backgroundColor: '',
+              marginLeft: '1rem',
+              marginBottom: '5px',
+              height: '2rem',
+              color: 'gray',
+              width: '50px',
+            }}
+            onClick={this.exportToExcel}
           >
             Export to Excel
-          </CButton>
+          </TfiExport>
+
+          {/* <div className="container" style={{ marginTop: '0px' }}> */}
+          <div>
+            <label htmlFor="searchTask" style={{ marginRight: '0%', marginTop: '10px' }}>
+              <span role="img" aria-label="search-icon"></span>
+            </label>
+            <select
+              value={this.searchQuery}
+              onChange={this.handleSearchChange}
+              style={{
+                // display: 'flex',
+                marginBottom: '0px',
+                padding: '8px',
+                margin: '8px',
+                border: '1px solid',
+                borderRadius: '4px',
+                transition: 'border-color 0.3s ease-in-out',
+                backgroundColor: isHovered ? '#f0f0f0' : 'transparent',
+              }}
+              onMouseEnter={this.handleMouseEnter}
+              onMouseLeave={this.handleMouseLeave}
+            >
+              <option>Search by Location</option>
+              <option value="Plant 1">Plant 1</option>
+              <option value="Plant 2">Plant 2</option>
+              <option value="Plant 3">Plant 3</option>
+            </select>
+          </div>
         </div>
-        <CTable
-          bordered
-          striped
-          hover
-          responsive
+        <CButton
+          onClick={this.toggleModal}
           style={{
-            marginTop: '20px',
-            borderCollapse: 'collapse',
-            width: '100%',
+            backgroundColor: 'grey',
+            width: '15rem',
+            marginBottom: '1rem',
+            marginLeft: '1.5rem',
           }}
         >
-          <CTableHead color="dark">
-            <tr>
-              <th style={{ textAlign: 'center' }}>Machine Number</th>
-              <th style={{ textAlign: 'center' }}>BreakDown Start Date</th>
-              <th style={{ textAlign: 'center' }}>BreakDown End Date</th>
-              <th style={{ textAlign: 'center' }}>Attended By</th>
-              <th style={{ textAlign: 'center' }}>BD Raised By</th>
-              <th style={{ textAlign: 'center' }}>Line Name</th>
-              <th style={{ textAlign: 'center' }}>Location</th>
-              {/* <th style={{ textAlign: 'center' }}>BD Raised By</th> */}
-              <th style={{ textAlign: 'center' }}>TotalRepairtime</th>
-              <th style={{ textAlign: 'center' }}>Status</th>
-              <th style={{ textAlign: 'center' }}>Edit</th>
-              <th>Attachment</th>
-            </tr>
-          </CTableHead>
-          <tbody>
-            {loading ? (
-              <tr>
-                <td colSpan="11" style={{ textAlign: 'center' }}>
-                  <CSpinner color="primary" />
-                  <div className="loader">Loading...</div>
-                </td>
-              </tr>
-            ) : (
-              breakdowns
-                .filter((breakdown) => {
-                  // Filter breakdowns based on the search term
-                  const searchTermLowerCase = searchTerm.toLowerCase()
-                  return breakdown.Location.toLowerCase().includes(searchTermLowerCase)
-                })
-                .map((breakdown) => (
-                  <tr key={breakdown._id}>
-                    <td style={{ textAlign: 'center' }}>{breakdown.MachineName}</td>
-                    <td style={{ textAlign: 'center' }}>
-                      {new Date(breakdown.BreakdownStartDate).toISOString().split('T')[0]}
-                    </td>
-                    {/* <td>{new Date(breakdown.BreakdownStartDate).toISOString().split('T')[0]}</td> */}
-                    <td style={{ textAlign: 'center' }}>
-                      {new Date(breakdown.BreakdownEndDate).toISOString().split('T')[0]}
-                    </td>
-                    <td style={{ textAlign: 'center' }}>{breakdown.AttendedBy}</td>
-                    <td style={{ textAlign: 'center' }}>{breakdown.BDRaiseName}</td>
-                    <td style={{ textAlign: 'center' }}>{breakdown.LineName}</td>
-                    <td style={{ textAlign: 'center' }}>{breakdown.Location}</td>
-                    {/* <td style={{ textAlign: 'center' }}>
-                      {Number(breakdown.TotalBDTime).toFixed(2)}
-                    </td> */}
-                    <td>
-                      {breakdown.TotalBDTime != null ? breakdown.TotalBDTime.toFixed(2) : 'N/A'}
-                    </td>
+          Calculate MTBF & MTTR
+        </CButton>
+        <div className="table-container  mobile-wide">
+          <Table className="custom-table">
+            <Thead>
+              <Tr>
+                <Th style={{ textAlign: 'center', height: '40px' }}>Machine Name</Th>
 
-                    <td style={{ textAlign: 'center' }}>{breakdown.Status}</td>
-                    <td style={{ textAlign: 'center' }}>
-                      <NavLink to={`/pbdStatus/${breakdown._id}`} style={{ color: '#000080' }}>
+                {/* <Td></Td> */}
+                <Th style={{ textAlign: 'center' }}>Shift</Th>
+                <Th style={{ textAlign: 'center' }}>Line Name</Th>
+                <Th style={{ textAlign: 'center' }}>Location</Th>
+                <Th style={{ textAlign: 'center' }}>BreakDown Start Date</Th>
+                <Th style={{ textAlign: 'center' }}>End Date</Th>
+                <Th style={{ textAlign: 'center' }}>Attend BY</Th>
+                {/* <Th style={{ textAlign: 'center' }}>Raised By</Th> */}
+                <th style={{ textAlign: 'center' }}>TotalRepairtime</th>
+                <Th style={{ textAlign: 'center' }}>Status</Th>
+                <Th style={{ textAlign: 'center' }}>Edit</Th>
+                {/* <th>Images</th> */}
+              </Tr>
+            </Thead>
+            <Tbody>
+              {loading ? ( // Show loader when loading is true
+                <tr>
+                  <td colSpan="8" style={{ textAlign: 'center' }}>
+                    {/* Use an image tag for the loading GIF */}
+                    {/* <img src={loadingGif} alt="Loading..." />
+                      <p>Loading...</p> */}
+                  </td>
+                </tr>
+              ) : (
+                <>
+                  {this.state.message && (
+                    <tr>
+                      <td colSpan="11" style={{ textAlign: 'center' }}>
+                        {this.state.message}
+                      </td>
+                    </tr>
+                  )}
+                  {filteredBreakdowns.map((breakdown) => (
+                    <Tr key={breakdown._id}>
+                      <Td style={{ textAlign: 'center' }}>{breakdown.MachineName}</Td>
+
+                      {/* <Td></Td> */}
+                      <Td style={{ textAlign: 'center' }}>{breakdown.Shift}</Td>
+                      <Td style={{ textAlign: 'center' }}>{breakdown.LineName}</Td>
+                      <Td style={{ textAlign: 'center' }}>{breakdown.Location}</Td>
+                      <Td style={{ textAlign: 'center' }}>
+                        {new Date(breakdown.BreakdownStartDate).toLocaleDateString()}
+                      </Td>
+                      <Td style={{ textAlign: 'center' }}>
+                        {new Date(breakdown.BreakdownEndDate).toLocaleDateString()}
+                      </Td>
+                      <Td style={{ textAlign: 'center' }}>{breakdown.AttendedBy}</Td>
+                      {/* <Td style={{ textAlign: 'center' }}>{breakdown.Raised_By}</Td> */}
+                      <Td style={{ textAlign: 'center' }}>
+                        {breakdown.TotalBDTime != null ? breakdown.TotalBDTime.toFixed(2) : 'N/A'}
+                      </Td>
+                      <Td style={{ textAlign: 'center' }}>{breakdown.Status}</Td>
+                      <Td style={{ textAlign: 'center' }}>
+                        <NavLink to={`/pbdStatus/${breakdown._id}`} style={{ color: '#000080' }}>
+                          <FaEdit />
+                        </NavLink>
+                      </Td>
+                      {/* <td style={{ textAlign: 'center' }}>
+                        <NavLink to={`/breakDownRecord/${breakdown._id}`}>
+                          <img src={breakdown.Image} height={50} width={50} />
+                        </NavLink>
+                      </td> */}
+                    </Tr>
+                  ))}
+                </>
+              )}
+            </Tbody>
+          </Table>
+          <div className="list-view">
+            {loading ? (
+              <p>Loading...</p>
+            ) : (
+              <>
+                {this.message && (
+                  <p style={{ textAlign: 'center', fontStyle: 'italic', color: 'red' }}>
+                    {this.message}
+                  </p>
+                )}
+                {filteredBreakdowns.map((breakDown, index) => (
+                  <div
+                    key={breakDown._id}
+                    className={`list-item ${
+                      this.state.expandedItems.includes(index) ? 'expanded' : ''
+                    }`}
+                  >
+                    <div className="expand d-flex">
+                      <div>
+                        <span>{breakDown.MachineName}</span> - <span>{breakDown.Location}</span>
+                      </div>
+                      <div className="Expand1">
+                        {this.state.expandedItems.includes(index) ? (
+                          <FaChevronUp onClick={() => this.toggleExpand(index)} />
+                        ) : (
+                          <FaChevronDown onClick={() => this.toggleExpand(index)} />
+                        )}
+                      </div>
+                    </div>
+                    <div
+                      className={`expanded-content ${
+                        this.state.expandedItems.includes(index) ? 'visible' : 'hidden'
+                      }`}
+                    >
+                      <div className="table-like">
+                        <div className="table-row">
+                          <div className="table-cell">
+                            <strong>BreakdownStartDate:</strong>
+                          </div>
+                          <div className="table-cell">
+                            {new Date(breakDown.BreakdownStartDate).toLocaleDateString()}
+                          </div>
+                        </div>
+                        <div className="table-row">
+                          <div className="table-cell">
+                            <strong>BreakdownEndDate:</strong>
+                          </div>
+                          <div className="table-cell">
+                            {new Date(breakDown.BreakdownEndDate).toLocaleDateString()}
+                          </div>
+                        </div>
+                        <div className="table-row">
+                          <div className="table-cell">
+                            <strong>Shift:</strong>
+                          </div>
+                          <div className="table-cell">{breakDown.Shift}</div>
+                        </div>
+                        <div className="table-row">
+                          <div className="table-cell">
+                            <strong>LineName:</strong>
+                          </div>
+                          <div className="table-cell">{breakDown.LineName}</div>
+                        </div>
+                        <div className="table-row">
+                          <div className="table-cell">
+                            <strong>Status:</strong>
+                          </div>
+                          <div className="table-cell">{breakDown.Status}</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="actions">
+                      <NavLink to={`/pbdStatus/${breakDown._id}`} style={{ color: '#000080' }}>
                         <FaEdit />
                       </NavLink>
-                    </td>
-                    <td style={{ textAlign: 'center' }}>
-                      {breakdown.Image && (
-                        <a href={breakdown.Image} download>
-                          Download File
-                        </a>
-                      )}
-                    </td>
-                  </tr>
-                ))
+                      {/* <button
+                          className="btn"
+                          onClick={() => deleteData(cbm._id)}
+                          style={{ color: 'red' }}
+                        >
+                          <MdDelete />
+                        </button> */}
+                    </div>
+                  </div>
+                ))}
+              </>
             )}
-          </tbody>
-        </CTable>
-        {loading && (
-          <div className="loader-container">
-            {/* <div className="loader">Loading...</div> */}
-            <CSpinner color="primary" />
-            <div className="loader">Loading...</div>
-          </div>
-        )}
-
-        <div
-          className="container"
-          style={{
-            marginTop: '20px',
-            // padding: '20px',
-            backgroundColor: '#f8f9fa',
-            borderRadius: '10px',
-          }}
-        >
-          <div className="row g-2">
-            <div className="col-md-6" style={{ marginBottom: '10px' }}>
-              <label>Select Machine: </label>
-              <select
-                onChange={(e) => {
-                  setSelectedMachine(e.target.value)
-                  calculateMTBF() // Call calculateMTBF directly after updating state
-                }}
-                value={selectedMachine}
-                style={{ marginLeft: 'px', padding: '5px' }}
-              >
-                <option value="">Select Machine</option>
-                {Array.from(new Set(breakdowns.map((breakdown) => breakdown.MachineName))).map(
-                  (machineName) => (
-                    <option key={machineName} value={machineName}>
-                      {machineName}
-                    </option>
-                  ),
-                )}
-              </select>
-              <CButton
-                color="info"
-                onClick={calculateMTBF}
-                // shape="rounded-pill"
-                className="mb-2"
-                marginLeft="20px"
-                padding="8px"
-                style={{ marginTop: '5px', marginLeft: '10px' }}
-              >
-                Calculate MTBF
-              </CButton>
-            </div>
-            <div
-              className="col-md-6"
-              style={{ marginBottom: '10px', display: 'flex', alignItems: 'center' }}
-            >
-              <label style={{ marginLeft: '' }}>MTBF (hours): </label>
-              <input
-                type="text"
-                value={mtbf}
-                readOnly
-                style={{ marginLeft: 'px', padding: '5px' }}
-              />
-            </div>
-
-            <div className="col-md-6" style={{ marginBottom: '10px' }}>
-              <label>Select Machine: </label>
-              <select
-                onChange={(e) => {
-                  setSelectedMachine(e.target.value)
-                  calculateMTTR() // Call calculateMTTR directly after updating state
-                }}
-                value={selectedMachine}
-                style={{ marginLeft: 'px', padding: '5px' }}
-              >
-                <option value="">Select Machine</option>
-                {Array.from(new Set(breakdowns.map((breakdown) => breakdown.MachineName))).map(
-                  (machineName) => (
-                    <option key={machineName} value={machineName}>
-                      {machineName}
-                    </option>
-                  ),
-                )}
-              </select>
-              <CButton
-                color="info"
-                onClick={calculateMTTR}
-                // shape="rounded-pill"
-                className="mb-2"
-                marginLeft="20px"
-                padding="8px"
-                style={{ marginTop: '5px', marginLeft: '10px' }}
-              >
-                Calculate MTTR
-              </CButton>
-            </div>
-            <div
-              className="col-md-6"
-              style={{ marginBottom: '10px', display: 'flex', alignItems: 'center' }}
-            >
-              <label style={{ marginLeft: '' }}>MTTR (hours): </label>
-              <input
-                type="text"
-                value={mttr}
-                readOnly
-                style={{ marginLeft: 'px', padding: '5px' }}
-              />
-            </div>
           </div>
         </div>
+        {/* </div> */}
+        <CModal visible={modalVisible} onClose={this.toggleModal}>
+          <CModalHeader className="cmodal-header">MTBF & MTTR Calculation</CModalHeader>
+          <CModalBody className="cmodal-body">
+            <div>
+              <label htmlFor="machineSelect">Select Machine:</label>
+              <select
+                id="machineSelect"
+                value={selectedMachine}
+                onChange={(e) => this.setState({ selectedMachine: e.target.value })}
+                className="cmodal-body select"
+              >
+                <option value="">Select Machine</option>
+                {Array.from(new Set(breakdowns.map((breakdown) => breakdown.MachineName))).map(
+                  (machineName, index) => (
+                    <option key={index} value={machineName}>
+                      {machineName}
+                    </option>
+                  ),
+                )}
+              </select>
+            </div>
+            <div>
+              <label htmlFor="monthSelect">Select Month:</label>
+              <select
+                id="monthSelect"
+                value={selectedMonth}
+                onChange={(e) => this.setState({ selectedMonth: e.target.value })}
+                className="cmodal-body select"
+              >
+                <option value="">Select Month</option>
+                {Array.from({ length: 12 }, (_, i) => (
+                  <option key={i} value={i + 1}>
+                    {new Date(0, i).toLocaleString('default', { month: 'long' })}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label htmlFor="yearSelect">Select Year:</label>
+              <select
+                id="yearSelect"
+                value={selectedYear}
+                onChange={(e) => this.setState({ selectedYear: e.target.value })}
+                className="cmodal-body select"
+              >
+                <option value="">Select Year</option>
+                {Array.from(
+                  new Set(
+                    breakdowns.map((breakdown) =>
+                      new Date(breakdown.BreakdownStartDate).getFullYear(),
+                    ),
+                  ),
+                ).map((year, index) => (
+                  <option key={index} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <button className="cbutton mt-2" onClick={this.calculateMTTR}>
+              Calculate MTTR
+            </button>
+            <button className="cbutton mt-2" onClick={this.calculateMTBF}>
+              Calculate MTBF
+            </button>
+            <div>
+              <strong>MTTR:</strong> {mttr !== null ? mttr : 'N/A'} hours
+            </div>
+            <div>
+              <strong>MTBF:</strong> {mtbf !== null ? mtbf : 'N/A'} hours
+            </div>
+          </CModalBody>
+          {/* <CModalFooter>
+            <button className="cbutton" onClick={this.toggleModal}>
+              Close
+            </button>
+          </CModalFooter> */}
+        </CModal>
       </div>
-    </>
-  )
+    )
+  }
 }
 
 export default BreakdownHistory

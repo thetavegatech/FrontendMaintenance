@@ -92,7 +92,7 @@ export default function EditForm() {
   }, [])
   const fetchData = async () => {
     try {
-      const response = await axios.get(`https://backendmaintenx.onrender.com/api/assets/${id}`)
+      const response = await axios.get(`http://localhost:4000/api/assets/${id}`)
       console.log(response)
       setAssetName(response.data.AssetName)
       setMachineNo(response.data.MachineNo)
@@ -116,7 +116,7 @@ export default function EditForm() {
   const Update = (e) => {
     e.preventDefault()
     axios
-      .put(`https://backendmaintenx.onrender.com/api/assets/${id}`, {
+      .put(`http://localhost:4000/api/assets/${id}`, {
         AssetName,
         MachineNo,
         SrNo,
@@ -184,6 +184,7 @@ export default function EditForm() {
             }}
           ></IoIosAddCircleOutline>
         </NavLink> */}
+        <h5 style={{ marginLeft: '25px' }}>Asset Edit</h5>
       </div>
 
       <div className="table-container">
@@ -397,7 +398,7 @@ export default function EditForm() {
                 marginBottom: '20px',
               }}
             >
-              <div className="form-group" style={{ width: '30%' }}>
+              {/* <div className="form-group" style={{ width: '30%' }}>
                 <label htmlFor="attachment">Attachment:</label>
                 <input
                   type="file"
@@ -405,7 +406,7 @@ export default function EditForm() {
                   onChange={convertToBse64}
                   style={{ height: '40px' }}
                 />
-              </div>
+              </div> */}
             </div>
 
             <button
@@ -413,7 +414,7 @@ export default function EditForm() {
               className="btn btn-primary"
               style={{
                 float: 'left',
-                backgroundColor: '#CA226B',
+                backgroundColor: '#1237F7',
                 marginTop: '10px',
                 alignItems: 'end',
               }}

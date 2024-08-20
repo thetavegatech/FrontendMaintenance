@@ -102,12 +102,12 @@ const Dashboard = () => {
     '0',
   )}-${String(today.getDate()).padStart(2, '0')}`
   const todaysScheduledAssets = assets.filter((asset) => asset.nextDate === formattedToday)
-  const todaysScheduledAssetsok = assets.filter(
-    (asset) => asset.nextDate === formattedToday && asset.status === 'Completed',
-  )
-  const todaysScheduledAssetsnok = assets.filter(
-    (asset) => asset.nextDate === formattedToday && asset.status === 'Pending',
-  )
+  // const todaysScheduledAssetsok = assets.filter(
+  //   (asset) => asset.nextDate === formattedToday && asset.status === 'Completed',
+  // )
+  // const todaysScheduledAssetsnok = assets.filter(
+  //   (asset) => asset.nextDate === formattedToday && asset.status === 'Pending',
+  // )
 
   const aggregateDataByLineName = (data) => {
     return data.reduce((acc, curr) => {
@@ -148,7 +148,7 @@ const Dashboard = () => {
   // }, [])
 
   useEffect(() => {
-    fetch('https://backendmaintenx.onrender.com/api/breakdown')
+    fetch('http://localhost:4000/api/breakdown')
       .then((response) => response.json())
       .then((fetchedBreakdowns) => {
         const aggregatedByLineName = aggregateDataByLineName(fetchedBreakdowns)
@@ -193,7 +193,7 @@ const Dashboard = () => {
   ]
 
   useEffect(() => {
-    fetch('https://backendmaintenx.onrender.com/api/breakdown')
+    fetch('http://localhost:4000/api/breakdown')
       .then((response) => response.json())
       .then((fetchedBreakdowns) => {
         const aggregated = aggregateData(fetchedBreakdowns)
@@ -204,7 +204,7 @@ const Dashboard = () => {
   }, [])
 
   useEffect(() => {
-    fetch('https://backendmaintenx.onrender.com/api/breakdown')
+    fetch('http://localhost:4000/api/breakdown')
       .then((response) => response.json())
       .then((fetchedBreakdowns) => {
         setBreakdown(fetchedBreakdowns, breakdowns)
@@ -214,7 +214,7 @@ const Dashboard = () => {
   }, [])
 
   useEffect(() => {
-    fetch('https://backendmaintenx.onrender.com/api/pm')
+    fetch('http://localhost:4000/api/pm')
       .then((response) => response.json())
 
       .then((fetchedTasks) => {
@@ -225,7 +225,7 @@ const Dashboard = () => {
   }, [])
 
   useEffect(() => {
-    fetch(`https://backendmaintenx.onrender.com/api/pm?nextDate=${formattedToday}`)
+    fetch(`http://localhost:4000/api/pm?nextDate=${formattedToday}`)
       .then((response) => response.json())
       .then((fetchedTasks) => {
         setTodaysTaskCount(fetchedTasks.length)
@@ -233,7 +233,7 @@ const Dashboard = () => {
       .catch((error) => console.error("Error fetching today's tasks: ", error))
     console.log(todaysTaskCount, todaysScheduledAssets)
   }, [])
-  const random = (min, max) => Math.floor(Math.random() * (max - min + 1) + min)
+  // const random = (min, max) => Math.floor(Math.random() * (max - min + 1) + min)
 
   return (
     <>
@@ -292,8 +292,22 @@ const Dashboard = () => {
                   datasets: [
                     {
                       data: formattedChartData.map((item) => item.value),
-                      backgroundColor: ['#00ACC1', '#4cacee', '#ffff00'],
-                      hoverBackgroundColor: ['#ff315b', '#137bc1', '#fff04d'],
+                      backgroundColor: [
+                        '#00ACC1',
+                        '#4cacee',
+                        '#ffff00',
+                        '#0000B2',
+                        '#7f7fd8',
+                        '#76a5af',
+                      ],
+                      hoverBackgroundColor: [
+                        '#ff315b',
+                        '#137bc1',
+                        '#FFCE56',
+                        '#4C4CC9',
+                        '#b2b2e7',
+                        '#acc9cf',
+                      ],
                       label: 'My dataset', // for legend
                     },
                   ],
@@ -305,15 +319,29 @@ const Dashboard = () => {
 
         <CCol xs={12} lg={6}>
           <CCard className="mb-4">
-            <CCardHeader>BreakDown Doughnut Chart</CCardHeader>
+            <CCardHeader>BreakDown LineWise Chart</CCardHeader>
             <CCardBody>
               <CChartDoughnut
                 data={{
                   labels: lineChartData.map((item) => item.lineName || 'Under Breakdown'),
                   datasets: [
                     {
-                      backgroundColor: ['#00ACC1', '#4cacee', '#ffff00'],
-                      hoverBackgroundColor: ['#ff315b', '#137bc1', '#FFCE56'],
+                      backgroundColor: [
+                        '#00ACC1',
+                        '#4cacee',
+                        '#ffff00',
+                        '#0000B2',
+                        '#7f7fd8',
+                        '#76a5af',
+                      ],
+                      hoverBackgroundColor: [
+                        '#ff315b',
+                        '#137bc1',
+                        '#FFCE56',
+                        '#4C4CC9',
+                        '#b2b2e7',
+                        '#acc9cf',
+                      ],
                       data: formattedChartData.map((item) => item.value),
                     },
                   ],

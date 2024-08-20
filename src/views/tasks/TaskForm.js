@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { MdDashboard } from 'react-icons/md'
 import { Link } from 'react-router-dom'
-import '../tasks/Taskform.css'
+import '../TBMForm'
 import classNames from 'classnames'
 
 const MyFormComponent = () => {
@@ -43,7 +43,7 @@ const MyFormComponent = () => {
   useEffect(() => {
     // Fetch asset names when the component mounts
     axios
-      .get('https://backendmaintenx.onrender.com/api/assets')
+      .get('http://localhost:4000/api/assets')
       .then((response) => {
         const names = Array.from(new Set(response.data.map((asset) => asset.AssetName)))
         setAssetNames(names)
@@ -80,7 +80,7 @@ const MyFormComponent = () => {
       // ... continue with other fields
 
       // Your fetch logic here
-      const response = await fetch('https://backendmaintenx.onrender.com/api/pm', {
+      const response = await fetch('http://localhost:4000/api/pm', {
         method: 'POST',
         headers: {
           'Content-type': 'application/json',
@@ -236,9 +236,7 @@ const MyFormComponent = () => {
 
     if (name === 'assetName') {
       try {
-        const response = await axios.get(
-          `https://backendmaintenx.onrender.com/api/locations/${value}`,
-        )
+        const response = await axios.get(`http://localhost:4000/api/locations/${value}`)
         if (response.data && response.data.Location) {
           updatedFormData = {
             ...updatedFormData,
@@ -261,9 +259,7 @@ const MyFormComponent = () => {
     }
 
     try {
-      const response = await axios.get(
-        `https://backendmaintenx.onrender.com/api/locations/${selectedAssetName}`,
-      )
+      const response = await axios.get(`http://localhost:4000/api/locations/${selectedAssetName}`)
       if (response.data && response.data.Location) {
         updatedFormData = {
           ...updatedFormData,
@@ -366,10 +362,11 @@ const MyFormComponent = () => {
               />
             </div>
             <div className="form-group" style={{ width: '30%' }}>
-              <label htmlFor="Task Name">Task Name</label>
+              <label htmlFor="TaskName">Task Name</label>
               <input
                 type="text"
-                name="Task Name"
+                name="TaskName"
+                id="TaskName"
                 className="form-control"
                 value={formData.TaskName}
                 onChange={handleChange}
@@ -377,17 +374,6 @@ const MyFormComponent = () => {
                 style={{ height: '40px' }}
               />
             </div>
-          </div>
-
-          <div
-            className="form-row"
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              gap: '10px',
-              marginBottom: '20px',
-            }}
-          >
             <div className="form-group" style={{ width: '30%' }}>
               <label htmlFor="description">Task Description</label>
               <input
@@ -400,30 +386,6 @@ const MyFormComponent = () => {
                 style={{ height: '40px' }}
               />
             </div>
-            <div className="form-group" style={{ width: '30%' }}>
-              <label htmlFor="pmScheduleDate">Start From</label>
-              <input
-                type="text"
-                name="pmScheduleDate"
-                className="form-control"
-                value={formData.pmScheduleDate}
-                onChange={handleChange}
-                required
-                style={{ height: '40px' }}
-              />
-            </div>
-            <div className="form-group" style={{ width: '30%' }}>
-              <label htmlFor="NextDateofMaintenance">Next Date of Maintenance </label>
-              <input
-                type="text"
-                name="NextDateofMaintenance"
-                className="form-control"
-                value={formData.NextDateofMaintenance}
-                onChange={handleChange}
-                required
-                style={{ height: '40px' }}
-              />
-            </div>
           </div>
 
           <div
@@ -435,8 +397,34 @@ const MyFormComponent = () => {
               marginBottom: '20px',
             }}
           >
+            {/* <div className="form-group" style={{ width: '30%' }}>
+              <label htmlFor="description">Task Description</label>
+              <input
+                type="text"
+                name="description"
+                className="form-control"
+                value={formData.description}
+                onChange={handleChange}
+                required
+                style={{ height: '40px' }}
+              />
+            </div> */}
             <div className="form-group" style={{ width: '30%' }}>
-              <label htmlFor="scheduledMaintenance">Scheduled Maintenance Dates & Intervals:</label>
+              <label htmlFor="pmScheduleDate">Start From</label>
+              <input
+                type="date"
+                name="pmScheduleDate"
+                className="form-control"
+                id="pmScheduleDate"
+                value={formData.pmScheduleDate}
+                // onChange={handleChange}
+                onChange={(e) => setFormData({ ...formData, pmScheduleDate: e.target.value })}
+                required
+                style={{ height: '40px' }}
+              />
+            </div>
+            <div className="form-group" style={{ width: '30%' }}>
+              <label htmlFor="scheduledMaintenance">Scheduled frequency</label>
               <select
                 className="form-control col-sm-6"
                 required
@@ -455,6 +443,62 @@ const MyFormComponent = () => {
               </select>
             </div>
             <div className="form-group" style={{ width: '30%' }}>
+              <label htmlFor="NextDateofMaintenance">Next Date of Maintenance </label>
+              <input
+                type="date"
+                name="NextDateofMaintenance"
+                id="nextScheduleDate"
+                className="form-control"
+                value={formData.nextScheduleDate}
+                // onChange={handleChange}
+                onChange={(e) => setFormData({ ...formData, nextScheduleDate: e.target.value })}
+                required
+                style={{ height: '40px' }}
+              />
+            </div>
+            <div className="form-group" style={{ width: '30%' }}>
+              <label htmlFor="attachment">Attachment</label>
+              <input
+                type="file"
+                name="attachment"
+                className="form-control"
+                value={formData.attachment}
+                onChange={handleChange}
+                // required
+                style={{ height: '40px' }}
+              />
+            </div>
+          </div>
+
+          <div
+            className="form-row"
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              gap: '10px',
+              marginBottom: '20px',
+            }}
+          >
+            {/* <div className="form-group" style={{ width: '30%' }}>
+              <label htmlFor="scheduledMaintenance">Scheduled Maintenance Dates & Intervals:</label>
+              <select
+                className="form-control col-sm-6"
+                required
+                id="scheduledMaintenance"
+                name="ScheduledMaintenanceDatesandIntervals"
+                onChange={handleFrequencyChange}
+              >
+                <option value="">Select an option</option>
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+                <option value="fifteen Days">Fifteen Days</option>
+                <option value="monthly">Monthly</option>
+                <option value="quarterly">Quarterly</option>
+                <option value="half Year">Half Year</option>
+                <option value="yearly">Yearly</option>
+              </select>
+            </div> */}
+            {/* <div className="form-group" style={{ width: '30%' }}>
               <label htmlFor="attachment">Attachment</label>
               <input
                 type="file"
@@ -465,7 +509,7 @@ const MyFormComponent = () => {
                 required
                 style={{ height: '40px' }}
               />
-            </div>
+            </div> */}
             <div className="form-group" style={{ width: '30%' }}>
               <label htmlFor="NextDateofMaintenance"> </label>
               {/* <input
@@ -485,7 +529,7 @@ const MyFormComponent = () => {
             className="btn btn-primary"
             style={{
               float: 'left',
-              backgroundColor: '#CA226B',
+              backgroundColor: '#1237F7',
               marginTop: '10px',
               alignItems: 'end',
             }}

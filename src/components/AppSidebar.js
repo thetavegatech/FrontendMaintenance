@@ -52,7 +52,7 @@ const AppSidebar = () => {
 
   const sidebarStyles = {
     backgroundImage:
-      'url(https://getwallpapers.com/wallpaper/full/b/6/4/1242469-dark-phone-wallpaper-1080x1920-for-android.jpg)', // replace with your image path
+      'url(https://img.freepik.com/free-photo/abstract-dark-blurred-background-smooth-gradient-texture-color-shiny-bright-website-pattern-banner-header-sidebar-graphic-art-image_1258-82972.jpg)', // replace with your image path
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
@@ -135,7 +135,7 @@ const AppSidebar = () => {
                   <CIcon customClassName="nav-icon" icon={cilCalculator} />
                   AssetTable
                 </CNavItem>
-                <CNavItem
+                {/* <CNavItem
                   component={NavLink}
                   to="/cbm"
                   style={{
@@ -146,7 +146,7 @@ const AppSidebar = () => {
                 >
                   <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
                   CBM
-                </CNavItem>
+                </CNavItem> */}
                 <CNavItem
                   component={NavLink}
                   to="/tbm"
@@ -169,7 +169,7 @@ const AppSidebar = () => {
                   onClick={() => handleNavItemClick(4)}
                 >
                   <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-                  Production
+                  Raise Breakdown
                 </CNavItem>
                 <CNavItem
                   component={NavLink}
@@ -181,7 +181,7 @@ const AppSidebar = () => {
                   onClick={() => handleNavItemClick(5)}
                 >
                   <CIcon customClassName="nav-icon" icon={cilPuzzle} />
-                  Breakdown
+                  Current Breakdown
                 </CNavItem>
                 <CNavItem
                   component={NavLink}
@@ -207,7 +207,7 @@ const AppSidebar = () => {
                   <CIcon customClassName="nav-icon" icon={cilPuzzle} />
                   PM Schedule
                 </CNavItem>
-                <CNavItem
+                {/* <CNavItem
                   component={NavLink}
                   to="/registeruser"
                   style={{
@@ -218,6 +218,18 @@ const AppSidebar = () => {
                 >
                   <CIcon customClassName="nav-icon" icon={cilNotes} />
                   Registered Users
+                </CNavItem> */}
+                <CNavItem
+                  component={NavLink}
+                  to="/users"
+                  style={{
+                    ...navItemStyles,
+                    ...(activeNavItem === 9 ? activeNavItemStyles : {}),
+                  }}
+                  onClick={() => handleNavItemClick(9)}
+                >
+                  <CIcon customClassName="nav-icon" icon={cilNotes} />
+                  Users
                 </CNavItem>
               </>
             )
@@ -234,7 +246,7 @@ const AppSidebar = () => {
                   onClick={() => handleNavItemClick(0)}
                 >
                   <CIcon customClassName="nav-icon" icon={cilSpeedometer} />
-                  Production
+                  Raise Breakdown
                 </CNavItem>
               </>
             )

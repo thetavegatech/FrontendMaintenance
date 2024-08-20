@@ -2,7 +2,10 @@ import React from 'react'
 import { format } from 'date-fns'
 import * as XLSX from 'xlsx'
 import { CContainer, CSpinner } from '@coreui/react'
-
+import { MdDashboard } from 'react-icons/md'
+import { Link } from 'react-router-dom'
+import { IoIosAddCircle } from 'react-icons/io'
+import classNames from 'classnames'
 // import BDList from './BDList';
 import axios from 'axios'
 import { NavLink } from 'react-router-dom'
@@ -85,11 +88,11 @@ class BDList extends React.Component {
     const { selectedLocation } = this.state
 
     const apiUrl = selectedLocation
-      ? `https://backendmaintenx.onrender.com/api/breakdown?location=${selectedLocation}`
-      : 'https://backendmaintenx.onrender.com/api/breakdown'
+      ? `http://localhost:4000/api/breakdown?location=${selectedLocation}`
+      : 'http://localhost:4000/api/breakdown'
 
     axios
-      .get('https://backendmaintenx.onrender.com/api/breakdown')
+      .get('http://localhost:4000/api/breakdown')
       .then((response) => {
         this.setState({
           breakdowns: Array.isArray(response.data) ? response.data : [response.data],
@@ -175,251 +178,286 @@ class BDList extends React.Component {
 
     return (
       <>
-        <div className="container">
-          <div>
-            <NavLink to="/breakdownForm">
-              {' '}
-              <CButton
-                // color="info"
-                // shape="rounded-pill"
-                className="mb-2"
-                style={{ marginTop: '5px', backgroundColor: '#000026' }}
-              >
-                Add New
-              </CButton>
-            </NavLink>
-            <label
-              htmlFor="startDate"
-              style={{
-                // marginLeft: '20rem',
-                marginRight: '0.2rem',
-                fontSize: '16px',
-                fontWeight: 'bold',
-                whiteSpace: 'nowrap',
-                '@media (max-width: 750px)': {
-                  // marginLeft: '3rem',
-                  // marginRight: '0.8rem',
-                  fontSize: '14px',
-                },
-              }}
+        <div className="card shadow-sm mx-auto" style={{ marginTop: '0.5rem' }}>
+          <Link
+            to="/temperature"
+            style={{ position: 'absolute', top: '10px', right: '10px', overflow: 'hidden' }}
+          ></Link>
+
+          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+            <div
+              // className="d-flex justify-content-center align-items-center"
+              className={classNames(
+                'box',
+                'd-flex',
+                'justify-content-center',
+                'align-items-center',
+                'd-flex justify-content-center align-items-center',
+              )}
             >
-              From Date:
-            </label>
-            <input
-              type="date"
-              id="startDate"
-              value={this.state.startDate}
-              onChange={(e) => this.handleDateChange('startDate', e.target.value)}
-              style={{
-                padding: '6px',
-                borderRadius: '5px',
-                border: '1px solid #ccc',
-                marginRight: '10px',
-                marginLeft: '10px',
-                fontSize: '14px',
-              }}
-            />
-            <label
-              htmlFor="endDate"
-              style={{
-                marginRight: '30px',
-                fontSize: '16px',
-                fontWeight: 'bold',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              To Date:
-            </label>
-            <input
-              type="date"
-              id="endDate"
-              value={this.state.endDate}
-              onChange={(e) => this.handleDateChange('endDate', e.target.value)}
-              style={{
-                padding: '6px',
-                borderRadius: '5px',
-                border: '1px solid #ccc',
-                marginRight: '10px',
-                fontSize: '14px',
-                marginBottom: '0.5rem',
-              }}
-            />
-            <label htmlFor="searchTask" style={{ marginLeft: 'rem' }}>
-              <span role="img" aria-label="search-icon"></span>
-            </label>
-            <select
-              value={this.searchQuery}
-              onChange={this.handleSearchChange}
-              style={{
-                // marginLeft: '70%',
-                marginBottom: '20px',
-                padding: '8px',
-                border: '1px solid',
-                borderRadius: '4px',
-                transition: 'border-color 0.3s ease-in-out',
-                backgroundColor: isHovered ? '#f0f0f0' : 'transparent',
-              }}
-              onMouseEnter={this.handleMouseEnter}
-              onMouseLeave={this.handleMouseLeave}
-            >
-              <option>Search by Location</option>
-              <option value="Plant 1">Plant 1</option>
-              <option value="Plant 2">Plant 2 </option>
-              <option value="Plant 3">Plant 3</option>
-              <option value="Plant 4">Plant 4</option>
-            </select>
+              <MdDashboard
+                className="icon"
+                style={{
+                  width: '30px',
+                  height: '30px',
+                  fill: 'white',
+                  marginTop: '1px',
+                  marginLeft: '3px',
+                }}
+              />
+            </div>
+            {/* <h5 style={{ marginLeft: '20px' }}>Create TBM Record</h5> */}
           </div>
-          <div className="table-container">
-            <Table className="custom-table">
-              <Thead>
-                <Tr>
-                  <Th style={{ textAlign: 'center', height: '40px' }}>Machine Code</Th>
-                  <Th style={{ textAlign: 'center' }}>BreakDown Start Date</Th>
-                  <Th style={{ textAlign: 'center' }}>Breakdown Type</Th>
-                  <Th style={{ textAlign: 'center' }}>Location</Th>
-                  <Th style={{ textAlign: 'center' }}>Line Name</Th>
-                  <Th style={{ textAlign: 'center' }}>Remark</Th>
-                  <Th style={{ textAlign: 'center' }}>Status</Th>
-                  <Th style={{ textAlign: 'center' }}>Edit</Th>
-                  {/* <CTableHeaderCell style={{ textAlign: 'center' }}>excel</CTableHeaderCell> */}
-                </Tr>
-              </Thead>
-              <Tbody>
-                {this.state.message && (
+          <div>
+            <div>
+              <NavLink to="/breakdownForm">
+                {' '}
+                <CButton
+                  // color="info"
+                  // shape="rounded-pill"
+                  className="mb-2"
+                  style={{ marginTop: '5px', backgroundColor: '#000026' }}
+                >
+                  Add New
+                </CButton>
+              </NavLink>
+              <label
+                htmlFor="startDate"
+                style={{
+                  // marginLeft: '20rem',
+                  marginRight: '0.2rem',
+                  fontSize: '16px',
+                  fontWeight: 'bold',
+                  whiteSpace: 'nowrap',
+                  '@media (max-width: 750px)': {
+                    // marginLeft: '3rem',
+                    // marginRight: '0.8rem',
+                    fontSize: '14px',
+                  },
+                }}
+              >
+                From Date:
+              </label>
+              <input
+                type="date"
+                id="startDate"
+                value={this.state.startDate}
+                onChange={(e) => this.handleDateChange('startDate', e.target.value)}
+                style={{
+                  padding: '6px',
+                  borderRadius: '5px',
+                  border: '1px solid #ccc',
+                  marginRight: '10px',
+                  marginLeft: '10px',
+                  fontSize: '14px',
+                }}
+              />
+              <label
+                htmlFor="endDate"
+                style={{
+                  marginRight: '30px',
+                  fontSize: '16px',
+                  fontWeight: 'bold',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                To Date:
+              </label>
+              <input
+                type="date"
+                id="endDate"
+                value={this.state.endDate}
+                onChange={(e) => this.handleDateChange('endDate', e.target.value)}
+                style={{
+                  padding: '6px',
+                  borderRadius: '5px',
+                  border: '1px solid #ccc',
+                  marginRight: '10px',
+                  fontSize: '14px',
+                  marginBottom: '0.5rem',
+                }}
+              />
+              <label htmlFor="searchTask" style={{ marginLeft: 'rem' }}>
+                <span role="img" aria-label="search-icon"></span>
+              </label>
+              <select
+                value={this.searchQuery}
+                onChange={this.handleSearchChange}
+                style={{
+                  // marginLeft: '70%',
+                  marginBottom: '20px',
+                  padding: '8px',
+                  border: '1px solid',
+                  borderRadius: '4px',
+                  transition: 'border-color 0.3s ease-in-out',
+                  backgroundColor: isHovered ? '#f0f0f0' : 'transparent',
+                }}
+                onMouseEnter={this.handleMouseEnter}
+                onMouseLeave={this.handleMouseLeave}
+              >
+                <option>Search by Location</option>
+                <option value="Plant 1">Plant 1</option>
+                <option value="Plant 2">Plant 2 </option>
+                <option value="Plant 3">Plant 3</option>
+                <option value="Plant 4">Plant 4</option>
+              </select>
+            </div>
+            <div className="table-container mobile-wide" style={{ marginTop: '10px' }}>
+              <Table className="custom-table">
+                <Thead>
                   <Tr>
-                    <Td colSpan="8">{this.state.message}</Td>
+                    <Th style={{ textAlign: 'center', height: '40px' }}>Machine Code</Th>
+                    <Th style={{ textAlign: 'center' }}>BreakDown Start Date</Th>
+                    <Th style={{ textAlign: 'center' }}>Breakdown Type</Th>
+                    <Th style={{ textAlign: 'center' }}>Location</Th>
+                    <Th style={{ textAlign: 'center' }}>BD RaiseBy</Th>
+                    <Th style={{ textAlign: 'center' }}>Attended By</Th>
+                    <Th style={{ textAlign: 'center' }}>Line Name</Th>
+                    <Th style={{ textAlign: 'center' }}>Remark</Th>
+                    <Th style={{ textAlign: 'center' }}>Status</Th>
+                    <Th style={{ textAlign: 'center' }}>Edit</Th>
+                    {/* <CTableHeaderCell style={{ textAlign: 'center' }}>excel</CTableHeaderCell> */}
                   </Tr>
-                )}
-                {(this.state.searchQuery
-                  ? filteredAssets.filter((breakdown) => openBreakdowns.includes(breakdown))
-                  : validatedAssets.filter((breakdown) => openBreakdowns.includes(breakdown))
-                ).map((breakdown) => (
-                  <Tr key={breakdown._id}>
-                    <Td style={{ textAlign: 'center' }}>{breakdown.MachineName}</Td>
-                    <Td style={{ textAlign: 'center' }}>
-                      {' '}
-                      {new Date(breakdown.Date).toLocaleDateString()}
-                    </Td>
-                    <Td style={{ textAlign: 'center' }}>{breakdown.BreakdownType}</Td>
-                    <Td style={{ textAlign: 'center' }}>{breakdown.Location}</Td>
-                    <Td style={{ textAlign: 'center' }}>{breakdown.LineName}</Td>
-                    <Td style={{ textAlign: 'center' }}>{breakdown.Remark}</Td>
-                    <Td style={{ textAlign: 'center' }}>{breakdown.Status}</Td>
-                    <Td style={{ textAlign: 'center' }}>
-                      <NavLink to={`/pbdStatus/${breakdown._id}`} style={{ color: '#000080' }}>
-                        <FaEdit />
-                      </NavLink>
-                    </Td>
-                    {/* <CButton
+                </Thead>
+                <Tbody>
+                  {this.state.message && (
+                    <Tr>
+                      <Td colSpan="8">{this.state.message}</Td>
+                    </Tr>
+                  )}
+                  {(this.state.searchQuery
+                    ? filteredAssets.filter((breakdown) => openBreakdowns.includes(breakdown))
+                    : validatedAssets.filter((breakdown) => openBreakdowns.includes(breakdown))
+                  ).map((breakdown) => (
+                    <Tr key={breakdown._id}>
+                      <Td style={{ textAlign: 'center' }}>{breakdown.MachineName}</Td>
+                      <Td style={{ textAlign: 'center' }}>
+                        {' '}
+                        {new Date(breakdown.Date).toLocaleDateString()}
+                      </Td>
+                      <Td style={{ textAlign: 'center' }}>{breakdown.BreakdownType}</Td>
+                      <Td style={{ textAlign: 'center' }}>{breakdown.Location}</Td>
+                      <Td style={{ textAlign: 'center' }}>{breakdown.BDRaiseName}</Td>
+                      <Td style={{ textAlign: 'center' }}>{breakdown.AttendedBy}</Td>
+                      <Td style={{ textAlign: 'center' }}>{breakdown.LineName}</Td>
+                      <Td style={{ textAlign: 'center' }}>{breakdown.Remark}</Td>
+                      <Td style={{ textAlign: 'center' }}>{breakdown.Status}</Td>
+                      <Td style={{ textAlign: 'center' }}>
+                        <NavLink to={`/pbdStatus/${breakdown._id}`} style={{ color: '#000080' }}>
+                          <FaEdit />
+                        </NavLink>
+                      </Td>
+                      {/* <CButton
                     type="button"
                     style={{ margin: '1rem', backgroundColor: 'grey' }}
                     onClick={this.exportToExcel}
                   >
                     Export to Excel
                   </CButton> */}
-                  </Tr>
-                ))}
-              </Tbody>
-            </Table>
-            <div className="list-view">
-              {loading ? (
-                <p>Loading...</p>
-              ) : (
-                <>
-                  {this.message && (
-                    <p style={{ textAlign: 'center', fontStyle: 'italic', color: 'red' }}>
-                      {this.message}
-                    </p>
-                  )}
-                  {this.state.searchQuery
-                    ? filteredAssets.filter((breakdown) => openBreakdowns.includes(breakdown))
-                    : validatedAssets
-                        .filter((breakdown) => openBreakdowns.includes(breakdown))
-                        .map((breakDown, index) => (
-                          <div
-                            key={breakDown._id}
-                            className={`list-item ${
-                              this.state.expandedItems.includes(index) ? 'expanded' : ''
-                            }`}
-                          >
-                            <div className="expand">
-                              {this.state.expandedItems.includes(index) ? (
-                                <FaChevronUp onClick={() => this.toggleExpand(index)} />
-                              ) : (
-                                <FaChevronDown onClick={() => this.toggleExpand(index)} />
-                              )}
-                            </div>
-                            <div>
-                              <span>{breakDown.MachineName}</span> -{' '}
-                              <span>{breakDown.Location}</span>
-                            </div>
+                    </Tr>
+                  ))}
+                </Tbody>
+              </Table>
+              <div className="list-view">
+                {loading ? (
+                  <p>Loading...</p>
+                ) : (
+                  <>
+                    {this.message && (
+                      <p style={{ textAlign: 'center', fontStyle: 'italic', color: 'red' }}>
+                        {this.message}
+                      </p>
+                    )}
+                    {this.state.searchQuery
+                      ? filteredAssets.filter((breakdown) => openBreakdowns.includes(breakdown))
+                      : validatedAssets
+                          .filter((breakdown) => openBreakdowns.includes(breakdown))
+                          .map((breakDown, index) => (
                             <div
-                              className={`expanded-content ${
-                                this.state.expandedItems.includes(index) ? 'visible' : 'hidden'
+                              key={breakDown._id}
+                              className={`list-item ${
+                                this.state.expandedItems.includes(index) ? 'expanded' : ''
                               }`}
                             >
-                              <div className="table-like">
-                                <div className="table-row">
-                                  <div className="table-cell">
-                                    <strong>BreakdownStartDate:</strong>
+                              <div className="expand">
+                                {this.state.expandedItems.includes(index) ? (
+                                  <FaChevronUp onClick={() => this.toggleExpand(index)} />
+                                ) : (
+                                  <FaChevronDown onClick={() => this.toggleExpand(index)} />
+                                )}
+                              </div>
+                              <div>
+                                <span>{breakDown.MachineName}</span> -{' '}
+                                <span>{breakDown.Location}</span>
+                              </div>
+                              <div
+                                className={`expanded-content ${
+                                  this.state.expandedItems.includes(index) ? 'visible' : 'hidden'
+                                }`}
+                              >
+                                <div className="table-like">
+                                  <div className="table-row">
+                                    <div className="table-cell">
+                                      <strong>BreakdownStartDate:</strong>
+                                    </div>
+                                    <div className="table-cell">
+                                      {new Date(breakDown.BreakdownStartDate).toLocaleDateString()}
+                                    </div>
                                   </div>
-                                  <div className="table-cell">
-                                    {new Date(breakDown.BreakdownStartDate).toLocaleDateString()}
+                                  <div className="table-row">
+                                    <div className="table-cell">
+                                      <strong>BreakdownType:</strong>
+                                    </div>
+                                    <div className="table-cell">{breakDown.BreakdownType}</div>
                                   </div>
-                                </div>
-                                <div className="table-row">
-                                  <div className="table-cell">
-                                    <strong>BreakdownType:</strong>
+                                  <div className="table-row">
+                                    <div className="table-cell">
+                                      <strong>LineName:</strong>
+                                    </div>
+                                    <div className="table-cell">{breakDown.LineName}</div>
                                   </div>
-                                  <div className="table-cell">{breakDown.BreakdownType}</div>
-                                </div>
-                                <div className="table-row">
-                                  <div className="table-cell">
-                                    <strong>LineName:</strong>
+                                  <div className="table-row">
+                                    <div className="table-cell">
+                                      <strong>Remark:</strong>
+                                    </div>
+                                    <div className="table-cell">{breakDown.Remark}</div>
                                   </div>
-                                  <div className="table-cell">{breakDown.LineName}</div>
-                                </div>
-                                <div className="table-row">
-                                  <div className="table-cell">
-                                    <strong>Remark:</strong>
+                                  <div className="table-row">
+                                    <div className="table-cell">
+                                      <strong>status:</strong>
+                                    </div>
+                                    <div className="table-cell">{breakDown.Status}</div>
                                   </div>
-                                  <div className="table-cell">{breakDown.Remark}</div>
-                                </div>
-                                <div className="table-row">
-                                  <div className="table-cell">
-                                    <strong>status:</strong>
-                                  </div>
-                                  <div className="table-cell">{breakDown.Status}</div>
                                 </div>
                               </div>
-                            </div>
-                            <div className="actions">
-                              <NavLink
-                                to={`/pbdStatus/${breakDown._id}`}
-                                style={{ color: '#000080' }}
-                              >
-                                <FaEdit />
-                              </NavLink>
-                              {/* <button
+                              <div className="actions">
+                                <NavLink
+                                  to={`/pbdStatus/${breakDown._id}`}
+                                  style={{ color: '#000080' }}
+                                >
+                                  <FaEdit />
+                                </NavLink>
+                                {/* <button
                           className="btn"
                           onClick={() => deleteData(cbm._id)}
                           style={{ color: 'red' }}
                         >
                           <MdDelete />
                         </button> */}
+                              </div>
                             </div>
-                          </div>
-                        ))}
-                </>
+                          ))}
+                  </>
+                )}
+              </div>
+              {loading && (
+                <div className="loader-container">
+                  {/* <div className="loader">Loading...</div> */}
+                  <CSpinner color="primary" />
+                  <div className="loader">Loading...</div>
+                </div>
               )}
             </div>
-            {loading && (
-              <div className="loader-container">
-                {/* <div className="loader">Loading...</div> */}
-                <CSpinner color="primary" />
-                <div className="loader">Loading...</div>
-              </div>
-            )}
           </div>
         </div>
       </>

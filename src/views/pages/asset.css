@@ -5,6 +5,8 @@
   background-color: #f8f9fa;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 2rem;
+  height: 200px;
 }
 
 .table-container {
@@ -20,19 +22,66 @@
 
 .custom-table th, .custom-table td {
   padding: 12px;
-  text-align: left;
+  text-align: center;
   border-bottom: 1px solid #ddd;
 }
 
 .custom-table th {
-  background-color: #000026;
-  color: white;
+  background-color: #ffffff;
+  color: rgb(193, 190, 190);
 }
 
 .custom-table tr:nth-child(even) {
-  background-color: #f2f2f2;
+  background-color: #eff7fe;
 }
 
+/* Modal content */
+.cmodal-content {
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  width: 100%;
+  max-width: 500px;
+}
+
+/* Button styles */
+.cbutton {
+  background-color: #000026;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.cbutton-close {
+  background-color: #fafbfc;
+}
+
+.cbutton:hover {
+  background-color: #114981;
+}
+
+/* Select dropdown */
+.cmodal-body select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+/* Result display */
+.mttr-result, .mtbf-result {
+  margin-top: 20px;
+  font-size: 18px;
+  font-weight: bold;
+}
 /* List View Styles */
 .list-view {
   display: none; /* Hide the list view by default */
@@ -90,11 +139,36 @@
   width: 100%;
   margin-bottom: 10px;
 }
+.icon {
+  width: 30px;
+  height: 30px;
+  fill: white;
+  margin-top: 1px;
+  margin-left: 3px;
+}
+.box {
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  width: 10%;
+  background-color: #108af9;
+  border-radius: 7px;
+  height: 5rem;
+  margin-left: 20px;
+  position: relative;
+  bottom: 20px;
+}
 
 /* Mobile View - List Style */
 @media screen and (max-width: 768px) {
   .mb-2 {
     width: 70%;
+  }
+  .box {
+    width: 30%;
+    /* height: 8.5rem; */
+  }
+  .icon {
+    width: 30px;
+    height: 15px;
   }
     .custom-table {
       display: none; /* Hide the table on small screens */
@@ -132,6 +206,10 @@
       display: block;
     }
 
+    .expand .Expand1 {
+      margin-left: 8.6rem;
+  }
+
     .table-like {
       display: table;
       width: 100%;
@@ -151,8 +229,37 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 10px;
+      margin-top: 0px;
+    }
+
+    .table-container.mobile-wide {
+      width: 100%; /* Adjust the width as needed */
+      padding: 0 1rem; /* Optional: Add some padding */
+      margin-top: 2rem;
+    }
+    .container-lg {
+      padding-left: 0%;
+      padding-right: 0%;
     }
 
 
   }
+
+
+
+  /* @media (max-width: 600px) {
+    .yourComponent {
+      padding: 0.5rem;
+      display: flex;
+    }
+
+    .yourComponent select {
+      width: 100%;
+    }
+
+    .yourComponent .button {
+      width: 100%;
+      margin-left: 0;
+
+    }
+  } */

@@ -26,7 +26,7 @@ const AssetTable = () => {
 
   useEffect(() => {
     axios
-      .get('https://backendmaintenx.onrender.com/api/assets')
+      .get('http://localhost:4000/api/assets')
       .then((response) => {
         const assetsData = Array.isArray(response.data) ? response.data : [response.data]
         setAssets(assetsData)
@@ -44,7 +44,7 @@ const AssetTable = () => {
     const isConfirmed = window.confirm('Are you sure you want to delete this data?')
     if (isConfirmed) {
       axios
-        .delete(`https://backendmaintenx.onrender.com/api/assets/${id}`)
+        .delete(`http://localhost:4000/api/assets/${id}`)
         .then(() => {
           const newAssets = assets.filter((asset) => asset._id !== id)
           setAssets(newAssets)
@@ -75,6 +75,15 @@ const AssetTable = () => {
     setSearchQuery(query)
   }
 
+  const downloadQRCode = (qrCodeUrl, assetName) => {
+    const link = document.createElement('a')
+    link.href = qrCodeUrl
+    link.download = `${assetName}_QRCode.png`
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
   const handleResult = (result, error) => {
     if (!!result) {
       console.log('QR Code Result:', result.text)
@@ -97,10 +106,10 @@ const AssetTable = () => {
   }
   return (
     <div className="card shadow-sm mx-auto" style={{ marginTop: '0.5rem' }}>
-      <Link
+      {/* <Link
         to="/temperature"
         style={{ position: 'absolute', top: '10px', right: '10px', overflow: 'hidden' }}
-      ></Link>
+      ></Link> */}
 
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
         <div
@@ -144,14 +153,14 @@ const AssetTable = () => {
           <span role="img" aria-label="search-icon"></span>
         </label>
         <input
-          placeholder="Search"
+          placeholder="Search By Location"
           style={{
             display: 'flex',
             marginBottom: '10px',
             padding: '6px',
             border: '1px solid ',
             borderRadius: '6px',
-            width: '8rem',
+            width: '10rem',
             transition: 'border-color 0.3s ease-in-out, background-color 0.3s ease-in-out',
           }}
           value={searchQuery}
@@ -159,7 +168,7 @@ const AssetTable = () => {
         />
       </div>
 
-      <div className="table-container">
+      <div className="table-container  mobile-wide" style={{ marginTop: '1rem' }}>
         <Table className="custom-table">
           <Thead>
             <Tr>
@@ -167,6 +176,11 @@ const AssetTable = () => {
               <Th>Machine Name</Th>
               <Th>Machine Type</Th>
               <Th>Location</Th>
+              <Th>Controller</Th>
+              <Th>Power Rating</Th>
+              <Th>Capacity Spindle</Th>
+              <Th>Axis Travels</Th>
+              <Th>Ranking</Th>
               <Th>QR Code</Th>
               <Th>Edit</Th>
               <Th>Delete</Th>
@@ -197,9 +211,21 @@ const AssetTable = () => {
                     <Td data-label="Machine Name">{asset.AssetName}</Td>
                     <Td data-label="Machine Type">{asset.MachineType}</Td>
                     <Td data-label="Location">{asset.Location}</Td>
+                    <Td data-label="Location">{asset.Controller}</Td>
+                    <Td data-label="Location">{asset.PowerRatting}</Td>
+                    <Td data-label="Location">{asset.CapecitySpindle}</Td>
+                    <Td data-label="Location">{asset.AxisTravels}</Td>
+                    <Td data-label="Location">{asset.Ranking}</Td>
                     <Td data-label="QR Code">
                       {asset.qrCode && (
-                        <img src={asset.qrCode} alt="QR Code" width={50} height={50} />
+                        <img
+                          src={asset.qrCode}
+                          alt="QR Code"
+                          width={50}
+                          height={50}
+                          style={{ cursor: 'pointer' }}
+                          onClick={() => downloadQRCode(asset.qrCode, asset.AssetName)}
+                        />
                       )}
                     </Td>
                     <Td data-label="Edit">
@@ -235,16 +261,19 @@ const AssetTable = () => {
                   key={asset._id}
                   className={`list-item ${expandedItems.includes(index) ? 'expanded' : ''}`}
                 >
-                  <div className="expand">
-                    {expandedItems.includes(index) ? (
-                      <FaChevronUp onClick={() => toggleExpand(index)} />
-                    ) : (
-                      <FaChevronDown onClick={() => toggleExpand(index)} />
-                    )}
+                  <div className="expand d-flex">
+                    <div>
+                      <span>{asset.AssetName}</span> - <span>{asset.Location}</span>
+                    </div>
+                    <div className="Expand1">
+                      {expandedItems.includes(index) ? (
+                        <FaChevronUp onClick={() => toggleExpand(index)} />
+                      ) : (
+                        <FaChevronDown onClick={() => toggleExpand(index)} />
+                      )}
+                    </div>
                   </div>
-                  <div>
-                    <span>{asset.AssetName}</span> - <span>{asset.Location}</span>
-                  </div>
+                  {/* <span>{asset.AssetName}</span> - <span>{asset.Location}</span> */}
                   <div
                     className={`expanded-content ${
                       expandedItems.includes(index) ? 'visible' : 'hidden'
@@ -257,7 +286,13 @@ const AssetTable = () => {
                         </div>
                         <div className="table-cell">
                           {asset.qrCode && (
-                            <img src={asset.qrCode} alt="QR Code" width={50} height={50} />
+                            <img
+                              src={asset.qrCode}
+                              alt="QR Code"
+                              onClick={() => downloadQRCode(asset.qrCode, asset.AssetName)}
+                              width={50}
+                              height={50}
+                            />
                           )}
                         </div>
                       </div>
@@ -278,6 +313,18 @@ const AssetTable = () => {
                           <strong>Capacity Spindle:</strong>
                         </div>
                         <div className="table-cell">{asset.CapecitySpindle}</div>
+                      </div>
+                      <div className="table-row">
+                        <div className="table-cell">
+                          <strong>Ranking:</strong>
+                        </div>
+                        <div className="table-cell">{asset.Ranking}</div>
+                      </div>
+                      <div className="table-row">
+                        <div className="table-cell">
+                          <strong>Axis Travels:</strong>
+                        </div>
+                        <div className="table-cell">{asset.AxisTravels}</div>
                       </div>
                     </div>
                   </div>

@@ -53,7 +53,7 @@ const CBMForm = () => {
     // Fetch asset names from the API
     const fetchAssets = async () => {
       try {
-        const response = await axios.get('https://backendmaintenx.onrender.com/api/assets')
+        const response = await axios.get('http://localhost:4000/api/assets')
         setAssets(response.data)
       } catch (error) {
         console.error('Error fetching assets:', error)
@@ -72,9 +72,7 @@ const CBMForm = () => {
 
     if (name === 'assetName') {
       try {
-        const response = await axios.get(
-          `https://backendmaintenx.onrender.com/api/locations/${value}`,
-        )
+        const response = await axios.get(`http://localhost:4000/api/locations/${value}`)
         if (response.data && response.data.Location) {
           updatedFormData = {
             ...updatedFormData,
@@ -101,7 +99,7 @@ const CBMForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      await axios.post('https://backendmaintenx.onrender.com/api/cbm', formData) // Adjust URL as needed
+      await axios.post('http://localhost:4000/api/cbm', formData) // Adjust URL as needed
       setMessage('CBM record created successfully!')
       setFormData({
         assetName: '',
@@ -160,7 +158,7 @@ const CBMForm = () => {
             <div className="form-group" style={{ width: '25%' }}>
               <label htmlFor="assetName">Asset Name</label>
               <select
-                type="text"
+                // type="text"
                 name="assetName"
                 className="form-control"
                 placeholder="assetName"
@@ -196,9 +194,9 @@ const CBMForm = () => {
             </div>
 
             <div className="form-group" style={{ width: '25%' }}>
-              <label htmlFor="cbmScheduleDate">CBM Schedule Date</label>
+              <label htmlFor="cbmScheduleDate">Life/Count</label>
               <input
-                type="date"
+                type="text"
                 name="cbmScheduleDate"
                 className="form-control"
                 value={formData.cbmScheduleDate}
@@ -218,7 +216,7 @@ const CBMForm = () => {
               marginTop: '20px',
             }}
           >
-            <div className="form-group1" style={{ width: '%' }}>
+            {/* <div className="form-group1" style={{ width: '%' }}>
               <label htmlFor="cbmFrequency">CBM Frequency</label>
               <select
                 name="cbmFrequency"
@@ -237,12 +235,12 @@ const CBMForm = () => {
                 <option value="half year">Half Year</option>
                 <option value="yearly">Yearly</option>
               </select>
-            </div>
+            </div> */}
 
             <div className="form-group2" style={{ width: '%' }}>
-              <label htmlFor="nextCbmDate">Next CBM Date</label>
+              <label htmlFor="nextCbmDate">Pre Life/Count</label>
               <input
-                type="date"
+                type="text"
                 name="nextCbmDate"
                 className="form-control"
                 value={formData.nextCbmDate}
@@ -251,6 +249,19 @@ const CBMForm = () => {
                 style={{ height: '40px' }}
               />
             </div>
+            <div className="form-group" style={{ width: '25%' }}>
+              <label htmlFor="description">Part</label>
+              <input
+                type="text"
+                name="description"
+                className="form-control"
+                value={formData.description}
+                onChange={handleChange}
+                required
+                style={{ height: '40px' }}
+              />
+            </div>
+            {/* </div> */}
 
             <div className="form-group" style={{ width: '30%' }}>
               <label htmlFor="NextDateofMaintenance"></label>
@@ -271,7 +282,7 @@ const CBMForm = () => {
             className="btn btn-primary"
             style={{
               float: 'left',
-              backgroundColor: '#CA226B',
+              backgroundColor: '#1237F7',
               marginTop: '15px',
               alignItems: 'end',
             }}

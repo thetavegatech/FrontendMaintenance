@@ -44,3 +44,81 @@
     color: #dc3545;
   }
    */
+   .card {
+    margin: 20px;
+  }
+  
+  .table-container {
+    margin-bottom: 20px;
+  }
+  
+  .custom-table {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  
+  .list-view {
+    display: none;
+  }
+  
+  .list-item {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 5px 0;
+  }
+  
+  .list-item .expand {
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .list-item .expanded-content {
+    display: none;
+  }
+  
+  .list-item.expanded .expanded-content {
+    display: block;
+  }
+  
+  .table-like {
+    display: table;
+    width: 100%;
+  }
+  
+  .table-row {
+    display: table-row;
+  }
+  
+  .table-cell {
+    display: table-cell;
+    padding: 5px;
+    border-top: 1px solid #ccc;
+  }
+  
+  .actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .table-container {
+      display: none;
+    }
+  
+    .list-view {
+      display: block;
+    }
+  
+    .list-item {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .actions {
+      flex-direction: column;
+    }
+  }
+  

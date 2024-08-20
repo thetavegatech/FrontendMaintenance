@@ -79,8 +79,8 @@ class BDList extends React.Component {
     const { selectedLocation } = this.state
 
     const apiUrl = selectedLocation
-      ? `https://backendmaintenx.onrender.com/api/breakdown?location=${selectedLocation}`
-      : 'https://backendmaintenx.onrender.com/api/breakdown'
+      ? `http://localhost:4000/api/breakdown?location=${selectedLocation}`
+      : 'http://localhost:4000/api/breakdown'
 
     axios
       .get(apiUrl)
@@ -191,7 +191,7 @@ class BDList extends React.Component {
             ></IoIosAddCircle>
           </NavLink>
           {/* <h5 style={{ marginLeft: '20px' }}>Production</h5> */}
-          <TfiExport
+          {/* <TfiExport
             type="button"
             style={{
               margin: 'rem',
@@ -205,7 +205,7 @@ class BDList extends React.Component {
             onClick={this.exportToExcel}
           >
             Export to Excel
-          </TfiExport>
+          </TfiExport> */}
         </div>
 
         {/* <div className="container"> */}
@@ -283,23 +283,27 @@ class BDList extends React.Component {
             onMouseEnter={this.handleMouseEnter}
             onMouseLeave={this.handleMouseLeave}
           >
-            <option>Search by Plant</option>
+            <option value="" disabled selected hidden>
+              Search by Plant
+            </option>
             <option value="Plant 1">Plant 1</option>
             <option value="Plant 2">Plant 2</option>
             <option value="Plant 3">Plant 3</option>
             <option value="Plant 4">Plant 4</option>
           </select>
         </div>
-        <div className="table-container">
+        <div className="table-container mobile-wide">
           <Table className="custom-table">
             <Thead>
               <Tr>
                 <Th style={{ textAlign: 'center', height: '40px' }}>Machine Code</Th>
-                <Th style={{ textAlign: 'center' }}>BreakDown Start Date</Th>
+                {/* <Th style={{ textAlign: 'center' }}>BreakDown Start Date</Th> */}
                 <Th style={{ textAlign: 'center' }}>Breakdown Type</Th>
                 <Th style={{ textAlign: 'center' }}>Location</Th>
+                <Th style={{ textAlign: 'center' }}>AttendedBy</Th>
+                <Th style={{ textAlign: 'center' }}>RaiseBy</Th>
                 <Th style={{ textAlign: 'center' }}>Line Name</Th>
-                <Th style={{ textAlign: 'center' }}>Remark</Th>
+                {/* <Th style={{ textAlign: 'center' }}>Remark</Th> */}
                 <Th style={{ textAlign: 'center' }}>Status</Th>
                 <Th style={{ textAlign: 'center' }}>Edit</Th>
                 {/* <CTableHeaderCell style={{ textAlign: 'center' }}>excel</CTableHeaderCell> */}
@@ -316,14 +320,13 @@ class BDList extends React.Component {
                 .map((breakdown) => (
                   <Tr key={breakdown._id}>
                     <Td style={{ textAlign: 'center' }}>{breakdown.MachineName}</Td>
-                    <Td style={{ textAlign: 'center' }}>
-                      {' '}
-                      {new Date(breakdown.Date).toLocaleDateString()}
-                    </Td>
+                    {/* <Td style={{ textAlign: 'center' }}>{breakdown.BreakdownStartDate}</Td> */}
                     <Td style={{ textAlign: 'center' }}>{breakdown.BreakdownType}</Td>
                     <Td style={{ textAlign: 'center' }}>{breakdown.Location}</Td>
+                    <Td style={{ textAlign: 'center' }}>{breakdown.AttendedBy}</Td>
+                    <Td style={{ textAlign: 'center' }}>{breakdown.BDRaiseName}</Td>
                     <Td style={{ textAlign: 'center' }}>{breakdown.LineName}</Td>
-                    <Td style={{ textAlign: 'center' }}>{breakdown.Remark}</Td>
+                    {/* <Td style={{ textAlign: 'center' }}>{breakdown.Remark}</Td> */}
                     <Td style={{ textAlign: 'center' }}>{breakdown.Status}</Td>
                     <Td style={{ textAlign: 'center' }}>
                       <NavLink to={`/pbdStatus/${breakdown._id}`} style={{ color: '#000080' }}>
@@ -377,9 +380,9 @@ class BDList extends React.Component {
                       >
                         <div className="table-like">
                           <div className="table-row">
-                            <div className="table-cell">
+                            {/* <div className="table-cell">
                               <strong>BreakdownStartDate:</strong>
-                            </div>
+                            </div> */}
                             <div className="table-cell">
                               {new Date(breakDown.BreakdownStartDate).toLocaleDateString()}
                             </div>

@@ -12,6 +12,7 @@ const CBMEdit = () => {
   const [formData, setFormData] = useState({
     assetName: '',
     location: '',
+    description: '',
     assetType: '',
     installationDate: '',
     tbmScheduleDate: '',
@@ -28,11 +29,12 @@ const CBMEdit = () => {
     // Fetch data by id when the component mounts
     const fetchData = async () => {
       try {
-        const response = await axios.get(`https://backendmaintenx.onrender.com/api/tbm/${id}`)
+        const response = await axios.get(`http://localhost:4000/api/tbm/${id}`)
         const data = response.data
 
         setFormData({
           assetName: data.assetName,
+          description: data.description,
           location: data.location,
           assetType: data.assetType,
           installationDate: data.installationDate,
@@ -83,9 +85,7 @@ const CBMEdit = () => {
 
     if (name === 'assetName') {
       try {
-        const response = await axios.get(
-          `https://backendmaintenx.onrender.com/api/locations/${value}`,
-        )
+        const response = await axios.get(`http://localhost:4000/api/locations/${value}`)
         if (response.data && response.data.Location) {
           updatedFormData = {
             ...updatedFormData,
@@ -112,7 +112,7 @@ const CBMEdit = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      await axios.put(`https://backendmaintenx.onrender.com/api/tbm/${id}`, formData)
+      await axios.put(`http://localhost:4000/api/tbm/${id}`, formData)
       navigate(-1) // Navigate back to the previous page
     } catch (error) {
       console.error('Error updating CBM record:', error)
@@ -170,9 +170,9 @@ const CBMEdit = () => {
             </div>
 
             <div className="form-group" style={{ width: '25%' }}>
-              <label htmlFor="tbmScheduleDate">TBM Schedule Date</label>
+              <label htmlFor="tbmScheduleDate">Hours</label>
               <input
-                type="date"
+                type="text"
                 name="tbmScheduleDate"
                 className="form-control"
                 value={formData.tbmScheduleDate}
@@ -192,7 +192,7 @@ const CBMEdit = () => {
               marginTop: '20px',
             }}
           >
-            <div className="form-group" style={{ width: '25%' }}>
+            {/* <div className="form-group" style={{ width: '25%' }}>
               <label htmlFor="tbmFrequency">TBM Frequency</label>
               <select
                 name="tbmFrequency"
@@ -211,15 +211,27 @@ const CBMEdit = () => {
                 <option value="half year">Half Year</option>
                 <option value="yearly">Yearly</option>
               </select>
-            </div>
+            </div> */}
 
             <div className="form-group" style={{ width: '25%' }}>
-              <label htmlFor="nextTbmDate">Next TBM Date</label>
+              <label htmlFor="nextTbmDate">Pre Notification Hours</label>
               <input
-                type="date"
+                type="text"
                 name="nextTbmDate"
                 className="form-control"
                 value={formData.nextTbmDate}
+                onChange={handleChange}
+                required
+                style={{ height: '40px' }}
+              />
+            </div>
+            <div className="form-group" style={{ width: '25%' }}>
+              <label htmlFor="description">Parts</label>
+              <input
+                type="text"
+                name="description"
+                className="form-control"
+                value={formData.description}
                 onChange={handleChange}
                 required
                 style={{ height: '40px' }}
@@ -248,7 +260,7 @@ const CBMEdit = () => {
             className="btn btn-primary"
             style={{
               float: 'left',
-              backgroundColor: '#CA226B',
+              backgroundColor: '#1237F7',
               marginTop: '15px',
               alignItems: 'end',
             }}

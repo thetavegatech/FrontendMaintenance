@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import '../form.css'
+import { MdDashboard } from 'react-icons/md'
+import classNames from 'classnames'
 
 export default function EditUser() {
   const { id } = useParams()
@@ -20,7 +23,7 @@ export default function EditUser() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/UserInfo/${id}`)
+      const response = await axios.get(`http://localhost:4000/UserInfo/${id}`)
       const { name, phoneNumber, address, email, Location } = response.data
       setUserData({ name, phoneNumber, address, email, Location })
       setAddress(response.data.address)
@@ -40,7 +43,7 @@ export default function EditUser() {
   const handleUpdate = async (e) => {
     e.preventDefault()
     try {
-      await axios.put(`http://localhost:5000/UserInfo/${id}`, userData)
+      await axios.put(`http://localhost:4000/UserInfo/${id}`, userData)
       // Clear form data after successful update
       setUserData({
         name: '',
@@ -57,20 +60,29 @@ export default function EditUser() {
   }
 
   return (
-    <div
-      className="container-lg"
-      style={{
-        border: '2px solid #ccc',
-        backgroundColor: '',
-        padding: '20px',
-        borderRadius: '10px',
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-        width: '90%',
-      }}
-    >
+    <div className="card shadow-sm mx-auto">
+      {/* <Link to="/temperature" style={{ position: 'absolute', top: '15px', right: '10px' }}></Link> */}
+
+      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+        <div
+          className={classNames('box', 'd-flex', 'justify-content-center', 'align-items-center')}
+        >
+          <MdDashboard
+            className="icon"
+            style={{
+              width: '30px',
+              height: '30px',
+              fill: 'white',
+              marginTop: '1px',
+              marginLeft: '3px',
+            }}
+          />
+        </div>
+        <h5 style={{ marginLeft: '25px' }}>User Edit</h5>
+      </div>
       <div className="tab-content1">
-        <form onSubmit={handleUpdate} style={{ marginLeft: '12%' }}>
-          <div className="row g-2">
+        <form onSubmit={handleUpdate} style={{ marginBottom: '5rem', marginTop: '0px' }}>
+          <div className="row g-2" style={{ marginLeft: '30px' }}>
             <div className="col-md-5">
               <label htmlFor="name">Name:</label>
               <input
@@ -135,9 +147,14 @@ export default function EditUser() {
             </div>
             <div style={{ marginTop: '20px' }}>
               <button
-                className="btn btn-primary"
-                style={{ width: '30%', marginBottom: '10px' }}
                 type="submit"
+                className="btn btn-primary ml-2"
+                style={{
+                  float: 'left',
+                  backgroundColor: '#007bff',
+                  marginTop: '10px',
+                  marginLeft: '2rem',
+                }}
               >
                 Save
               </button>

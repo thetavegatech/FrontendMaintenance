@@ -12,6 +12,7 @@ import 'react-toastify/dist/ReactToastify.css'
 const TBMForm = () => {
   const [formData, setFormData] = useState({
     assetName: '',
+    description: '',
     location: '',
     assetType: '',
     installationDate: '',
@@ -52,7 +53,7 @@ const TBMForm = () => {
     // Fetch asset names from the API
     const fetchAssets = async () => {
       try {
-        const response = await axios.get('https://backendmaintenx.onrender.com/api/assets')
+        const response = await axios.get('http://localhost:4000/api/assets')
         setAssets(response.data)
       } catch (error) {
         console.error('Error fetching assets:', error)
@@ -71,9 +72,7 @@ const TBMForm = () => {
 
     if (name === 'assetName') {
       try {
-        const response = await axios.get(
-          `https://backendmaintenx.onrender.com/api/locations/${value}`,
-        )
+        const response = await axios.get(`http://localhost:4000/api/locations/${value}`)
         if (response.data && response.data.Location) {
           updatedFormData = {
             ...updatedFormData,
@@ -100,13 +99,14 @@ const TBMForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      await axios.post('https://backendmaintenx.onrender.com/api/tbm', formData)
+      await axios.post('http://localhost:4000/api/tbm', formData)
       setMessage('TBM record created successfully!')
       toast.success('TBM record created successfully!', { autoClose: 5000 })
       // Reset form data after successful submission
       setFormData((prevState) => ({
         ...prevState,
         assetName: '',
+        description: '',
         location: '',
         assetType: '',
         installationDate: '',
@@ -124,7 +124,7 @@ const TBMForm = () => {
 
   return (
     <div className="card shadow-sm mx-auto">
-      <Link to="/temperature" style={{ position: 'absolute', top: '15px', right: '10px' }}></Link>
+      {/* <Link to="/temperature" style={{ position: 'absolute', top: '15px', right: '10px' }}></Link> */}
 
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
         <div
@@ -193,9 +193,9 @@ const TBMForm = () => {
             </div>
 
             <div className="form-group" style={{ width: '25%' }}>
-              <label htmlFor="tbmScheduleDate">TBM Schedule Date</label>
+              <label htmlFor="tbmScheduleDate">Hours</label>
               <input
-                type="date"
+                type="text"
                 name="tbmScheduleDate"
                 className="form-control"
                 value={formData.tbmScheduleDate}
@@ -215,7 +215,7 @@ const TBMForm = () => {
               marginTop: '20px',
             }}
           >
-            <div className="form-group1" style={{ width: '33.5%' }}>
+            {/* <div className="form-group1" style={{ width: '33.5%' }}>
               <label htmlFor="tbmFrequency">TBM Frequency</label>
               <select
                 name="tbmFrequency"
@@ -234,15 +234,28 @@ const TBMForm = () => {
                 <option value="half year">Half Year</option>
                 <option value="yearly">Yearly</option>
               </select>
-            </div>
+            </div> */}
 
             <div className="form-group2" style={{}}>
-              <label htmlFor="nextTbmDate">Next TBM Date</label>
+              <label htmlFor="nextTbmDate">Pre Notification Hours</label>
               <input
-                type="date"
+                type="text"
                 name="nextTbmDate"
                 className="form-control"
                 value={formData.nextTbmDate}
+                onChange={handleChange}
+                required
+                style={{ height: '40px' }}
+              />
+            </div>
+            <div className="form-group2" style={{}}>
+              <label htmlFor="description">Parts</label>
+              <input
+                type="text"
+                name="description"
+                id="description"
+                className="form-control"
+                value={formData.decsription}
                 onChange={handleChange}
                 required
                 style={{ height: '40px' }}
@@ -267,7 +280,7 @@ const TBMForm = () => {
             className="btn btn-primary"
             style={{
               float: 'left',
-              backgroundColor: '#CA226B',
+              backgroundColor: '#1237F7',
               marginTop: '10px',
               alignItems: 'end',
             }}

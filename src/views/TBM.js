@@ -26,7 +26,7 @@ const TbmTable = () => {
 
   useEffect(() => {
     axios
-      .get('https://backendmaintenx.onrender.com/api/tbm')
+      .get('http://localhost:4000/api/tbm')
       .then((response) => {
         const tbmData = Array.isArray(response.data) ? response.data : [response.data]
         setTbms(tbmData)
@@ -83,7 +83,7 @@ const TbmTable = () => {
       setTbms(updatedAssets)
       setFilteredTbms(updatedAssets)
       try {
-        await axios.put('https://backendmaintenx.onrender.com/api/tbmupdateRecords', {
+        await axios.put('http://localhost:4000/api/tbmupdateRecords', {
           tbms: updatedAssets,
         })
       } catch (error) {
@@ -123,7 +123,7 @@ const TbmTable = () => {
     const isConfirmed = window.confirm('Are you sure you want to delete this data?')
     if (isConfirmed) {
       axios
-        .delete(`https://backendmaintenx.onrender.com/api/tbm/${id}`)
+        .delete(`http://localhost:4000/api/tbm/${id}`)
         .then((response) => {
           const newTbms = tbms.filter((tbm) => tbm._id !== id)
           setTbms(newTbms)
@@ -219,14 +219,14 @@ const TbmTable = () => {
           <span role="img" aria-label="search-icon"></span>
         </label>
         <input
-          placeholder="Search"
+          placeholder="Search By Location/AssetName"
           style={{
             display: 'flex',
             marginBottom: '10px',
             padding: '6px',
             border: '1px solid ',
             borderRadius: '6px',
-            width: '8rem',
+            width: '13rem',
             transition: 'border-color 0.3s ease-in-out, background-color 0.3s ease-in-out',
           }}
           value={searchQuery}
@@ -234,7 +234,7 @@ const TbmTable = () => {
         />
         {/* <h5 style={{ marginLeft: '20px' }}>Create TBM Record</h5> */}
       </div>
-      <div className="table-container">
+      <div className="table-container  mobile-wide" style={{ marginTop: '5px' }}>
         <Table className="custom-table">
           <Thead style={{ backgroundColor: '#000026', color: 'white' }}>
             <Tr>
@@ -243,9 +243,10 @@ const TbmTable = () => {
               <Th style={{ textAlign: 'center' }}>Location</Th>
               {/* <th style={{ textAlign: 'center' }}>Asset Type</th> */}
               {/* <Th style={{ textAlign: 'center' }}>Installation Date</Th> */}
-              <Th style={{ textAlign: 'center' }}>TBM Schedule Date</Th>
-              <Th style={{ textAlign: 'center' }}>TBM Frequency</Th>
-              <Th style={{ textAlign: 'center' }}>Next TBM Date</Th>
+              <Th style={{ textAlign: 'center' }}>Hours</Th>
+              {/* <Th style={{ textAlign: 'center' }}>TBM Frequency</Th> */}
+              <Th style={{ textAlign: 'center' }}>Actual Hours</Th>
+              <Th style={{ textAlign: 'center' }}>Part</Th>
               <Th style={{ textAlign: 'center' }}>Status</Th>
               {/* <th style={{ textAlign: 'center' }}>QR Code</th> */}
               <Th style={{ textAlign: 'center' }}>Edit</Th>
@@ -280,13 +281,16 @@ const TbmTable = () => {
                     {/* <Td style={{ textAlign: 'center' }}>
                     {new Date(tbm.installationDate).toLocaleDateString()}
                   </Td> */}
-                    <Td style={{ textAlign: 'center' }}>
+                    <Td style={{ textAlign: 'center' }}>{tbm.tbmScheduleDate}</Td>
+                    {/* <Td style={{ textAlign: 'center' }}>
                       {new Date(tbm.tbmScheduleDate).toLocaleDateString()}
-                    </Td>
-                    <Td style={{ textAlign: 'center' }}>{tbm.tbmFrequency}</Td>
-                    <Td style={{ textAlign: 'center' }}>
+                    </Td> */}
+                    <Td style={{ textAlign: 'center' }}>{tbm.nextTbmDate}</Td>
+                    {/* <Td style={{ textAlign: 'center' }}>{tbm.tbmFrequency}</Td> */}
+                    {/* <Td style={{ textAlign: 'center' }}>
                       {new Date(tbm.nextTbmDate).toLocaleDateString()}
-                    </Td>
+                    </Td> */}
+                    <Td style={{ textAlign: 'center' }}>{tbm.description} </Td>
                     <Td style={{ textAlign: 'center' }}>{tbm.status} </Td>
                     {/* <td style={{ textAlign: 'center' }}>
                     {tbm.qrCode && <img src={tbm.qrCode} alt="QR Code" width={50} height={50} />}
@@ -324,16 +328,19 @@ const TbmTable = () => {
                   key={tbm._id}
                   className={`list-item ${expandedItems.includes(index) ? 'expanded' : ''}`}
                 >
-                  <div className="expand">
-                    {expandedItems.includes(index) ? (
-                      <FaChevronUp onClick={() => toggleExpand(index)} />
-                    ) : (
-                      <FaChevronDown onClick={() => toggleExpand(index)} />
-                    )}
+                  <div className="expand d-flex">
+                    <div>
+                      <span>{tbm.assetName}</span> - <span>{tbm.location}</span>
+                    </div>
+                    <div className="Expand1">
+                      {expandedItems.includes(index) ? (
+                        <FaChevronUp onClick={() => toggleExpand(index)} />
+                      ) : (
+                        <FaChevronDown onClick={() => toggleExpand(index)} />
+                      )}
+                    </div>
                   </div>
-                  <div>
-                    <span>{tbm.assetName}</span> - <span>{tbm.location}</span>
-                  </div>
+
                   <div
                     className={`expanded-content ${
                       expandedItems.includes(index) ? 'visible' : 'hidden'
