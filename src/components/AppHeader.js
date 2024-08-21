@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { BiSolidUser } from 'react-icons/bi'
 import { IoIosNotifications } from 'react-icons/io'
+import { CToast, CToastBody, CToastHeader, CToaster } from '@coreui/react'
 import {
   CContainer,
   CHeader,
@@ -35,6 +36,7 @@ import { logout } from '../slices/authSlice'
 import QrScanner from '../views/QrScanner'
 
 const AppHeader = () => {
+  const [toasts, setToasts] = useState([])
   const [isQrScannerOpen, setIsQrScannerOpen] = useState(false)
   const [qrModal, setQrModal] = useState()
   const [scanResult, setScanResult] = useState('')
@@ -47,6 +49,17 @@ const AppHeader = () => {
 
   const toggleQrScanner = () => {
     setIsQrScannerOpen(!isQrScannerOpen)
+  }
+
+  // Function to trigger a notification
+  const addNotification = (message, color = 'success') => {
+    const newToast = (
+      <CToast autohide={true} delay={3000} color={color}>
+        <CToastHeader closeButton>Notification</CToastHeader>
+        <CToastBody>{message}</CToastBody>
+      </CToast>
+    )
+    setToasts([...toasts, newToast])
   }
 
   const logoutHandler = async () => {
@@ -97,9 +110,9 @@ const AppHeader = () => {
           />
 
           {/* Notification Icon */}
-          <CNavItem className="me-1">
+          {/* <CNavItem className="me-1">
             <IoIosNotifications size={24} className="cursor-pointer" />
-          </CNavItem>
+          </CNavItem> */}
 
           {/* User Icon */}
           <CDropdown>
@@ -107,7 +120,7 @@ const AppHeader = () => {
               <BiSolidUser size={24} />
             </CDropdownToggle>
             <CDropdownMenu>
-              <CDropdownItem href="/profile">Profile</CDropdownItem>
+              {/* <CDropdownItem href="/profile">Profile</CDropdownItem> */}
               <CDropdownItem onClick={logoutHandler}>Logout</CDropdownItem>
             </CDropdownMenu>
           </CDropdown>

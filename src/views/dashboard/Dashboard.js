@@ -102,12 +102,6 @@ const Dashboard = () => {
     '0',
   )}-${String(today.getDate()).padStart(2, '0')}`
   const todaysScheduledAssets = assets.filter((asset) => asset.nextDate === formattedToday)
-  // const todaysScheduledAssetsok = assets.filter(
-  //   (asset) => asset.nextDate === formattedToday && asset.status === 'Completed',
-  // )
-  // const todaysScheduledAssetsnok = assets.filter(
-  //   (asset) => asset.nextDate === formattedToday && asset.status === 'Pending',
-  // )
 
   const aggregateDataByLineName = (data) => {
     return data.reduce((acc, curr) => {
@@ -130,22 +124,6 @@ const Dashboard = () => {
   const convertToLineChartLabels = (aggregatedData) => {
     return Object.keys(aggregatedData)
   }
-
-  // useEffect(() => {
-  //   // Make an API request to fetch user information
-  //   axios
-  //     .get('https://mms-backend-n2zv.onrender.com/getAlluser') // Replace with your API endpoint
-  //     .then((response) => {
-  //       const userData = response.data
-  //       setUser({
-  //         username: userData.username,
-  //         userRoll: userData.userRoll,
-  //       })
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error fetching user info:', error)
-  //     })
-  // }, [])
 
   useEffect(() => {
     fetch('http://localhost:4000/api/breakdown')
@@ -177,20 +155,6 @@ const Dashboard = () => {
       value: value,
     }))
   }
-
-  const scatterChartData = [
-    { x: 10, y: 30, z: 200 },
-    { x: 20, y: 20, z: 300 },
-    { x: 30, y: 40, z: 250 },
-    { x: 40, y: 50, z: 400 },
-  ]
-
-  const bubbleChartData = [
-    { name: 'A', x: 30, y: 20, z: 200 },
-    { name: 'B', x: 50, y: 30, z: 300 },
-    { name: 'C', x: 70, y: 40, z: 400 },
-    { name: 'D', x: 90, y: 50, z: 500 },
-  ]
 
   useEffect(() => {
     fetch('http://localhost:4000/api/breakdown')

@@ -7,11 +7,14 @@ import { Link } from 'react-router-dom'
 import classNames from 'classnames'
 // import '../assetForm/AssetForm'
 import '../assetTable/asset.css'
-import { CTimePicker } from '@coreui/react'
+import { CButton, CTimePicker } from '@coreui/react'
 import TimePicker from 'react-time-picker'
 import 'react-datepicker/dist/react-datepicker.css'
 import Select from 'react-select'
 import { useDispatch, useSelector } from 'react-redux'
+// import { Modal, Button } from 'react-bootstrap'
+// import 'bootstrap/dist/css/bootstrap.min.css'
+import { CModal, CModalHeader, CModalBody, CModalFooter } from '@coreui/react'
 
 export default function BreakDown() {
   const [usernos, setUsers] = useState([])
@@ -26,7 +29,10 @@ export default function BreakDown() {
   const username = useSelector((state) => state.auth.userInfo?.name)
   const [allUsers, setAllUsers] = useState([])
   const [breakdownStatus, setBreakdownStatus] = useState(null)
+  const [showModal, setShowModal] = useState(false)
 
+  const handleShowModal = () => setShowModal(true)
+  const handleCloseModal = () => setShowModal(false)
   const loggedInUsername = useSelector((state) => state.auth.userInfo?.name)
 
   useEffect(() => {
@@ -222,7 +228,7 @@ export default function BreakDown() {
         console.log(MachineName)
         console.log(loggedInUsername)
         navigate(-1) // Navigating back after successful submission
-
+        handleShowModal()
         // Reset form state
         setFormData({
           MachineName: '',
@@ -251,7 +257,7 @@ export default function BreakDown() {
         })
         // Display success message
         setSuccessMessage('Breakdown saved successfully!')
-
+        handleShowModal()
         // Call the SMS sending function
         sendSMS(formData, selectedUsers, loggedInUsername)
 
@@ -521,23 +527,11 @@ export default function BreakDown() {
                 style={{ height: '40px' }}
               />
             </div>
-            {/* <div className="form-group" style={{ width: '30%' }}>
-              <label htmlFor="breakdownPhenomenon">Breakdown Phenomenon</label>
-              <input
-                type="text"
-                name="breakdownPhenomenon"
-                className="form-control col-sm-6l"
-                value={formData.BreakdownPhenomenons}
-                onChange={handleChange}
-                required
-                style={{ height: '40px' }}
-              />
-            </div> */}
           </div>
 
           <div className="row lg-2">
             <div className="col-md-6" style={{ marginTop: '2vh', overflowY: 'auto' }}>
-              <label style={{ marginBottom: '10px' }}>Select users:</label>
+              {/* <label style={{ marginBottom: '10px' }}>Select users:</label> */}
               <div className="row">
                 {usernos.map((user, index) => (
                   <React.Fragment key={user.phoneNumber}>
@@ -565,7 +559,7 @@ export default function BreakDown() {
               </div>
             </div>
 
-            <div className="col-md-6" style={{ marginTop: '2vh' }}>
+            {/* <div className="col-md-6" style={{ marginTop: '2vh' }}>
               <label>Selected Users:</label>
               <ul>
                 {usernos
@@ -576,7 +570,7 @@ export default function BreakDown() {
                     </li>
                   ))}
               </ul>
-            </div>
+            </div> */}
 
             <div className="col-xs-12">
               <button
@@ -594,6 +588,20 @@ export default function BreakDown() {
               </button>
             </div>
           </div>
+          <CModal show={showModal} onHide={handleCloseModal}>
+            <CModal.Header closeButton>
+              <CModal.Title>Breakdown Alert</CModal.Title>
+            </CModal.Header>
+            <CModal.Body>
+              Breakdown for {formData.MachineName} has been successfully submitted. Please visit the
+              concerned department.
+            </CModal.Body>
+            <CModal.Footer>
+              <CButton variant="secondary" onClick={handleCloseModal}>
+                Close
+              </CButton>
+            </CModal.Footer>
+          </CModal>
           {/* <button
             type="submit"
             className="btn btn-primary"

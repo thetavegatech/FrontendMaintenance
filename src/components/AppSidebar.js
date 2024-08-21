@@ -219,7 +219,7 @@ const AppSidebar = () => {
                   <CIcon customClassName="nav-icon" icon={cilNotes} />
                   Registered Users
                 </CNavItem> */}
-                <CNavItem
+                {/* <CNavItem
                   component={NavLink}
                   to="/users"
                   style={{
@@ -230,7 +230,7 @@ const AppSidebar = () => {
                 >
                   <CIcon customClassName="nav-icon" icon={cilNotes} />
                   Users
-                </CNavItem>
+                </CNavItem> */}
               </>
             )
           } else if (userrole === 'production') {

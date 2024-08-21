@@ -1,16 +1,20 @@
-import React from 'react'
+// here im getting plant in array but when i get data by loggedin uuser and by its plant then its not showing me data,,,,,,,,
+import React, { useState, useEffect } from 'react'
 // import BDList from './BDList';
 import axios from 'axios'
 import { FaEdit } from 'react-icons/fa'
 import { NavLink } from 'react-router-dom'
-import loadingGif from '../assetTable/loader.gif'
 import { CContainer, CSpinner } from '@coreui/react'
-import { CInput } from '@coreui/react'
 import { MdDashboard } from 'react-icons/md'
 import { Link } from 'react-router-dom'
 import { IoIosAddCircle } from 'react-icons/io'
 import classNames from 'classnames'
+import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table'
+import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css'
 import '../assetTable/asset.css'
+import { FaChevronUp, FaChevronDown } from 'react-icons/fa'
+import '../assetTable/asset.css'
+import { CInput } from '@coreui/react'
 import {
   CTable,
   CTableBody,
@@ -18,72 +22,63 @@ import {
   CTableHead,
   CTableHeaderCell,
   CTableRow,
+  CButton,
 } from '@coreui/react'
-import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table'
-import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css'
-import '../assetTable/asset.css'
-import { FaChevronUp, FaChevronDown } from 'react-icons/fa'
+import { useDispatch, useSelector } from 'react-redux'
 
-class BDList extends React.Component {
-  state = {
-    breakdowns: [],
-    selectedLocation: '',
-    searchLocation: '', // New state for the search term
-    message: '',
-    searchQuery: '',
-    isHovered: false,
-    startDate: '',
-    endDate: '',
-    loading: true,
-    expandedItems: [],
+const BDList = () => {
+  const [breakdowns, setBreakdowns] = useState([])
+  const [selectedLocation, setSelectedLocation] = useState('')
+  const [searchQuery, setSearchQuery] = useState('')
+  const [startDate, setStartDate] = useState('')
+  const [endDate, setEndDate] = useState('')
+  const [loading, setLoading] = useState(true)
+  const [message, setMessage] = useState('')
+  const loggedInUserLocation = useSelector((state) => state.auth.userInfo?.plant)
+
+  useEffect(() => {
+    fetchData()
+  }, [selectedLocation])
+
+  const [expandedItems, setExpandedItems] = useState([])
+
+  const toggleExpand = (index) => {
+    if (expandedItems.includes(index)) {
+      setExpandedItems(expandedItems.filter((item) => item !== index))
+    } else {
+      setExpandedItems([...expandedItems, index])
+    }
   }
 
-  handleMouseEnter = () => {
-    this.setState({ isHovered: true })
-  }
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:4000/api/breakdown')
+        // Filter breakdowns based on the logged-in user's location and status
+        const filteredBreakdowns = response.data.filter(
+          (breakdown) => breakdown.Location === loggedInUserLocation && breakdown.Status === 'open',
+        )
+        setBreakdowns(filteredBreakdowns)
+        setLoading(false)
+      } catch (error) {
+        console.error('Error fetching data:', error)
+        alert('Error fetching data')
+      }
+    }
 
-  handleMouseLeave = () => {
-    this.setState({ isHovered: false })
-  }
+    fetchData()
+  }, [loggedInUserLocation])
 
-  handleSearchChange = (e) => {
-    const query = e.target.value.toLowerCase()
-
-    const filteredAssets = this.state.breakdowns.filter((breakDown) => {
-      const taskLocationLower = (breakDown.Location || '').toLowerCase()
-      const startDateMatch =
-        !this.state.startDate ||
-        (breakDown.BreakdownStartDate && breakDown.BreakdownStartDate >= this.state.startDate)
-      const endDateMatch =
-        !this.state.endDate ||
-        (breakDown.BreakdownStartDate && breakDown.BreakdownStartDate <= this.state.endDate)
-      return (
-        taskLocationLower.includes(query) && startDateMatch && endDateMatch
-        // ... other conditions if needed
-      )
-    })
-
-    this.setState({
-      filteredAssets,
-      // searchLocation: e.target.value,
-      searchQuery: query,
-    })
-  }
-
-  componentDidMount() {
-    const { selectedLocation } = this.state
-
+  const fetchData = () => {
     const apiUrl = selectedLocation
-      ? `http://localhost:4000/getBreakdownData?location=${selectedLocation}`
-      : 'http://localhost:4000/api/getBreakdownData'
+      ? `http://localhost:4000/api/breakdown?location=${selectedLocation}`
+      : 'http://localhost:4000/api/breakdown'
 
     axios
-      .get('http://localhost:4000/api/breakdown')
+      .get(apiUrl)
       .then((response) => {
-        this.setState({
-          breakdowns: Array.isArray(response.data) ? response.data : [response.data],
-          loading: false,
-        })
+        setBreakdowns(Array.isArray(response.data) ? response.data : [response.data])
+        setLoading(false)
       })
       .catch((error) => {
         console.error('Error fetching data:', error)
@@ -91,14 +86,47 @@ class BDList extends React.Component {
       })
   }
 
-  handleLocationChange = (event) => {
-    this.setState({ selectedLocation: event.target.value })
+  // const handleMouseEnter = () => {
+  //   this.setState({ isHovered: true })
+  // }
+
+  // const handleMouseLeave = () => {
+  //   this.setState({ isHovered: false })
+  // }
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value.toLowerCase())
   }
-  formatDate = (dateString) => {
+
+  // const componentDidMount() {
+  //   const { selectedLocation } = this.state
+
+  //   const apiUrl = selectedLocation
+  //     ? `http://localhost:5000/getBreakdownData?location=${selectedLocation}`
+  //     : 'http://localhost:5000/getBreakdownData'
+
+  //   axios
+  //     .get(apiUrl)
+  //     .then((response) => {
+  //       this.setState({
+  //         breakdowns: Array.isArray(response.data) ? response.data : [response.data],
+  //         loading: false,
+  //       })
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error fetching data:', error)
+  //       alert('Error fetching data')
+  //     })
+  // }
+
+  // const handleLocationChange = (event) => {
+  //   this.setState({ selectedLocation: event.target.value })
+  // }
+  const formatDate = (dateString) => {
     const options = { day: '2-digit', month: '2-digit', year: 'numeric' }
     return new Intl.DateTimeFormat('en-GB', options).format(new Date(dateString))
   }
-  formatTime = (dateString) => {
+  const formatTime = (dateString) => {
     const options = {
       hour: '2-digit',
       minute: '2-digit',
@@ -108,36 +136,128 @@ class BDList extends React.Component {
     return new Intl.DateTimeFormat('en-GB', options).format(new Date(dateString))
   }
 
-  handleDateChange = (field, value) => {
-    this.setState({
-      [field]: value,
-    })
+  const handleDateChange = (field, value) => {
+    if (field === 'startDate') {
+      setStartDate(value)
+    } else {
+      setEndDate(value)
+    }
   }
 
-  toggleExpand = (index) => {
-    this.setState((prevState) => {
-      const expandedItems = prevState.expandedItems.includes(index)
-        ? prevState.expandedItems.filter((item) => item !== index)
-        : [...prevState.expandedItems, index]
-      return { expandedItems }
-    })
-  }
+  const filteredAssets = breakdowns.filter((breakdown) => {
+    const taskLocationLower = (breakdown.Location || '').toLowerCase()
+    const startDateMatch =
+      !startDate || (breakdown.BreakdownStartDate && breakdown.BreakdownStartDate >= startDate)
+    const endDateMatch =
+      !endDate || (breakdown.BreakdownStartDate && breakdown.BreakdownStartDate <= endDate)
+    return taskLocationLower.includes(searchQuery) && startDateMatch && endDateMatch
+  })
 
-  render() {
-    const { breakdowns, filteredAssets, searchLocation, searchQuery, loading } = this.state
-    const openBreakdowns = breakdowns.filter((breakdown) => breakdown.Status === 'open')
-    const validatedAssets = breakdowns.filter(
-      (breakdowns) => breakdowns.Location && breakdowns.Location.trim() !== '',
-    )
+  // render() {
+  //   const { breakdowns, filteredAssets, searchLocation, searchQuery, loading } = this.state
+  //   const openBreakdowns = breakdowns.filter((breakdown) => breakdown.Status === 'open')
+  //   const validatedAssets = breakdowns.filter(
+  //     (breakdowns) => breakdowns.Location && breakdowns.Location.trim() !== '',
+  //   )
 
-    const { isHovered } = this.state
+  //   const { isHovered } = this.state
 
-    return (
+  return (
+    <>
+      {/* <div style={{ display: '', marginBottom: 'px' }}>
+        <div
+          style={{
+            // marginLeft: 'rem',
+            marginRight: '0.2rem',
+            fontSize: '16px',
+            fontWeight: 'bold',
+            whiteSpace: 'nowrap',
+            marginTop: '10px',
+          }}
+        >
+          <label htmlFor="startDate">From Date: </label>
+          <input
+            type="date"
+            style={{
+              padding: '6px',
+              borderRadius: '5px',
+              border: '1px solid #ccc',
+              marginRight: '10px',
+              fontSize: '14px',
+            }}
+            id="startDate"
+            value={startDate}
+            onChange={(e) => handleDateChange('startDate', e.target.value)}
+          />
+        </div>
+        <div
+          style={{
+            marginLeft: '1.3rem',
+            fontSize: '16px',
+            marginTop: '10px',
+            fontWeight: 'bold',
+            whiteSpace: 'nowrap',
+            marginRight: '0.2rem',
+          }}
+        >
+          <label htmlFor="endDate">To Date: </label>
+          <input
+            type="date"
+            style={{
+              padding: '6px',
+              borderRadius: '5px',
+              border: '1px solid #ccc',
+              // marginRight: '10px',
+              fontSize: '14px',
+              marginBottom: '0.5rem',
+            }}
+            id="endDate"
+            value={endDate}
+            onChange={(e) => handleDateChange('endDate', e.target.value)}
+          />
+        </div>
+        <label htmlFor="searchTask" style={{ marginLeft: '0%' }}>
+          <span role="img" aria-label="search-icon"></span>
+        </label>
+        <select
+          value={searchQuery}
+          onChange={handleSearchChange}
+          style={{
+            display: 'flex',
+            marginBottom: '0%',
+            padding: '8px',
+            border: '1px solid',
+            borderRadius: '4px',
+            transition: 'border-color 0.3s ease-in-out',
+            backgroundColor: 'transparent',
+          }}
+          // onMouseEnter={handleMouseEnter}
+          // onMouseLeave={handleMouseLeave}
+        >
+          <option>Search by Plant</option>
+          <option value="AAAPL-27">AAAPL-27</option>
+          <option value="AAAPL-29">AAAPL-29</option>
+          <option value="AAAPL- 89">AAAPL- 89</option>
+          <option value="DPAPL - 236">DPAPL - 236</option>
+          <option value=" DPAPL- GN"> DPAPL- GN</option>
+        </select>
+        <NavLink to="/worktable">
+          <CButton color="info" className="mb-2" style={{ marginTop: '5px' }}>
+            Add Work
+          </CButton>
+        </NavLink>
+        <NavLink to="/assetpart">
+          <CButton color="info" className="mb-2" style={{ marginTop: '5px', marginLeft: '5px' }}>
+            Add Part
+          </CButton>
+        </NavLink>
+      </div> */}
+
       <div className="card shadow-sm mx-auto" style={{ marginTop: '0.5rem' }}>
-        <Link
+        {/* <Link
           to="/temperature"
           style={{ position: 'absolute', top: '10px', right: '10px', overflow: 'hidden' }}
-        ></Link>
+        ></Link> */}
 
         <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
           <div
@@ -163,160 +283,8 @@ class BDList extends React.Component {
           </div>
           {/* <h5 style={{ marginLeft: '20px' }}>Create TBM Record</h5> */}
         </div>
-        {/* <div className="container"> */}
-        {/* <div className="row">
-          <div className="col-12 col-md-4 mb-3">
-            <div className="row align-items-center">
-              <div className="col-4">
-                <label
-                  htmlFor="fromDate"
-                  className="form-label"
-                  style={{ fontWeight: 'bold', marginLeft: '10px' }}
-                >
-                  From Date
-                </label>
-              </div>
-              <div className="col-8">
-                <input
-                  type="date"
-                  className="form-control"
-                  id="startDate"
-                  value={this.state.startDate}
-                  onChange={(e) => this.handleDateChange('startDate', e.target.value)}
-                />
-              </div>
-            </div>
-          </div>
-          <div className="col-12 col-md-4 mb-3">
-            <div className="row align-items-center">
-              <div className="col-4">
-                <label
-                  htmlFor="toDate"
-                  className="form-label"
-                  style={{ fontWeight: 'bold', marginLeft: '10px' }}
-                >
-                  To Date
-                </label>
-              </div>
-              <div className="col-8">
-                <input
-                  type="date"
-                  className="form-control"
-                  id="endDate"
-                  value={this.state.endDate}
-                  onChange={(e) => this.handleDateChange('endDate', e.target.value)}
-                />
-              </div>
-            </div>
-          </div>
-          <div className="col-12 col-md-4 mb-3">
-            <div className="row align-items-center">
-              <div className="col-4">
-                <label
-                  htmlFor="plant"
-                  className="form-label"
-                  value={this.searchQuery}
-                  onChange={this.handleSearchChange}
-                >
-                  
-                </label>
-              </div>
-              <div className="col-8">
-                <select className="form-select" id="plant">
-                  <option value="">Select Plant</option>
-                  <option value="plant1">Plant 1</option>
-                  <option value="plant2">Plant 2</option>
-                  <option value="plant3">Plant 3</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        </div> */}
-
-        {/* <div>
-          <label
-            htmlFor="startDate"
-            style={{
-              // marginLeft: '20rem',
-              margin: '10px',
-              fontSize: '16px',
-              fontWeight: 'bold',
-              // marginLeft: '1rem',
-              whiteSpace: 'nowrap',
-              '@media (max-width: 750px)': {
-                // marginRight: '0.8rem',
-                fontSize: '14px',
-              },
-            }}
-          >
-            From:
-          </label>
-          <input
-            type="date"
-            id="startDate"
-            value={this.state.startDate}
-            onChange={(e) => this.handleDateChange('startDate', e.target.value)}
-            style={{
-              padding: '6px',
-              borderRadius: '5px',
-              border: '1px solid #ccc',
-              marginRight: '10px',
-              marginLeft: '10px',
-              fontSize: '14px',
-            }}
-          />
-          <label
-            htmlFor="endDate"
-            style={{
-              marginRight: '10px',
-              fontSize: '16px',
-              fontWeight: 'bold',
-              whiteSpace: 'nowrap',
-            }}
-          >
-            To:
-          </label>
-          <input
-            type="date"
-            id="endDate"
-            value={this.state.endDate}
-            onChange={(e) => this.handleDateChange('endDate', e.target.value)}
-            style={{
-              padding: '6px',
-              borderRadius: '5px',
-              border: '1px solid #ccc',
-              marginRight: '10px',
-              fontSize: '14px',
-              marginBottom: '0.5rem',
-            }}
-          />
-          <label htmlFor="searchTask" style={{ marginLeft: 'rem' }}>
-            <span role="img" aria-label="search-icon"></span>
-          </label>
-          <select
-            value={this.searchQuery}
-            onChange={this.handleSearchChange}
-            style={{
-              marginBottom: '10px',
-              padding: '8px',
-              border: '1px solid',
-              borderRadius: '4px',
-              transition: 'border-color 0.3s ease-in-out',
-              backgroundColor: isHovered ? '#f0f0f0' : 'transparent',
-            }}
-            onMouseEnter={this.handleMouseEnter}
-            onMouseLeave={this.handleMouseLeave}
-          >
-            <option>Search by Plant</option>
-            <option value="Plant 1">Plant 1</option>
-            <option value="Plant 2">Plant 2</option>
-            <option value="Plant 3">Plant 3</option>
-            <option value="Plant 4">Plant 4</option>
-          </select>
-        </div> */}
-
         <div className="table-container  mobile-wide" style={{ marginTop: '10px' }}>
-          <Table className="custom-table">
+          <Table className="custom-table" style={{ width: '100%' }}>
             <Thead style={{ backgroundColor: '#000026', color: 'white' }}>
               <Tr>
                 <Th style={{ textAlign: 'center', height: '40px' }}>Machine Name</Th>
@@ -332,48 +300,34 @@ class BDList extends React.Component {
               </Tr>
             </Thead>
             <Tbody>
-              {loading ? ( // Show loader when loading is true
-                <tr>
-                  <td colSpan="8" style={{ textAlign: 'center' }}>
-                    {/* Use an image tag for the loading GIF */}
-                    {/* <img src={loadingGif} alt="Loading..." /> */}
-                    {/* <p>Loading...</p> */}
-                  </td>
-                </tr>
-              ) : (
-                <>
-                  {this.state.message && (
-                    <Tr>
-                      <CTableDataCell colSpan="8" style={{ textAlign: 'center' }}>
-                        {this.state.message}
-                      </CTableDataCell>
-                    </Tr>
-                  )}
-                  {(this.state.searchQuery
-                    ? filteredAssets.filter((breakdown) => openBreakdowns.includes(breakdown))
-                    : validatedAssets.filter((breakdown) => openBreakdowns.includes(breakdown))
-                  ).map((breakdown) => (
-                    <Tr key={breakdown._id}>
-                      <Td style={{ textAlign: 'center' }}>{breakdown.MachineName}</Td>
-                      <Td style={{ textAlign: 'center' }}>
-                        {new Date(breakdown.BreakdownStartDate).toISOString().split('T')[0]}
-                      </Td>
-                      <Td style={{ textAlign: 'center' }}>{breakdown.Shift}</Td>
-                      <Td style={{ textAlign: 'center' }}>{breakdown.Location}</Td>
-                      <Td style={{ textAlign: 'center' }}>{breakdown.LineName}</Td>
-                      <Td style={{ textAlign: 'center' }}>{breakdown.Operations}</Td>
-                      <Td style={{ textAlign: 'center' }}>{breakdown.BDRaiseName}</Td>
-
-                      <Td style={{ textAlign: 'center' }}>{breakdown.Status}</Td>
-                      <Td style={{ textAlign: 'center' }}>
-                        <NavLink to={`/productionBD/${breakdown._id}`} style={{ color: '#000080' }}>
-                          <FaEdit />
-                        </NavLink>
-                      </Td>
-                    </Tr>
-                  ))}
-                </>
+              {message && (
+                <Tr>
+                  <CTableDataCell colSpan="8" style={{ textAlign: 'center' }}>
+                    {message}
+                  </CTableDataCell>
+                </Tr>
               )}
+              {filteredAssets.map((breakdown) => (
+                <Tr key={breakdown._id}>
+                  <Td style={{ textAlign: 'center' }}>{breakdown.MachineName}</Td>
+                  <Td style={{ textAlign: 'center' }}>
+                    {new Date(breakdown.BreakdownStartDate).toLocaleDateString()}
+                    {/* {new Date(breakdown.BreakdownStartDate).toISOString().split('T')[0]} */}
+                  </Td>
+                  <Td style={{ textAlign: 'center' }}>{breakdown.Shift}</Td>
+                  <Td style={{ textAlign: 'center' }}>{breakdown.Location}</Td>
+                  <Td style={{ textAlign: 'center' }}>{breakdown.LineName}</Td>
+                  <Td style={{ textAlign: 'center' }}>{breakdown.Operations}</Td>
+                  <Td style={{ textAlign: 'center' }}>{breakdown.BDRaiseName}</Td>
+
+                  <Td style={{ textAlign: 'center' }}>{breakdown.Status}</Td>
+                  <Td style={{ textAlign: 'center' }}>
+                    <NavLink to={`/productionBD/${breakdown._id}`} style={{ color: '#000080' }}>
+                      <FaEdit />
+                    </NavLink>
+                  </Td>
+                </Tr>
+              ))}
             </Tbody>
           </Table>
           <div className="list-view">
@@ -381,89 +335,81 @@ class BDList extends React.Component {
               <p>Loading...</p>
             ) : (
               <>
-                {this.message && (
+                {/* {this.message && (
                   <p style={{ textAlign: 'center', fontStyle: 'italic', color: 'red' }}>
                     {this.message}
                   </p>
-                )}
-                {this.state.searchQuery
-                  ? filteredAssets.filter((breakdown) => openBreakdowns.includes(breakdown))
-                  : validatedAssets
-                      .filter((breakdown) => openBreakdowns.includes(breakdown))
-                      .map((breakDown, index) => (
-                        <div
-                          key={breakDown._id}
-                          className={`list-item ${
-                            this.state.expandedItems.includes(index) ? 'expanded' : ''
-                          }`}
-                        >
-                          <div className="expand">
-                            {this.state.expandedItems.includes(index) ? (
-                              <FaChevronUp onClick={() => this.toggleExpand(index)} />
-                            ) : (
-                              <FaChevronDown onClick={() => this.toggleExpand(index)} />
-                            )}
+                )} */}
+                {/* {filteredAssets */}
+                {filteredAssets.map((breakdown, index) => (
+                  <div
+                    key={breakdown._id}
+                    className={`list-item ${expandedItems.includes(index) ? 'expanded' : ''}`}
+                  >
+                    <div className="expand">
+                      {expandedItems.includes(index) ? (
+                        <FaChevronUp onClick={() => toggleExpand(index)} />
+                      ) : (
+                        <FaChevronDown onClick={() => toggleExpand(index)} />
+                      )}
+                    </div>
+                    <div>
+                      <span>{breakdown.MachineName}</span> - <span>{breakdown.Location}</span>
+                    </div>
+                    <div
+                      className={`expanded-content ${
+                        expandedItems.includes(index) ? 'visible' : 'hidden'
+                      }`}
+                    >
+                      <div className="table-like">
+                        <div className="table-row">
+                          <div className="table-cell">
+                            <strong>BreakdownStartDate:</strong>
                           </div>
-                          <div>
-                            <span>{breakDown.MachineName}</span> - <span>{breakDown.Location}</span>
+                          <div className="table-cell">
+                            {new Date(breakdown.BreakdownStartDate).toLocaleDateString()}
                           </div>
-                          <div
-                            className={`expanded-content ${
-                              this.state.expandedItems.includes(index) ? 'visible' : 'hidden'
-                            }`}
-                          >
-                            <div className="table-like">
-                              <div className="table-row">
-                                <div className="table-cell">
-                                  <strong>BreakdownStartDate:</strong>
-                                </div>
-                                <div className="table-cell">
-                                  {new Date(breakDown.BreakdownStartDate).toLocaleDateString()}
-                                </div>
-                              </div>
-                              <div className="table-row">
-                                <div className="table-cell">
-                                  <strong>Shift:</strong>
-                                </div>
-                                <div className="table-cell">{breakDown.Shift}</div>
-                              </div>
-                              <div className="table-row">
-                                <div className="table-cell">
-                                  <strong>LineName:</strong>
-                                </div>
-                                <div className="table-cell">{breakDown.LineName}</div>
-                              </div>
-                              <div className="table-row">
-                                <div className="table-cell">
-                                  <strong>Operations:</strong>
-                                </div>
-                                <div className="table-cell">{breakDown.Operations}</div>
-                              </div>
-                              <div className="table-row">
-                                <div className="table-cell">
-                                  <strong>status:</strong>
-                                </div>
-                                <div className="table-cell">{breakDown.Status}</div>
-                              </div>
-                            </div>
+                        </div>
+                        <div className="table-row">
+                          <div className="table-cell">
+                            <strong>Shift:</strong>
                           </div>
-                          <div className="actions">
-                            <NavLink
-                              to={`/productionBD/${breakDown._id}`}
-                              style={{ color: '#000080' }}
-                            >
-                              <FaEdit />
-                            </NavLink>
-                            {/* <button
+                          <div className="table-cell">{breakdown.Shift}</div>
+                        </div>
+                        <div className="table-row">
+                          <div className="table-cell">
+                            <strong>LineName:</strong>
+                          </div>
+                          <div className="table-cell">{breakdown.LineName}</div>
+                        </div>
+                        <div className="table-row">
+                          <div className="table-cell">
+                            <strong>Operations:</strong>
+                          </div>
+                          <div className="table-cell">{breakdown.Operations}</div>
+                        </div>
+                        <div className="table-row">
+                          <div className="table-cell">
+                            <strong>status:</strong>
+                          </div>
+                          <div className="table-cell">{breakdown.Status}</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="actions">
+                      <NavLink to={`/productionBD/${breakdown._id}`} style={{ color: '#000080' }}>
+                        <FaEdit />
+                      </NavLink>
+                      {/* <button
                           className="btn"
                           onClick={() => deleteData(cbm._id)}
                           style={{ color: 'red' }}
                         >
                           <MdDelete />
                         </button> */}
-                          </div>
-                        </div>
-                      ))}
+                    </div>
+                  </div>
+                ))}
               </>
             )}
           </div>
@@ -475,9 +421,9 @@ class BDList extends React.Component {
             </div>
           )}
         </div>
-        {/* </div> */}
       </div>
-    )
-  }
+    </>
+  )
+  // }
 }
 export default BDList
