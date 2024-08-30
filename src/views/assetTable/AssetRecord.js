@@ -8,10 +8,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import { MdDelete } from 'react-icons/md'
 import { FaEdit } from 'react-icons/fa'
 import { NavLink } from 'react-router-dom'
-import './table.css'
+// import './table.css'
+// import './asset.css'
 import './asset.css'
+import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css'
+
 import classNames from 'classnames'
 import { MdDashboard } from 'react-icons/md'
+import { FaChevronUp, FaChevronDown } from 'react-icons/fa'
+import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table'
 
 const Inventory = () => {
   const { id } = useParams()
@@ -29,7 +34,7 @@ const Inventory = () => {
   useEffect(() => {
     const fetchAssetDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:4000/api/assets/${id}`)
+        const response = await axios.get(`https://backendmaintenx.onrender.com/api/assets/${id}`)
         setAssetDetails(response.data)
         setLoading(false)
       } catch (error) {
@@ -45,7 +50,7 @@ const Inventory = () => {
     const fetchPmData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:4000/api/pm?assetName=${assetDetails.AssetName}`,
+          `https://backendmaintenx.onrender.com/api/pm?assetName=${assetDetails.AssetName}`,
         )
         setPmData(response.data)
         setLoading(false)
@@ -61,7 +66,9 @@ const Inventory = () => {
   useEffect(() => {
     if (assetDetails.AssetName) {
       axios
-        .get(`http://localhost:4000/api/breakdown?assetName=${assetDetails.AssetName}`)
+        .get(
+          `https://backendmaintenx.onrender.com/api/breakdown?assetName=${assetDetails.AssetName}`,
+        )
         .then((response) => {
           setSlittingData(response.data)
         })
@@ -146,7 +153,7 @@ const Inventory = () => {
       </CNav>
       <CTabContent>
         <CTabPane role="tabpanel" aria-labelledby="home-tab-pane" visible={activeKey === 1}>
-          <div className="card shadow-sm mx-auto" style={{ marginTop: '0.5rem' }}>
+          <div className="card shadow-sm mx-auto" style={{ marginTop: '2rem' }}>
             {/* <Link
               to="/temperature"
               style={{ position: 'absolute', top: '10px', right: '10px', overflow: 'hidden' }}
@@ -178,13 +185,28 @@ const Inventory = () => {
                 {/* <div className="" style={{ marginLeft: '10px' }}> */}
                 <h4>Asset Details</h4>
                 <p>
-                  <strong>Machine Name:</strong> {assetDetails.AssetName}
+                  <strong>Asset Name:</strong> {assetDetails.AssetName}
                 </p>
                 <p>
                   <strong>Machine Type:</strong> {assetDetails.MachineType}
                 </p>
                 <p>
                   <strong>Location:</strong> {assetDetails.Location}
+                </p>
+                <p>
+                  <strong>Controller:</strong> {assetDetails.Controller}
+                </p>
+                <p>
+                  <strong>Power Rating:</strong> {assetDetails.PowerRatting}
+                </p>
+                <p>
+                  <strong>Capacity Spindle:</strong> {assetDetails.CapecitySpindle}
+                </p>
+                <p>
+                  <strong>Axis Travels:</strong> {assetDetails.AxisTravels}
+                </p>
+                <p>
+                  <strong>Installation Date:</strong> {assetDetails.InstallationDate}
                 </p>
                 {assetDetails.Image && (
                   <div>
@@ -214,14 +236,24 @@ const Inventory = () => {
 
 const BreakdownData = ({ assetName, breakdownData }) => {
   const navigate = useNavigate()
+  const [expandedItems, setExpandedItems] = useState([])
+  const [loading, setLoading] = useState(true)
   const filteredData = breakdownData.filter((item) => item.MachineName === assetName)
 
   const handleProductionPageNavigation = (id) => {
     navigate(`/productionBD/${id}`)
   }
 
+  const toggleExpand = (index) => {
+    if (expandedItems.includes(index)) {
+      setExpandedItems(expandedItems.filter((item) => item !== index))
+    } else {
+      setExpandedItems([...expandedItems, index])
+    }
+  }
+
   return (
-    <div className="card shadow-sm mx-auto" style={{ marginTop: '0.5rem' }}>
+    <div className="card shadow-sm mx-auto" style={{ marginTop: '2rem' }}>
       {/* <Link
               to="/temperature"
               style={{ position: 'absolute', top: '10px', right: '10px', overflow: 'hidden' }}
@@ -249,50 +281,137 @@ const BreakdownData = ({ assetName, breakdownData }) => {
             }}
           />
         </div>
-        <div style={{ margin: '2rem', paddingLeft: '10px' }}>
+        <div style={{ margin: 'rem', paddingLeft: '10px' }}>
           <h5>{assetName} Breakdown</h5>
-          <div className="table-responsive">
-            <table className="table table-bordered table-hover">
-              <thead className="table-dark">
-                <tr>
-                  <th style={{ backgroundColor: '#002244', color: 'white' }}>Machine Name</th>
-                  <th style={{ backgroundColor: '#002244', color: 'white' }}>Line Name</th>
-                  <th style={{ backgroundColor: '#002244', color: 'white' }}>Operations</th>
-                  <th style={{ backgroundColor: '#002244', color: 'white' }}>Location</th>
-                  <th style={{ backgroundColor: '#002244', color: 'white' }}>
+          <div className="table-container  mobile-wide" style={{ marginTop: '10px' }}>
+            <Table className="custom-table" style={{ width: '100%' }}>
+              <Thead style={{ backgroundColor: '#000026', color: 'white' }}>
+                <Tr>
+                  <Th style={{ backgroundColor: '#002244', color: 'white' }}>Machine Name</Th>
+                  <Th style={{ backgroundColor: '#002244', color: 'white' }}>Line Name</Th>
+                  <Th style={{ backgroundColor: '#002244', color: 'white' }}>Operations</Th>
+                  <Th style={{ backgroundColor: '#002244', color: 'white' }}>Location</Th>
+                  <Th style={{ backgroundColor: '#002244', color: 'white' }}>
                     Breakdown Start Date
-                  </th>
-                  <th style={{ backgroundColor: '#002244', color: 'white' }}>Breakdown End Date</th>
-                  <th style={{ backgroundColor: '#002244', color: 'white' }}>Status</th>
-                  <th style={{ textAlign: 'center' }}>Edit </th>
-                  <th style={{ textAlign: 'center' }}>Delete</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredData.map((item) => (
-                  <tr key={item._id}>
-                    <td>{item.MachineName}</td>
-                    <td>{item.LineName}</td>
-                    <td>{item.Operations}</td>
-                    <td>{item.Location}</td>
-                    <td>{item.BreakdownStartDate}</td>
-                    <td>{item.BreakdownEndDate}</td>
-                    <td>{item.Status}</td>
-                    <td style={{ textAlign: 'center' }}>
-                      <NavLink to={`/productionBD/${item._id}`} style={{ color: '#000080' }}>
-                        <FaEdit />
-                      </NavLink>
-                    </td>
-                    <td style={{ textAlign: 'center' }}>
-                      <button className="btn" style={{ color: 'red' }}>
-                        {/* <img src={dlt} alt="" width={30} height={30} /> */}
-                        <MdDelete />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                  </Th>
+                  {/* <Th style={{ backgroundColor: '#002244', color: 'white' }}>Breakdown End Date</Th> */}
+                  <Th style={{ backgroundColor: '#002244', color: 'white' }}>Status</Th>
+                  <Th style={{ backgroundColor: '#002244', textAlign: 'center' }}>Edit </Th>
+                  {/* <Th style={{ textAlign: 'center' }}>Delete</Th> */}
+                </Tr>
+              </Thead>
+              <Tbody>
+                {filteredData
+                  .filter((item) => item.Status === 'open' || item.Status === 'pending') // Filter for 'Open' and 'Pending' status
+                  .map((item) => (
+                    <tr key={item._id}>
+                      <td>{item.MachineName}</td>
+                      <td>{item.LineName}</td>
+                      <td>{item.Operations}</td>
+                      <td>{item.Location}</td>
+                      <td>{item.BreakdownStartDate}</td>
+                      {/* <td>{item.BreakdownEndDate}</td> */}
+                      <td>{item.Status}</td>
+                      <td style={{ textAlign: 'center' }}>
+                        <NavLink to={`/productionBD/${item._id}`} style={{ color: '#000080' }}>
+                          <FaEdit />
+                        </NavLink>
+                      </td>
+                      {/* <td style={{ textAlign: 'center' }}>
+                        <button className="btn" style={{ color: 'red' }}>
+                          <img src={dlt} alt="" width={30} height={30} />
+                          <MdDelete />
+                        </button>
+                      </td> */}
+                    </tr>
+                  ))}
+              </Tbody>
+            </Table>
+            <div className="list-view">
+              {/* {loading ? (
+                <p>Loading...</p>
+              ) : ( */}
+              <>
+                {/* {this.message && (
+                  <p style={{ textAlign: 'center', fontStyle: 'italic', color: 'red' }}>
+                    {this.message}
+                  </p>
+                )} */}
+                {/* {filteredAssets */}
+                {filteredData
+                  .filter((item) => item.Status === 'open' || item.Status === 'pending') // Filter for 'Open' and 'Pending' status
+                  .map((item, index) => (
+                    <div
+                      key={item._id}
+                      className={`list-item ${expandedItems.includes(index) ? 'expanded' : ''}`}
+                    >
+                      <div className="expand">
+                        {expandedItems.includes(index) ? (
+                          <FaChevronUp onClick={() => toggleExpand(index)} />
+                        ) : (
+                          <FaChevronDown onClick={() => toggleExpand(index)} />
+                        )}
+                      </div>
+                      <div>
+                        <span>{item.MachineName}</span> - <span>{item.Location}</span>
+                      </div>
+                      <div
+                        className={`expanded-content ${
+                          expandedItems.includes(index) ? 'visible' : 'hidden'
+                        }`}
+                      >
+                        <div className="table-like">
+                          <div className="table-row">
+                            <div className="table-cell">
+                              <strong>BreakdownStartDate:</strong>
+                            </div>
+                            <div className="table-cell">
+                              {new Date(item.BreakdownStartDate).toLocaleDateString()}
+                            </div>
+                          </div>
+                          <div className="table-row">
+                            <div className="table-cell">
+                              <strong>Shift:</strong>
+                            </div>
+                            <div className="table-cell">{item.Shift}</div>
+                          </div>
+                          <div className="table-row">
+                            <div className="table-cell">
+                              <strong>LineName:</strong>
+                            </div>
+                            <div className="table-cell">{item.LineName}</div>
+                          </div>
+                          <div className="table-row">
+                            <div className="table-cell">
+                              <strong>Operations:</strong>
+                            </div>
+                            <div className="table-cell">{item.Operations}</div>
+                          </div>
+                          <div className="table-row">
+                            <div className="table-cell">
+                              <strong>status:</strong>
+                            </div>
+                            <div className="table-cell">{item.Status}</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="actions">
+                        <NavLink to={`/productionBD/${item._id}`} style={{ color: '#000080' }}>
+                          <FaEdit />
+                        </NavLink>
+                        {/* <button
+                          className="btn"
+                          onClick={() => deleteData(cbm._id)}
+                          style={{ color: 'red' }}
+                        >
+                          <MdDelete />
+                        </button> */}
+                      </div>
+                    </div>
+                  ))}
+              </>
+              {/* )} */}
+            </div>
           </div>
         </div>
       </div>
@@ -301,123 +420,149 @@ const BreakdownData = ({ assetName, breakdownData }) => {
 }
 
 const PMData = ({ assetName, pmData }) => {
-  // const navigate = useNavigate()
+  const [expandedItems, setExpandedItems] = useState([])
+
   const filteredData = pmData.filter((item) => item.AssetName === assetName)
 
   const deleteData = (id) => {
     const isConfirmed = window.confirm('Are you sure you want to delete this data?')
     if (isConfirmed) {
       axios
-        .delete(`http://localhost:4000/api/pm/${id}`)
+        .delete(`https://backendmaintenx.onrender.com/api/pm/${id}`)
         .then((response) => {
           console.log('Data deleted:', response.data)
-
-          // Delete from frontend
-          // const index = this.state.assets.findIndex((asset) => asset._id === id)
-          // if (index !== -1) {
-          //   const newAssets = [...this.state.assets]
-          //   newAssets.splice(index, 1).setState({
-          //     assets: newAssets,
-          //     message: 'Data successfully deleted!',
-          //   })
-          // }
+          // Add logic to remove the deleted item from the frontend if necessary
         })
         .catch((error) => {
           console.error('Error deleting data:', error)
-          this.setState({
-            message: 'Error deleting data. Please try again.',
-          })
-
-          // Set timeout to clear the error message after 3 seconds (adjust as needed)
-          setTimeout(() => {
-            this.setState({
-              message: '',
-            })
-          }, 2000)
         })
     }
   }
-  // const filteredData = (item) => item.AssetName === assetName
 
-  // const handleProductionPageNavigation = (id) => {
-  //   navigate(`/productionBD/${id}`)
-  // }
+  // Toggle expand/collapse for mobile list view
+  const toggleExpand = (index) => {
+    setExpandedItems((prevExpandedItems) =>
+      prevExpandedItems.includes(index)
+        ? prevExpandedItems.filter((item) => item !== index)
+        : [...prevExpandedItems, index],
+    )
+  }
 
   return (
-    <div className="card shadow-sm mx-auto" style={{ marginTop: '0.5rem' }}>
-      {/* <Link
-              to="/temperature"
-              style={{ position: 'absolute', top: '10px', right: '10px', overflow: 'hidden' }}
-            ></Link> */}
+    <div className="card shadow-sm mx-auto" style={{ marginTop: '2rem' }}>
+      <div className={classNames('box', 'd-flex', 'justify-content-center', 'align-items-center')}>
+        <MdDashboard
+          className="icon"
+          style={{
+            width: '30px',
+            height: '30px',
+            fill: 'white',
+            marginTop: '1px',
+            marginLeft: '3px',
+          }}
+        />
+      </div>
+      <h5>{assetName} PM Data</h5>
 
-      <div style={{ display: '', alignItems: 'center', marginBottom: '20px' }}>
-        <div
-          // className="d-flex justify-content-center align-items-center"
-          className={classNames(
-            'box',
-            'd-flex',
-            'justify-content-center',
-            'align-items-center',
-            'd-flex justify-content-center align-items-center',
-          )}
-        >
-          <MdDashboard
-            className="icon"
-            style={{
-              width: '30px',
-              height: '30px',
-              fill: 'white',
-              marginTop: '1px',
-              marginLeft: '3px',
-            }}
-          />
-        </div>
-        {/* <div style={{ margin: '2rem', paddingLeft: '10px' }}> */}
-        <h5>{assetName} PM Data</h5>
-
-        <div className="table-responsive" style={{ margin: '2rem', paddingLeft: '10px' }}>
-          <table className="table table-bordered table-hover">
-            <thead className="table-dark">
-              <tr>
-                <th style={{ backgroundColor: '#002244', color: 'white' }}>Asset Name</th>
-                <th style={{ backgroundColor: '#002244', color: 'white' }}>Task Name</th>
-                <th style={{ backgroundColor: '#002244', color: 'white' }}>Location</th>
-                <th style={{ backgroundColor: '#002244', color: 'white' }}>PM Schedule Date</th>
-                <th style={{ backgroundColor: '#002244', color: 'white' }}>Next Schedule Date</th>
-                <th style={{ backgroundColor: '#002244', color: 'white' }}>Scheduled Frequency</th>
-                <th style={{ textAlign: 'center' }}>Edit </th>
-                <th style={{ textAlign: 'center' }}>Delete</th>
+      {/* Table view for desktop */}
+      <div className="table-container mobile-wide" style={{ margin: '2rem', paddingLeft: '10px' }}>
+        <table className="custom-table" style={{ width: '100%' }}>
+          <thead className="table-dark">
+            <tr>
+              <th style={{ backgroundColor: '#002244', color: 'white' }}>Asset Name</th>
+              <th style={{ backgroundColor: '#002244', color: 'white' }}>Task Name</th>
+              <th style={{ backgroundColor: '#002244', color: 'white' }}>Location</th>
+              <th style={{ backgroundColor: '#002244', color: 'white' }}>PM Schedule Date</th>
+              <th style={{ backgroundColor: '#002244', color: 'white' }}>Next Schedule Date</th>
+              <th style={{ backgroundColor: '#002244', color: 'white' }}>Scheduled Frequency</th>
+              <th style={{ backgroundColor: '#002244', color: 'white' }}>Edit</th>
+              <th style={{ backgroundColor: '#002244', color: 'white' }}>Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredData.map((item) => (
+              <tr key={item._id}>
+                <td>{item.AssetName}</td>
+                <td>{item.TaskName}</td>
+                <td>{item.Location}</td>
+                <td>{item.startDate}</td>
+                <td>{item.nextDate}</td>
+                <td>{item.ScheduledMaintenanceDatesandIntervals}</td>
+                <td style={{ textAlign: 'center' }}>
+                  <NavLink to={`/editPM/${item._id}`} style={{ color: '#000080' }}>
+                    <FaEdit />
+                  </NavLink>
+                </td>
+                <td style={{ textAlign: 'center' }}>
+                  <button
+                    className="btn"
+                    onClick={() => deleteData(item._id)}
+                    style={{ color: 'red' }}
+                  >
+                    <MdDelete />
+                  </button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {filteredData.map((item) => (
-                <tr key={item._id}>
-                  <td>{item.AssetName}</td>
-                  <td>{item.TaskName}</td>
-                  <td>{item.Location}</td>
-                  <td>{item.startDate}</td>
-                  <td>{item.nextDate}</td>
-                  <td>{item.ScheduledMaintenanceDatesandIntervals}</td>
-                  <td style={{ textAlign: 'center' }}>
-                    <NavLink to={`/editPM/${item._id}`} style={{ color: '#000080' }}>
-                      <FaEdit />
-                    </NavLink>
-                  </td>
-                  <td style={{ textAlign: 'center' }}>
-                    <button
-                      className="btn"
-                      onClick={() => deleteData(item._id)}
-                      style={{ color: 'red' }}
-                    >
-                      {/* <img src={dlt} alt="" width={30} height={30} /> */}
-                      <MdDelete />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* List view for mobile */}
+      <div className="list-view" style={{ margin: '2rem', paddingLeft: '10px' }}>
+        {filteredData.map((item, index) => (
+          <div
+            key={item._id}
+            className={`list-item ${expandedItems.includes(index) ? 'expanded' : ''}`}
+            style={{
+              borderBottom: '1px solid #ccc',
+              marginBottom: '10px',
+              paddingBottom: '10px',
+            }}
+          >
+            <div className="expand" style={{ cursor: 'pointer' }}>
+              {expandedItems.includes(index) ? (
+                <FaChevronUp onClick={() => toggleExpand(index)} />
+              ) : (
+                <FaChevronDown onClick={() => toggleExpand(index)} />
+              )}
+            </div>
+            <div>
+              <strong>{item.AssetName}</strong> - <span>{item.TaskName}</span>
+            </div>
+            {expandedItems.includes(index) && (
+              <div className="expanded-content" style={{ marginTop: '10px' }}>
+                <p>
+                  <strong>Location:</strong> {item.Location}
+                </p>
+                <p>
+                  <strong>PM Schedule Date:</strong> {item.startDate}
+                </p>
+                <p>
+                  <strong>Next Schedule Date:</strong> {item.nextDate}
+                </p>
+                <p>
+                  <strong>Scheduled Frequency:</strong> {item.ScheduledMaintenanceDatesandIntervals}
+                </p>
+                <div className="actions" style={{ textAlign: 'center', marginTop: '10px' }}>
+                  <NavLink
+                    to={`/editPM/${item._id}`}
+                    style={{ color: '#000080', marginRight: '15px' }}
+                  >
+                    <FaEdit />
+                  </NavLink>
+                  <button
+                    className="btn"
+                    onClick={() => deleteData(item._id)}
+                    style={{ color: 'red' }}
+                  >
+                    <MdDelete />
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        ))}
       </div>
     </div>
   )
@@ -579,7 +724,7 @@ const Breakdown = ({ assetName }) => {
       setSuccessMessage('')
     }, 5000)
 
-    fetch('http://localhost:4000/api/breakdown', {
+    fetch('https://backendmaintenx.onrender.com/api/breakdown', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
@@ -618,7 +763,7 @@ const Breakdown = ({ assetName }) => {
       })
   }
   return (
-    <div className="card shadow-sm mx-auto" style={{ marginTop: '0.5rem' }}>
+    <div className="card shadow-sm mx-auto" style={{ marginTop: '2rem' }}>
       {/* <Link
               to="/temperature"
               style={{ position: 'absolute', top: '10px', right: '10px', overflow: 'hidden' }}
